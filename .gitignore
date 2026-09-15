@@ -10,3 +10,6 @@ source/photography/*
 
 # Licensed fonts must not go into a public repo. See README.
 source/fonts/*
+
+# Client-review renders — deliverables, not site assets.
+review/
