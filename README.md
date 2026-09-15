@@ -90,7 +90,7 @@ block the video and the stylesheet — it needs to be served over HTTP.)
 - [ ] **"Heart of the Land"** — the brand display face, licensed from a small
       foundry, awaiting delivery from the studio. Drop the files in
       `source/fonts/`, self-host into `site/assets/fonts/`, and point
-      `--display` at it. Jost carries everything until then, per the client.
+      `--display` at it. Fredoka carries everything until then.
 - [ ] Opening details: timing, email capture, socials
 - [x] Hosting — GitHub Pages, auto-deploys from `main`
 - [ ] Real domain, and drop the noindex when it goes live

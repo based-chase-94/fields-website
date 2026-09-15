@@ -79,3 +79,22 @@ saturated green that darkens just as effectively without that cost — see
 [video-prep.md](video-prep.md). It is never seen as a flat colour, only as a
 gradient over moving footage; the page ground, the intro veil and the still
 fallback are all still Forest.
+
+## Type
+
+Fredoka, variable weight 300-700, in three treatments that mirror what the
+page used before it:
+
+| Element | Weight | Treatment |
+|---|---|---|
+| Tagline | 300 Light | Sentence case, 0.01em |
+| "Coming Soon…" | 500 Medium | Uppercase, 0.32em |
+| Address | 400 Regular | Sentence case, 0.02em |
+
+The lowercase sizes sit ~5% below their previous values. Fredoka's x-height
+measures 7.6% larger than the face it replaced and it sets ~8% wider, so
+carrying the old numbers over would have let the supporting text creep up on
+the lockup. Uppercase needed no change — cap height differs by only 4%, and
+the tracked-out eyebrow actually sets 1.4% *narrower*.
+
+`--display` is aliased to it until "Heart of the Land" is licensed.

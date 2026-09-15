@@ -43,7 +43,9 @@
      no overshoot. Overshoot is what reads as jittery; this reads as settling. */
   --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --sans:    "Jost", "Futura", "Avenir Next", system-ui, sans-serif;
+  /* ui-rounded resolves to SF Pro Rounded on Apple platforms, so the fallback
+     is at least the right shape while the webfont loads. */
+  --sans:    "Fredoka", ui-rounded, system-ui, -apple-system, sans-serif;
   --display: var(--sans);
 
   /* How much the video is knocked back behind the type. The grass footage
@@ -145,7 +147,7 @@ html, body {
   margin: clamp(2.75rem, 6.5vw, 4.25rem) 0 0;
   font-family: var(--display);
   font-weight: 300;
-  font-size: clamp(1.15rem, 2.9vw, 1.6rem);
+  font-size: clamp(1.08rem, 2.7vw, 1.5rem);
   line-height: 1.35;
   letter-spacing: 0.01em;
   color: var(--almond);
@@ -175,13 +177,18 @@ html, body {
   .hero__status span { display: block; }
 }
 
-/* Sits under the eyebrow, and has to read as subordinate to it — so it's
+/* Sizes here are ~5% under their Jost equivalents: Fredoka's x-height measures
+   7.6% larger and it sets ~8% wider, so like-for-like numbers would have let
+   the supporting text creep up on the lockup. Uppercase is barely affected
+   (cap height only 4% larger), which is why the eyebrow keeps its size.
+
+   Sits under the eyebrow, and has to read as subordinate to it — so it's
    smaller at every viewport, not just at the large end. Normal capitals at
    regular tracking, per the client's note on using Jost outside the eyebrow;
    an address is also simply easier to read that way than letterspaced. */
 .hero__meta {
   margin: clamp(0.7rem, 1.8vw, 1rem) 0 0;
-  font-size: clamp(0.6875rem, 1.2vw, 0.78rem);
+  font-size: clamp(0.66rem, 1.15vw, 0.75rem);
   font-weight: 400;
   letter-spacing: 0.02em;
   line-height: 1.5;
