@@ -88,8 +88,7 @@ crossfade and **17%** after, where a normal frame-to-frame step is 0%.
 
 Source: 3840x2160, 19.5s, 75 Mbps, 176 MB.
 
-```bash
-bash tools/encode-hero-video.sh -t 6 -S 0.6 -x 1.2 -q 34 -e 0.04 -p 2.5 \
+```bash tools/encode-hero-video.sh -t 6 -S 0.6 -x 1.2 -q 35 -e 0.07 -a 1.32 -k 1.24 \
   source/video/lush-green-grass-blowing-in-wind.mp4
 ```
 
@@ -100,10 +99,15 @@ Six seconds of source, slowed to 0.6x, crossfaded — an 8.8 second loop at
   and no subject, so one stretch looks exactly like any other. For pure
   texture, loop length is close to irrelevant — nobody can tell 9 seconds from
   20. That is what bought the budget.
-- **It needed grading** (`-e 0.07 -a 1.32 -k 1.07`). The footage measures 21%
+- **It needed grading** (`-e 0.07 -a 1.32 -k 1.24`). The footage measures 21%
   mean luminance — much darker than it looks — and reads muted and olive
   ungraded. Saturation past ~1.5 turns the green acid and flattens the
   highlights, so 1.32 is about the ceiling for footage this saturated already.
+  Contrast tops out around 1.26 — past that the shadowed patches block up to
+  near-black and lose all blade detail.
+- **Contrast costs file size.** Going from 1.07 to 1.24 added ~0.6 MB, because
+  sharper tonal separation is more for the encoder to describe. It came back
+  with one step of CRF (34 to 35), which on footage this soft is invisible.
 - **The scrim came *down*, not up.** White type clears 11:1 against the raw
   footage, so the scrim here is about letting the video recede, not legibility.
   It sits at 0.45.
