@@ -88,7 +88,8 @@ crossfade and **17%** after, where a normal frame-to-frame step is 0%.
 
 Source: 3840x2160, 19.5s, 75 Mbps, 176 MB.
 
-```bash tools/encode-hero-video.sh -t 6 -S 0.6 -x 1.2 -q 35 -e 0.07 -a 1.32 -k 1.24 \
+```bash
+bash tools/encode-hero-video.sh -t 6 -S 0.6 -x 1.2 -q 35 -e 0.07 -a 1.32 -k 1.24 \
   source/video/lush-green-grass-blowing-in-wind.mp4
 ```
 
