@@ -22,6 +22,23 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap">
 <link rel="stylesheet" href="assets/css/site.css">
+
+<script>
+/* Runs before first paint: marks the intro as pending so the hero starts
+   hidden without a flash of the finished state. Deliberately independent of
+   site.js — if that never loads, or the webfont hangs, the failsafe below
+   still reveals everything. */
+(function () {
+  var d = document.documentElement;
+  try {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  } catch (e) { return; }
+  d.setAttribute('data-intro', 'pending');
+  setTimeout(function () {
+    if (d.getAttribute('data-intro') === 'pending') d.setAttribute('data-intro', 'run');
+  }, 1600);
+})();
+</script>
 </head>
 <body>
 
@@ -40,6 +57,7 @@
     aria-hidden="true" tabindex="-1"></video>
 
   <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="hero__veil" aria-hidden="true"></div>
 
   <div class="hero__content">
     <!-- logo:start -->

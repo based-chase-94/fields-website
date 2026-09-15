@@ -29,6 +29,10 @@
      "Heart of the Land" — licensed, not yet delivered by the studio. When it
      lands, self-host it into assets/fonts/ and point --display at it; that's
      the only change needed. */
+  /* Intro choreography: one easing curve throughout — a strong ease-out with
+     no overshoot. Overshoot is what reads as jittery; this reads as settling. */
+  --ease-settle: cubic-bezier(0.22, 1, 0.36, 1);
+
   --sans:    "Jost", "Futura", "Avenir Next", system-ui, sans-serif;
   --display: var(--sans);
 
@@ -95,13 +99,23 @@ html, body {
 
 /* --- content -------------------------------------------------------------- */
 
+/* Sits above the scrim and lifts as the type settles, so the frame appears to
+   open up rather than the text simply appearing on a static background. */
+.hero__veil {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--forest);
+  opacity: 0;
+  pointer-events: none;
+}
+
 .hero__content {
   position: relative;
   z-index: 1;
   width: min(100%, 46rem);
   padding: clamp(2rem, 6vw, 4rem) clamp(1.25rem, 5vw, 3rem);
   text-align: center;
-  animation: rise 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* Inline SVG, so the fill rides on `color` and the mark paints with the
@@ -164,11 +178,6 @@ html, body {
 }
 .hero__meta:empty { display: none; }
 
-@keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: none; }
-}
-
 /* --- fallbacks ------------------------------------------------------------ */
 
 /* No video playing: the poster alone has to carry the frame, so lean on the
@@ -183,7 +192,18 @@ html, body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__content { animation: none; }
+  /* Sits above the scrim and lifts as the type settles, so the frame appears to
+   open up rather than the text simply appearing on a static background. */
+.hero__veil {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--forest);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero__content { animation: none; }
 }
 
 /* Portrait phones: a 16:9 clip cropped to a tall frame loses most of its
@@ -191,4 +211,120 @@ html, body {
 @media (max-width: 30rem) {
   .hero__logo { width: clamp(12rem, 74vw, 17rem); }
   .hero { --scrim-strength: 0.52; }
+}
+
+/* ---------------------------------------------------------------------------
+   Intro
+   One motion language for every element — blur off, rise, settle — with the
+   stagger doing the work. Varying the technique per element looks busy; a
+   consistent move that arrives in sequence looks composed.
+
+   Blur-to-sharp is the load-bearing idea: it reads as the page coming into
+   focus, which suits a soft-focus video background, and it carries the
+   entrance without needing distance. Big translations are what make an
+   entrance feel overbearing.
+
+   Amounts scale down with element size — 14px of blur on 11px type would look
+   like a rendering fault, not a transition.
+--------------------------------------------------------------------------- */
+
+@keyframes intro-settle {
+  from {
+    opacity: 0;
+    transform: translateY(var(--intro-y)) scale(var(--intro-scale, 1));
+    filter: blur(var(--intro-blur));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+/* The logo keeps its drop-shadow through the move, so it needs its own
+   keyframe — `filter` is one property and a blur alone would drop the shadow. */
+@keyframes intro-settle-logo {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+    filter: blur(14px) drop-shadow(0 2px 24px rgba(0, 0, 0, 0.35));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0) drop-shadow(0 2px 24px rgba(0, 0, 0, 0.35));
+  }
+}
+
+@keyframes intro-veil {
+  from { opacity: 0.38; }
+  to   { opacity: 0; }
+}
+
+/* Pre-paint state. Only ever set by the inline head script, so a no-JS
+   visitor and anyone on reduced-motion gets the finished page directly. */
+[data-intro="pending"] .hero__logo,
+[data-intro="pending"] .hero__tagline,
+[data-intro="pending"] .hero__status,
+[data-intro="pending"] .hero__meta { opacity: 0; }
+
+[data-intro="pending"] .hero__veil { opacity: 0.38; }
+
+[data-intro="run"] .hero__logo {
+  animation: intro-settle-logo 1100ms var(--ease-settle) both;
+}
+
+[data-intro="run"] .hero__veil {
+  animation: intro-veil 1900ms var(--ease-settle) both;
+}
+
+[data-intro="run"] .hero__tagline,
+[data-intro="run"] .hero__status,
+[data-intro="run"] .hero__meta {
+  animation: intro-settle var(--intro-dur, 850ms) var(--ease-settle) both;
+  animation-delay: var(--intro-delay, 0ms);
+}
+
+[data-intro="run"] .hero__tagline { --intro-y: 12px; --intro-blur: 7px;  --intro-delay: 380ms; }
+[data-intro="run"] .hero__status  { --intro-y: 9px;  --intro-blur: 5px;  --intro-delay: 700ms; --intro-dur: 800ms; }
+[data-intro="run"] .hero__meta    { --intro-y: 7px;  --intro-blur: 4px;  --intro-delay: 860ms; --intro-dur: 800ms; }
+
+/* Word-level stagger on the tagline, applied only once site.js has split it.
+   Tight — 55ms — so it reads as one soft sweep across the line rather than
+   four words arriving separately. */
+.hero__tagline .word {
+  display: inline-block;
+  white-space: pre;
+}
+
+[data-intro="run"] .hero__tagline.is-split {
+  animation: none;
+  opacity: 1;
+}
+
+[data-intro="run"] .hero__tagline.is-split .word {
+  --intro-y: 12px;
+  --intro-blur: 7px;
+  animation: intro-settle 850ms var(--ease-settle) both;
+  animation-delay: calc(380ms + var(--i) * 55ms);
+}
+
+[data-intro="pending"] .hero__tagline.is-split { opacity: 1; }
+[data-intro="pending"] .hero__tagline.is-split .word { opacity: 0; }
+
+/* Belt and braces: the media query in the base sheet already covers this, but
+   the intro is the one thing on the page with real movement, so it gets an
+   explicit override too. */
+@media (prefers-reduced-motion: reduce) {
+  [data-intro] .hero__logo,
+  [data-intro] .hero__tagline,
+  [data-intro] .hero__tagline .word,
+  [data-intro] .hero__status,
+  [data-intro] .hero__meta {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none;
+    transform: none;
+  }
+  [data-intro] .hero__veil { animation: none !important; opacity: 0 !important; }
 }

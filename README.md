@@ -19,7 +19,8 @@ website/
 │   └── build-logo.py
 └── docs/
     ├── video-prep.md  ← how to prep the hero clip, and why
-    └── palette.md     ← brand colours + how the page uses them
+    ├── palette.md     ← brand colours + how the page uses them
+    └── motion.md      ← the intro choreography, and why there's no library
 ```
 
 The `source/` ÷ `site/` split is the important part: masters go in one, the
@@ -67,6 +68,7 @@ block the video and the stylesheet — it needs to be served over HTTP.)
 ## Current state
 
 - [x] Landing page shell: full-bleed video background, logo, coming-soon text
+- [x] Intro choreography — see [docs/motion.md](docs/motion.md)
 - [x] Video encode pipeline — see [docs/video-prep.md](docs/video-prep.md)
 - [x] **Real vector logo** in place — white, inline SVG, driven by one CSS line
 - [x] Favicon cut from the "F" swash (SVG + iOS PNG)
