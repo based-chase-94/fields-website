@@ -33,10 +33,27 @@ reproducible from `source/` by running something in `tools/`.
 | Hero video from a camera or editor | `source/video/` |
 | Food / space photography | `source/photography/` |
 | Logo files (AI, EPS, SVG, layered PSD) | `source/logo/` → `python3 tools/build-logo.py` |
-| Licensed webfonts | `source/fonts/` |
+| Licensed webfonts | `source/fonts/` — **gitignored**, see below |
 
 Then run the matching script in `tools/` — don't copy files into `site/`
 by hand.
+
+## Live review link
+
+**https://based-chase-94.github.io/fields-website/**
+
+Pushing to `main` redeploys it — `.github/workflows/pages.yml` publishes the
+`site/` folder, so `source/`, `tools/` and `docs/` stay in the repo but never
+reach the web root.
+
+This is a **review deployment, not the live site**: it carries
+`<meta name="robots" content="noindex, nofollow">` and a blanket-disallow
+`robots.txt` so an unannounced location doesn't turn up in search. Drop both
+when it moves to the real domain.
+
+The repo is public, which is what GitHub Pages needs on a free plan. The page
+is therefore reachable by anyone with the URL — it isn't secret, just
+unlisted.
 
 ## Preview it locally
 
@@ -61,8 +78,9 @@ block the video and the stylesheet — it needs to be served over HTTP.)
       foundry, awaiting delivery from the studio. Drop the files in
       `source/fonts/`, self-host into `site/assets/fonts/`, and point
       `--display` at it. Jost carries everything until then, per the client.
-- [ ] Opening details: neighbourhood, timing, email capture, socials
-- [ ] Domain + hosting
+- [ ] Opening details: timing, email capture, socials
+- [x] Hosting — GitHub Pages, auto-deploys from `main`
+- [ ] Real domain, and drop the noindex when it goes live
 
 ## Logo
 
@@ -96,3 +114,14 @@ brew install librsvg
 The earlier lettuce-mark lockup I'd extracted from the print signage has been
 removed — this supersedes it. The signage PDFs themselves are untouched in
 `../Coming Soon Print  Signage/`.
+
+## A licensing note on the display font
+
+`source/fonts/` is gitignored, and that's deliberate. Self-hosting a webfont
+means serving the font file from a public repo, which for most small-foundry
+licences counts as redistribution. When "Heart of the Land" arrives, check what
+its licence allows before it goes anywhere near this repo — a webfont licence
+is usually separate from a desktop one, and may be pageview-limited.
+
+If it can't be self-hosted, the display face can stay a licensed desktop font
+used to set the logo and any headline artwork, with Jost carrying live text.
