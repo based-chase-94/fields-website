@@ -113,6 +113,51 @@ Six seconds of source, slowed to 0.6x, crossfaded — an 8.8 second loop at
   footage, so the scrim here is about letting the video recede, not legibility.
   It sits at 0.45.
 
+## Saturation has a ceiling, and it isn't in the encode
+
+Worth knowing before anyone reaches for `-a` again: **this footage is already at
+the sRGB chroma limit for green.** Measured off the graded frame, mean HSV
+saturation is **0.975 out of 1.0** — the blue channel is effectively at zero
+across most of the frame, which is exactly what makes the green read as green.
+
+Pushing `-a` higher does almost nothing useful:
+
+| encode saturation | pixels with blue at floor | chroma |
+|---|---|---|
+| 1.32 (shipping) | 83% | 0.976 |
+| 1.45 | 90% | 0.986 |
+| 1.60 | 94% | 0.992 |
+
+Chroma moves 1.6% while another 11% of the frame loses its blue channel
+entirely. That is where "acid" comes from — not saturation as such, but tonal
+detail collapsing once a channel has nowhere left to go. `vibrance` (which
+boosts unsaturated pixels preferentially) was tried too and hits the same wall,
+because there are barely any unsaturated pixels to work on.
+
+**The chroma was being lost downstream, in the scrim.** See below.
+
+## The scrim colour is a saturation control
+
+The scrim used to be Forest, `#283628`. Forest is a *desaturated* green, so
+compositing it over the video pulled the whole frame toward grey-green —
+raw chroma 0.975 arrived on screen at 0.860. It was buying darkness at a 12%
+chroma cost it didn't need to pay.
+
+It is now `--scrim-rgb: 11, 38, 0` — a deep, *saturated* green, the colour of
+shadowed grass. Mixing toward a colour that is already saturated darkens just
+as effectively without bleaching. Because it is much darker, it also needs
+roughly half the alpha, so `--scrim-strength` dropped from 0.45 to 0.25.
+
+Measured on the composited frame:
+
+| | chroma on screen | white | Sunshine |
+|---|---|---|---|
+| Forest scrim @ 0.45 | 0.860 | 10.2:1 | 7.7:1 |
+| Saturated scrim @ 0.25 | **0.966** | 9.8:1 | 7.4:1 |
+
+**+12% chroma**, with contrast still far above the 4.5:1 floor. If a future clip
+needs more vibrancy, this is the knob — not `-a`.
+
 ## Grade in the encode, never in CSS
 
 There was a `filter: saturate(0.92) contrast(1.04)` on the video element for a

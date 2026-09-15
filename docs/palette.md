@@ -25,7 +25,8 @@ properties at the top of `site/assets/css/site.css` mirror it one-to-one.
 
 | Role | Token | Colour |
 |---|---|---|
-| Page ground + video scrim | `--forest` / `--forest-rgb` | Forest |
+| Page ground, veil, still fallback | `--forest` / `--forest-rgb` | Forest |
+| Video scrim | `--scrim-rgb` | Deep green `#0B2600` |
 | Logo script | `--logo-ink` | Sunshine |
 | GRAINS + GREENS | `--logo-sub-ink` | White `#FFFFFF` |
 | Tagline | `--ink-on-dark` → `--almond` | Almond |
@@ -49,10 +50,10 @@ frame, which is what a visitor actually sees:
 
 | Element | Colour | Ratio |
 |---|---|---|
-| Logo script | Sunshine | 7.5:1 |
-| GRAINS + GREENS | White | 10.0:1 |
-| Tagline | Almond | 8.0:1 |
-| "Coming Soon" | Sunshine | 7.0:1 |
+| Logo script | Sunshine | 7.4:1 |
+| GRAINS + GREENS | White | 9.8:1 |
+| Tagline | Almond | 8.2:1 |
+| "Coming Soon" | Sunshine | 7.4:1 |
 | Address | Almond | 8.2:1 |
 
 All of them clear AA for normal text. Re-measure if the hero clip is ever
@@ -68,3 +69,13 @@ Sunshine now carries both the logo script and the "Coming Soon" eyebrow. That
 is a lot of weight on one accent — if the eyebrow starts to feel like it's
 competing with the lockup rather than supporting it, moving it to Almond is a
 one-line change to `--accent`.
+
+## Why the scrim isn't Forest
+
+The one place the page deliberately uses a colour that isn't in the guidelines.
+Forest is a desaturated green, and compositing it over the hero video bleached
+about 12% of the chroma out of the footage. `--scrim-rgb` (`#0B2600`) is a deep
+saturated green that darkens just as effectively without that cost — see
+[video-prep.md](video-prep.md). It is never seen as a flat colour, only as a
+gradient over moving footage; the page ground, the intro veil and the still
+fallback are all still Forest.
