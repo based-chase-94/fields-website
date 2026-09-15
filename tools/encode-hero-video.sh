@@ -20,6 +20,8 @@
 #
 # Picture
 #   -e <n>     brightness lift, -1..1          (default 0)
+#   -a <n>     saturation, 1 = untouched        (default 1)
+#   -k <n>     contrast, 1 = untouched          (default 1)
 #   -c <w:h>   crop before scaling
 #   -p <sec>   poster frame, in OUTPUT time    (default 0)
 #   -R         raw: skip the denoise + softening
@@ -35,13 +37,14 @@ OUT_V="$ROOT/site/assets/video"
 OUT_I="$ROOT/site/assets/img"
 
 START=0; TAKE=""; SPEED=1; FPS=24; XFADE=1
-LIFT=0; CROP=""; POSTER_AT=0; SOFTEN=1
+LIFT=0; SAT=1; CON=1; CROP=""; POSTER_AT=0; SOFTEN=1
 NAME="hero"; CRF=30
 
-while getopts "s:t:S:f:x:e:c:p:Rn:q:" opt; do
+while getopts "s:t:S:f:x:e:a:k:c:p:Rn:q:" opt; do
   case "$opt" in
     s) START="$OPTARG" ;;   t) TAKE="$OPTARG" ;;    S) SPEED="$OPTARG" ;;
     f) FPS="$OPTARG" ;;     x) XFADE="$OPTARG" ;;   e) LIFT="$OPTARG" ;;
+    a) SAT="$OPTARG" ;;     k) CON="$OPTARG" ;;
     c) CROP="$OPTARG" ;;    p) POSTER_AT="$OPTARG" ;; R) SOFTEN=0 ;;
     n) NAME="$OPTARG" ;;    q) CRF="$OPTARG" ;;
     *) exit 1 ;;
@@ -82,8 +85,10 @@ if [ "$SOFTEN" = "1" ]; then
   # edges off foliage, which is where H.264 spends everything.
   CHAIN="$CHAIN,hqdn3d=4:3:6:4,gblur=sigma=0.6"
 fi
-if [ "$LIFT" != "0" ]; then
-  CHAIN="$CHAIN,eq=brightness=$LIFT:contrast=1.04:saturation=1.04"
+# The grade is baked in here rather than applied as a CSS filter, so the video
+# and the poster still are graded identically and the two states match.
+if [ "$LIFT" != "0" ] || [ "$SAT" != "1" ] || [ "$CON" != "1" ]; then
+  CHAIN="${CHAIN},eq=brightness=${LIFT}:saturation=${SAT}:contrast=${CON}"
 fi
 CHAIN="$CHAIN,scale='min(1920,iw)':-2:flags=lanczos,format=yuv420p"
 

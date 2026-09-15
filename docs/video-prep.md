@@ -100,11 +100,23 @@ Six seconds of source, slowed to 0.6x, crossfaded — an 8.8 second loop at
   and no subject, so one stretch looks exactly like any other. For pure
   texture, loop length is close to irrelevant — nobody can tell 9 seconds from
   20. That is what bought the budget.
-- **It needed a slight lift** (`-e 0.04`). The footage measures 21% mean
-  luminance, much darker than it looks, and the scrim was crushing it.
+- **It needed grading** (`-e 0.07 -a 1.32 -k 1.07`). The footage measures 21%
+  mean luminance — much darker than it looks — and reads muted and olive
+  ungraded. Saturation past ~1.5 turns the green acid and flattens the
+  highlights, so 1.32 is about the ceiling for footage this saturated already.
 - **The scrim came *down*, not up.** White type clears 11:1 against the raw
   footage, so the scrim here is about letting the video recede, not legibility.
   It sits at 0.45.
+
+## Grade in the encode, never in CSS
+
+There was a `filter: saturate(0.92) contrast(1.04)` on the video element for a
+while. It applied to the `<video>` but **not** to the poster still behind
+`.is-still`, so the two states were graded differently — a visitor on
+reduced-motion or a failed autoplay saw a different picture from everyone else.
+
+All grading now lives in `-e` / `-a` / `-k`, which bake into the renditions and
+the poster alike.
 
 ## Watch out: WebM does not always win
 

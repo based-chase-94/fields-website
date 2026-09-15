@@ -26,7 +26,8 @@ properties at the top of `site/assets/css/site.css` mirror it one-to-one.
 | Role | Token | Colour |
 |---|---|---|
 | Page ground + video scrim | `--forest` / `--forest-rgb` | Forest |
-| Logo lockup | `--logo-ink` | White `#FFFFFF` |
+| Logo script | `--logo-ink` | Sunshine |
+| GRAINS + GREENS | `--logo-sub-ink` | White `#FFFFFF` |
 | Tagline | `--ink-on-dark` → `--almond` | Almond |
 | "Coming Soon" eyebrow | `--accent` → `--sunshine` | Sunshine |
 | Favicon ground | — | Forest |
@@ -48,14 +49,22 @@ frame, which is what a visitor actually sees:
 
 | Element | Colour | Ratio |
 |---|---|---|
-| Logo | White | 10.1:1 |
+| Logo script | Sunshine | 7.5:1 |
+| GRAINS + GREENS | White | 10.0:1 |
 | Tagline | Almond | 8.0:1 |
-| "Coming Soon" | Sunshine | 7.1:1 |
+| "Coming Soon" | Sunshine | 7.0:1 |
+| Address | Almond | 8.2:1 |
 
-All three clear AA for normal text. Re-measure if the hero clip is ever
+All of them clear AA for normal text. Re-measure if the hero clip is ever
 replaced with brighter footage — a bright clip pushes every one of these down,
 and `--scrim-strength` is the knob that pulls them back.
 
-The logo is pure white rather than Almond, per the client. White isn't in the
-palette, so if the lockup should match the tagline exactly, `--logo-ink` is the
-single line to change.
+The lockup is two-tone at the client's request: the script in Sunshine, the
+GRAINS + GREENS line under it in white. White isn't in the palette but is what
+the sub-line is set in; `--logo-sub-ink` changes it if that should move to
+Almond.
+
+Sunshine now carries both the logo script and the "Coming Soon" eyebrow. That
+is a lot of weight on one accent — if the eyebrow starts to feel like it's
+competing with the lockup rather than supporting it, moving it to Almond is a
+one-line change to `--accent`.

@@ -17,9 +17,11 @@
   --forest-rgb: 40, 54, 40;
 
   --ink-on-dark: var(--almond);
-  /* The logo is pure white for now, per client. --almond is the on-palette
-     alternative if the lockup should match the tagline exactly. */
-  --logo-ink:    #FFFFFF;
+  /* The lockup is two-tone: the script in Sunshine, the GRAINS + GREENS line
+     under it in white. The inline SVG reads both of these directly, so this is
+     the only place either colour is set. */
+  --logo-ink:     var(--sunshine);
+  --logo-sub-ink: #FFFFFF;
   /* Sunshine, not Chartreuse: the hero is green grass, and an olive-yellow in
      the same hue family measured 3.9:1 against it — below the 4.5:1 floor. */
   --accent:      var(--sunshine);
@@ -75,9 +77,9 @@ html, body {
   /* Nudge the framing if the subject sits high or low in the frame. */
   object-position: center center;
   z-index: -2;
-  /* Video decodes slightly warmer/flatter than the poster; a touch of
-     contrast keeps the two from popping when playback starts. */
-  filter: saturate(0.92) contrast(1.04);
+  /* No grade here on purpose: it would apply to the video but not to the
+     poster still behind .is-still, so the two states would not match. All
+     grading is baked in by tools/encode-hero-video.sh. */
 }
 
 /* Vignette + top/bottom falloff. Type sits in the calm middle. */
@@ -126,7 +128,6 @@ html, body {
   width: clamp(15rem, 40vw, 27rem);
   height: auto;
   margin: 0 auto;
-  color: var(--logo-ink);
   filter: drop-shadow(0 2px 24px rgba(0, 0, 0, 0.35));
 }
 

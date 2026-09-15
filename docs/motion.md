@@ -67,3 +67,24 @@ fail all had to be closed off:
 The hidden state is applied *only* by JS setting an attribute before first
 paint, never in the base stylesheet — so there's no way for a visitor to be
 left looking at an invisible page.
+
+## Autoplay on mobile
+
+Autoplay is refused far more often on phones than on desktop — iOS Low Power
+Mode blocks it outright, and no amount of markup overrides that. So playback
+failure is treated as two separate cases:
+
+- **The video isn't coming** (no sources, decode or network error, reduced
+  motion, data-saver): hide it, let the poster carry the frame.
+- **Autoplay was refused but the video is fine**: keep the element on screen
+  showing its poster frame and start on the visitor's first touch, scroll or
+  keypress.
+
+The second case used to fall into the first, which hid the `<video>` outright
+and left it unrecoverable for the rest of the pageview — a tap couldn't bring
+it back, because the resume handler skipped anything already marked as a still.
+
+`video.muted` is also set as a property before `play()`, not just as a markup
+attribute; some WebKit builds only honour muted autoplay that way. And the
+`canplay` / `loadeddata` listeners are attached *before* `load()`, so a cached
+video can't reach a ready state before anything is listening.

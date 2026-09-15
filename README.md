@@ -16,7 +16,8 @@ website/
 ├── tools/             ← build scripts (run as `bash`/`python3 tools/…` —
 │   │                     Tresorit drops the executable bit on sync)
 │   ├── encode-hero-video.sh
-│   └── build-logo.py
+│   ├── build-logo.py
+│   └── stamp-assets.py
 └── docs/
     ├── video-prep.md  ← how to prep the hero clip, and why
     ├── palette.md     ← brand colours + how the page uses them
@@ -55,6 +56,16 @@ when it moves to the real domain.
 The repo is public, which is what GitHub Pages needs on a free plan. The page
 is therefore reachable by anyone with the URL — it isn't secret, just
 unlisted.
+
+## After editing CSS or JS
+
+```bash
+python3 tools/stamp-assets.py
+```
+
+Stamps `site.css` and `site.js` with a hash of their own contents. Pages serves
+assets with a ten-minute max-age, so without this a client reloading the review
+link mid-change can sit on a stale stylesheet and see a half-updated page.
 
 ## Preview it locally
 

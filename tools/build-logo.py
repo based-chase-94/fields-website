@@ -32,7 +32,17 @@ INDEX = ROOT / "site/index.html"
 SVG = "http://www.w3.org/2000/svg"
 DROP_NS = ("inkscape", "sodipodi")
 
-VARIANTS = {"white": "#FFFFFF", "forest": "#283628"}
+# The master splits cleanly in two: path15-20 are the "Fields" script itself,
+# path2-14 are the GRAINS + GREENS line beneath it. That lets the two be
+# coloured independently, which is what the brand lockup wants.
+WORDMARK_PATHS = {"path15", "path16", "path17", "path18", "path19", "path20"}
+
+# name -> (wordmark fill, sub-line fill)
+VARIANTS = {
+    "brand":  ("#F9E14D", "#FFFFFF"),   # Sunshine script, white sub-line
+    "white":  ("#FFFFFF", "#FFFFFF"),
+    "forest": ("#283628", "#283628"),
+}
 
 FOREST = "#283628"
 
@@ -45,8 +55,9 @@ FAVICON_VIEWBOX = "5.55 -7.65 176.5 176.5"
 FAVICON_GLYPH = "path15"
 
 
-def clean(color):
-    """Return the master as a minimal <svg> tree filled with `color`."""
+def clean(wordmark_fill, sub_fill):
+    """Return the master as a minimal <svg> tree, the two groups filled
+    independently."""
     ET.register_namespace("", SVG)
     tree = ET.parse(MASTER)
     root = tree.getroot()
@@ -64,15 +75,17 @@ def clean(color):
         for attr in list(el.attrib):
             if attr.startswith("{") or attr.split(":")[0] in DROP_NS:
                 del el.attrib[attr]
-        # Every path carries the same black style; fill comes off the root now.
+        # Every path carries the same hard-coded black style. Drop it and fill
+        # by which half of the lockup the path belongs to.
         if el.tag == "{%s}path" % SVG:
             el.attrib.pop("style", None)
+            pid = el.get("id", "")
+            el.set("fill", wordmark_fill if pid in WORDMARK_PATHS else sub_fill)
         # Layer/group ids are Inkscape's, not ours.
         if el.tag == "{%s}g" % SVG:
             el.attrib.pop("id", None)
 
     root.attrib.pop("id", None)
-    root.set("fill", color)
     # No explicit xmlns here — register_namespace already emits the default one,
     # and setting it again produces a duplicate attribute that strict XML
     # parsers reject (HTML's lenient parser hides this, .svg files don't).
@@ -89,7 +102,7 @@ def serialise(root):
 
 def favicon():
     """The F glyph alone, knocked out of a Forest tile."""
-    root = clean("#FFFFFF")
+    root = clean("#FFFFFF", "#FFFFFF")
     group = root.find(".//{%s}g" % SVG)
     for el in root.iter():
         for child in list(el):
@@ -128,16 +141,16 @@ def rasterise(src):
 def main():
     IMG.mkdir(parents=True, exist_ok=True)
 
-    for name, color in VARIANTS.items():
+    for name, (wm, sub) in VARIANTS.items():
         dest = IMG / f"fields-primary-{name}.svg"
         dest.write_text(
-            '<?xml version="1.0" encoding="UTF-8"?>\n' + serialise(clean(color)) + "\n"
+            '<?xml version="1.0" encoding="UTF-8"?>\n' + serialise(clean(wm, sub)) + "\n"
         )
         print(f"  {dest.relative_to(ROOT)}  ({dest.stat().st_size // 1024} KB)")
 
     # Inline copy: currentColor means one CSS declaration recolours it, and the
     # logo paints with the document instead of waiting on a second request.
-    inline = clean("currentColor")
+    inline = clean("var(--logo-ink, #F9E14D)", "var(--logo-sub-ink, #FFFFFF)")
     inline.attrib.pop("width", None)
     inline.attrib.pop("height", None)
     inline.set("class", "hero__logo")

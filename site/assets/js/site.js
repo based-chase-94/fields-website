@@ -11,9 +11,32 @@
   var hero = document.querySelector(".hero");
   if (!video || !hero) return;
 
+  // Two different failures, two different responses.
+  //   stayStill()     — the video is not coming: no sources, a decode/network
+  //                     error, or the visitor asked us not to. Hide it and let
+  //                     the poster carry the frame.
+  //   awaitGesture()  — the video is fine but autoplay was refused (iOS Low
+  //                     Power Mode is the common one). Keep the element on
+  //                     screen showing its poster frame and start on the first
+  //                     touch, rather than killing playback for the pageview.
   function stayStill() {
     hero.classList.add("is-still");
     if (video) video.removeAttribute("autoplay");
+  }
+
+  var gestureArmed = false;
+  function awaitGesture() {
+    if (gestureArmed) return;
+    gestureArmed = true;
+    var events = ["touchstart", "pointerdown", "keydown"];
+    function go() {
+      events.forEach(function (e) { document.removeEventListener(e, go); });
+      var p = video.play();
+      if (p && typeof p.catch === "function") p.catch(function () {});
+    }
+    events.forEach(function (e) {
+      document.addEventListener(e, go, { once: true, passive: true });
+    });
   }
 
   // 1. Honour the user's stated preferences before anything else.
@@ -50,11 +73,19 @@
 
   if (!attached) return stayStill();
 
-  // 4. Load, then play. preload="none" means nothing moved until now.
-  video.preload = "auto";
-  video.load();
+  function attempt() {
+    // Some WebKit builds only honour muted autoplay when it's set as a
+    // property, not just the markup attribute.
+    video.muted = true;
+    var p = video.play();
+    if (p && typeof p.catch === "function") p.catch(awaitGesture);
+  }
 
+  // 4. Listeners first, then load — otherwise a cached video can reach
+  //    `canplay` before anything is listening and never get played.
   video.addEventListener("error", stayStill, { once: true });
+  video.addEventListener("canplay", attempt, { once: true });
+  video.addEventListener("loadeddata", attempt, { once: true });
   video.addEventListener("stalled", function () {
     // Give it a moment; if it never gets going, fall back to the still.
     window.setTimeout(function () {
@@ -62,14 +93,8 @@
     }, 6000);
   });
 
-  video.addEventListener("canplay", function () {
-    var p = video.play();
-    if (p && typeof p.catch === "function") {
-      // iOS low-power mode and some autoplay policies reject this. The poster
-      // is already on screen, so there is nothing to clean up but the class.
-      p.catch(stayStill);
-    }
-  }, { once: true });
+  video.preload = "auto";
+  video.load();
 
   // 5. A tab that loads in the background — or an iOS device that drops into
   //    Low Power Mode — gets its playback suspended and never resumes on its
@@ -78,7 +103,7 @@
     if (document.hidden || hero.classList.contains("is-still")) return;
     if (video.paused && video.readyState >= 2) {
       var p = video.play();
-      if (p && typeof p.catch === "function") p.catch(function () {});
+      if (p && typeof p.catch === "function") p.catch(awaitGesture);
     }
   });
 })();
