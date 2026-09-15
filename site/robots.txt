@@ -1,0 +1,3 @@
+# Client-review deployment. Not the live site.
+User-agent: *
+Disallow: /

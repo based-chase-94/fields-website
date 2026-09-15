@@ -1,0 +1,12 @@
+.DS_Store
+
+# Video and photo masters. The grass master alone is 176 MB — well past
+# GitHub's 100 MB per-file limit — and nothing here is reproducible from the
+# repo anyway. They live in Tresorit; only the encoded output in
+# site/assets/video/ ships.
+source/video/*
+source/photography/*
+!source/**/.keep
+
+# Licensed fonts must not go into a public repo. See README.
+source/fonts/*
