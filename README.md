@@ -23,7 +23,8 @@ website/
     ├── video-prep.md  ← how to prep the hero clip, and why
     ├── palette.md     ← brand colours + how the page uses them
     ├── motion.md      ← the intro choreography, and why there's no library
-    └── signage.md     ← the looping video for screens in the space
+    ├── signage.md     ← the looping video for screens in the space
+    └── hosting.md     ← Porkbun + Cloudflare runbook, and the launch checklist
 ```
 
 The `source/` ÷ `site/` split is the important part: masters go in one, the
@@ -95,7 +96,10 @@ block the video and the stylesheet — it needs to be served over HTTP.)
       `--display` at it. Fredoka carries everything until then.
 - [ ] Opening details: timing, email capture, socials
 - [x] Hosting — GitHub Pages, auto-deploys from `main`
-- [ ] Real domain, and drop the noindex when it goes live
+- [ ] **Move to Cloudflare Pages** — domain is bought (Porkbun) and the
+      Cloudflare account exists. Runbook in [docs/hosting.md](docs/hosting.md)
+- [ ] Launch checklist: drop the noindex, canonical, sitemap, LocalBusiness
+      JSON-LD, Google Business Profile
 
 ## Logo
 
