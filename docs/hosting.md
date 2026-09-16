@@ -100,20 +100,26 @@ has nothing to fire on.
 
 **a. A placeholder DNS record**
 
-DNS → Records → Add record:
+DNS → Records → Add **two** records, both proxied:
 
-| Field | Value |
-|---|---|
-| Type | `AAAA` |
-| Name | `www` |
-| IPv6 address | `100::` |
-| Proxy status | **Proxied** (orange cloud — this is essential) |
-| TTL | Auto |
+| Type | Name | Content |
+|---|---|---|
+| `AAAA` | `www` | `100::` |
+| `A` | `www` | `192.0.2.1` |
 
-`100::` is the IPv6 discard address. Nothing is ever fetched from it — the
-record exists purely so Cloudflare accepts the connection, and the redirect
-below fires at the edge before any origin is contacted. Grey-clouding this
-record would break it, because an unproxied record bypasses the rules engine.
+**Both address families are required.** A hostname with only an `AAAA` resolves
+for IPv6 clients and fails outright for everyone else — plenty of corporate and
+older ISP networks are still IPv4-only, and they would get a DNS error rather
+than the redirect. The apex does not need this handled manually because
+attaching the Worker custom domain creates both families automatically.
+
+`100::` is the IPv6 discard address and `192.0.2.1` is TEST-NET-1, both
+reserved by RFC for exactly this purpose. Neither is ever contacted — the
+records exist purely so Cloudflare accepts the connection, and the redirect
+below fires at the edge first.
+
+**Proxied is essential.** A grey-clouded record bypasses the rules engine, so
+the redirect never runs and the request goes nowhere.
 
 **b. The redirect rule**
 
