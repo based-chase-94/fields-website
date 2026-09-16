@@ -77,20 +77,69 @@ Certificate issuance takes a few minutes.
 **Add the apex only.** Attaching `www` as a second custom domain would serve
 the identical site on two hostnames, which splits SEO signals between them.
 
-### 5. Redirect www to the apex
+### 5. Force HTTPS
 
-Cloudflare → **Rules** → **Redirect Rules** → **Create**:
+**SSL/TLS → Edge Certificates → Always Use HTTPS → on.**
 
-- If: `Hostname` `equals` `www.example.com`
-- Then: **Dynamic** redirect, **301**, expression:
-  `concat("https://example.com", http.request.uri.path)`
-- Tick **preserve query string**
+Not on by default. Until it is, `http://fieldsbowls.com` serves the site over an
+unencrypted connection rather than redirecting — verified by requesting port 80
+directly, which returned `200`, not a `301`.
 
-Then add a DNS record so `www` resolves at all: type `AAAA`, name `www`,
-content `100::`, **Proxied**. That is Cloudflare's documented discard address —
-the redirect rule fires before anything is actually fetched.
+Two reasons it matters beyond the obvious: anyone typing the bare domain gets
+plain HTTP, and search engines treat `http://` and `https://` as separate URLs,
+so without the redirect the ranking signals split between them.
 
-### 6. Verify, then retire GitHub Pages
+Leave **HSTS** alone for now. It is worth enabling at launch, but browsers cache
+the policy for its full duration and it cannot be withdrawn quickly — so it is a
+bad thing to switch on while the site is still moving around.
+
+### 6. Send www to the apex
+
+Two parts, in this order. The DNS record must exist first, or the redirect rule
+has nothing to fire on.
+
+**a. A placeholder DNS record**
+
+DNS → Records → Add record:
+
+| Field | Value |
+|---|---|
+| Type | `AAAA` |
+| Name | `www` |
+| IPv6 address | `100::` |
+| Proxy status | **Proxied** (orange cloud — this is essential) |
+| TTL | Auto |
+
+`100::` is the IPv6 discard address. Nothing is ever fetched from it — the
+record exists purely so Cloudflare accepts the connection, and the redirect
+below fires at the edge before any origin is contacted. Grey-clouding this
+record would break it, because an unproxied record bypasses the rules engine.
+
+**b. The redirect rule**
+
+Rules → Redirect Rules → Create rule. If a **"Redirect from WWW to Root"**
+template is offered, use it — it builds exactly this. Otherwise, by hand:
+
+- **If** — Custom filter expression: `Hostname` `equals` `www.fieldsbowls.com`
+- **Then** — URL redirect, type **Dynamic**
+- **Expression**: `concat("https://fieldsbowls.com", http.request.uri.path)`
+- **Status code**: `301`
+- **Preserve query string**: on
+
+301 rather than 302 because this is permanent, and a permanent redirect passes
+ranking signals to the apex. The dynamic expression carries the path through, so
+`www.fieldsbowls.com/menu` lands on `fieldsbowls.com/menu` rather than dumping
+everyone on the homepage.
+
+Verify:
+
+```bash
+curl -sI https://www.fieldsbowls.com/ | grep -iE 'HTTP/|location'
+```
+
+Expect `301` and `location: https://fieldsbowls.com/`.
+
+### 7. Verify, then retire GitHub Pages
 
 Once the real domain serves correctly:
 
