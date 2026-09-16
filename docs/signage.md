@@ -5,9 +5,24 @@ burned into the pixels — grass, scrim, lockup, coming-soon line — because th
 is no browser doing the compositing.
 
 ```bash
-python3 tools/build-signage.py            # 1920x1080
-python3 tools/build-signage.py --portrait # 1080x1920
+python3 tools/build-signage.py                          # 1920x1080
+python3 tools/build-signage.py --portrait               # 1080x1920
+python3 tools/build-signage.py --width 3840 --height 2160   # 4K
 ```
+
+| Render | Bitrate | Size | H.264 level |
+|---|---|---|---|
+| 3840x2160 | 51 Mbps | 190 MB | 5.1 |
+| 1920x1080 | 27 Mbps | 98 MB | 4.2 |
+| 1080x1920 | 18 Mbps | 67 MB | 4.2 |
+
+**The level is picked from the resolution, and it matters.** H.264 level 4.2
+does not cover 3840x2160; a 4K file tagged 4.2 is out of spec and strict
+players and CMS validators reject it outright. Above 1080p the build tags 5.1.
+
+CRF also steps back one notch at 4K (20 rather than 18). At four times the
+pixels, CRF 18 lands near 70 Mbps, which is past what a lot of signage hardware
+will decode reliably.
 
 Output lands in `signage/` (gitignored — rebuildable, and tens of megabytes).
 
@@ -64,4 +79,15 @@ Five things worth confirming, because they change the render:
 ## If the message changes
 
 The text lives at the top of `tools/build-signage.py` (`TAGLINE`, `EYEBROW`).
-There is deliberately no address, per the client.
+
+The signage line reads just **"Coming Soon"**, not "Coming Soon to CU Anschutz"
+like the website. These screens are *on* the Anschutz campus, so naming it
+there is redundant. The website keeps the longer line, because its visitors
+are not standing in the building.
+
+Dropping fifteen characters left the line with no width to hold its place under
+the lockup, so it also gained size (0.0165 to 0.0225 of frame width) and
+tracking (0.32em to 0.42em). Short all-caps lines carry more tracking
+gracefully than long ones do.
+
+There is deliberately no address.

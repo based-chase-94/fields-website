@@ -44,7 +44,7 @@ ALMOND = (244, 233, 225)
 SUNSHINE = (249, 225, 77)
 
 TAGLINE = "Good things take thyme."
-EYEBROW = "COMING SOON TO CU ANSCHUTZ"
+EYEBROW = "COMING SOON"
 
 
 def sh(cmd):
@@ -106,7 +106,7 @@ def build_overlay(w, h, strength, tmp):
     # legibility floor for that distance.
     logo_w = int(base * (0.72 if portrait else 0.40))
     tag_size = int(base * (0.048 if portrait else 0.027))
-    eye_size = int(base * (0.030 if portrait else 0.0165))
+    eye_size = int(base * (0.040 if portrait else 0.0225))
     gap_logo = int(base * (0.055 if portrait else 0.032))
     gap_eye = int(base * (0.030 if portrait else 0.018))
 
@@ -118,7 +118,8 @@ def build_overlay(w, h, strength, tmp):
     draw = ImageDraw.Draw(layer)
     tag_font = font_at(tag_size, 300)
     eye_font = font_at(eye_size, 500)
-    tracking = eye_size * 0.32
+    # Short all-caps lines carry more tracking gracefully than long ones.
+    tracking = eye_size * 0.42
 
     tag_w = draw.textlength(TAGLINE, font=tag_font)
     eye_w = tracked_width(draw, EYEBROW, eye_font, tracking)
@@ -158,12 +159,14 @@ def main():
     ap.add_argument("--take", type=float, default=0)          # 0 = whole source
     ap.add_argument("--xfade", type=float, default=1.5)
     ap.add_argument("--fps", type=int, default=30)            # signage players prefer 30
-    ap.add_argument("--crf", type=int, default=18)
+    ap.add_argument("--crf", type=int, default=0)   # 0 = pick by resolution
     ap.add_argument("--scrim", type=float, default=0.25)
     ap.add_argument("--name", default="fields-signage")
     a = ap.parse_args()
 
     w, h = (1080, 1920) if a.portrait else (a.width, a.height)
+    if not a.crf:
+        a.crf = 20 if w * h > 1920 * 1080 else 18
     OUT.mkdir(exist_ok=True)
 
     dur = float(subprocess.run(
@@ -202,6 +205,8 @@ def main():
             "-map", "[v]", "-c:v", "libx264", "-preset", "veryfast",
             "-crf", "12", str(tmp / "looped.mp4")])
 
+        # 4.2 tops out below 4K; 5.1 covers 3840x2160 at 30fps.
+        level = "5.1" if w * h > 1920 * 1080 else "4.2"
         out = OUT / f"{a.name}-{w}x{h}.mp4"
         print("── burn in + encode ───")
         sh(["ffmpeg", "-hide_banner", "-loglevel", "error", "-stats", "-y",
@@ -210,7 +215,7 @@ def main():
             # A silent track: some signage players error on a video with no audio.
             "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=48000",
             "-shortest",
-            "-c:v", "libx264", "-profile:v", "high", "-level:v", "4.2",
+            "-c:v", "libx264", "-profile:v", "high", "-level:v", level,
             "-preset", "slow", "-crf", str(a.crf),
             "-x264-params", f"keyint={a.fps*2}:min-keyint={a.fps*2}:scenecut=0",
             "-c:a", "aac", "-b:a", "96k",
