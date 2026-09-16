@@ -29,29 +29,50 @@ entries with the pair Cloudflare gave you → save.
 Cloudflare emails when it takes over. Usually minutes; allow a few hours.
 Nothing else can be done until Cloudflare reports the zone **Active**.
 
-### 3. Create the Pages project
+### 3. Create the project
 
-Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** →
-**Connect to Git** → authorise the GitHub app → pick `fields-website`.
+**Cloudflare has moved new Git-connected projects from Pages to Workers.** The
+old "Build output directory" field is gone from the dashboard — the assets
+directory is declared in `wrangler.jsonc` at the repo root instead, which is an
+improvement, since it is versioned rather than set once in a web form.
 
-Build settings — this repo has no build step:
+Do **not** reach for the legacy Pages flow. Pages still works, but it is in
+maintenance and new projects are steered to Workers. Everything this site needs
+— custom domains, `_headers`, Git deploys, preview URLs — works on Workers, and
+**requests to static assets are free and unlimited on both plans**, exactly as
+they were on Pages.
+
+Dashboard → **Workers & Pages** → **Create** → **Import a repository** → pick
+`fields-website`.
 
 | Setting | Value |
 |---|---|
-| Framework preset | None |
-| Build command | *(leave empty)* |
-| Build output directory | `site` |
-| Root directory | `/` |
+| Build command | *(leave empty — there is no build step)* |
+| Deploy command | `npx wrangler deploy` *(usually prefilled)* |
 | Production branch | `main` |
 
-That gives a `*.pages.dev` URL. Confirm it looks right before attaching the
+The assets directory is **not** set here. It comes from `wrangler.jsonc`:
+
+```jsonc
+{
+  "name": "fields-website",
+  "compatibility_date": "2026-09-16",
+  "assets": { "directory": "./site" }
+}
+```
+
+There is no `main` key on purpose — with no Worker script this deploys as a
+pure static site. If the build fails with *"Missing entry-point to Worker
+script or to assets directory"*, that path is the thing to check.
+
+That gives a `*.workers.dev` URL. Confirm it looks right before attaching the
 real domain.
 
 ### 4. Attach the domain
 
-Pages project → **Custom domains** → **Set up a domain** → the apex
-(`example.com`). Cloudflare creates the DNS record itself. Certificate issuance
-takes a few minutes.
+The Worker → **Settings** → **Domains & Routes** → **Add** → **Custom domain**
+→ the apex (`example.com`). Cloudflare creates the DNS record itself.
+Certificate issuance takes a few minutes.
 
 **Add the apex only.** Attaching `www` as a second custom domain would serve
 the identical site on two hostnames, which splits SEO signals between them.
@@ -101,6 +122,17 @@ private review link.
       do not work for social scrapers)
 - [ ] Claim the Google Business Profile. For a campus location this drives more
       traffic than the site does.
+
+## A note on file handling
+
+Pages used to silently exclude `node_modules`, `.git` and `.DS_Store` from
+uploads. **Workers does not.** Deploying through Workers Builds is safe, because
+it deploys the repo checkout and those are gitignored — but a local
+`wrangler deploy` uploads the working directory as-is and would publish
+`.DS_Store`. `site/.assetsignore` covers that case.
+
+Limits worth knowing: 20,000 files per deployment, 25 MiB per file. The largest
+asset here is the 3.6 MB hero video.
 
 ## Why Cloudflare over the alternatives
 

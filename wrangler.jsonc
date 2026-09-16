@@ -1,0 +1,20 @@
+{
+  // Cloudflare Workers static-assets config.
+  //
+  // This replaces what used to be the "Build output directory" field in the
+  // Pages dashboard. New Git-connected projects are Workers now, and the
+  // assets directory is declared here instead — which is an improvement: it is
+  // versioned with the code rather than set once in a web form.
+  //
+  // There is deliberately no "main". With no Worker script this deploys as a
+  // pure static site, which is all this needs.
+
+  "name": "fields-website",
+  "compatibility_date": "2026-09-16",
+
+  "assets": {
+    // Only site/ is servable. source/, tools/, docs/ and signage/ stay in the
+    // repo and never reach the web.
+    "directory": "./site"
+  }
+}

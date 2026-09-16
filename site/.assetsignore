@@ -1,0 +1,6 @@
+# Workers static assets does NOT strip these the way Pages did. Harmless via
+# Workers Builds, which deploys the repo checkout where they are gitignored —
+# but a local `wrangler deploy` uploads the working directory, and would
+# happily publish .DS_Store. Not itself uploaded.
+.DS_Store
+.assetsignore
