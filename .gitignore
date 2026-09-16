@@ -13,3 +13,6 @@ source/fonts/*
 
 # Client-review renders — deliverables, not site assets.
 review/
+
+# Rendered signage deliverables — rebuild with tools/build-signage.py.
+signage/
