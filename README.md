@@ -96,10 +96,12 @@ block the video and the stylesheet — it needs to be served over HTTP.)
       `--display` at it. Fredoka carries everything until then.
 - [ ] Opening details: timing, email capture, socials
 - [x] Hosting — GitHub Pages, auto-deploys from `main`
-- [ ] **Move to Cloudflare** — domain bought (Porkbun), Cloudflare account
-      created, waiting on the client to verify it. Deploys as a Workers static
-      site (`wrangler.jsonc`), not legacy Pages. Runbook in
-      [docs/hosting.md](docs/hosting.md)
+- [x] **Cloudflare** — `fieldsbowls.com` (Porkbun registration, Cloudflare DNS)
+      live on the apex as a Workers static site. Porkbun's imported forwarding
+      records cleared; email forwarding kept
+- [ ] `www` redirect to the apex — discard `AAAA` + redirect rule
+      (step 5 in [docs/hosting.md](docs/hosting.md))
+- [ ] Retire the GitHub Pages workflow once the domain has been stable a while
 - [ ] Launch checklist: drop the noindex, canonical, sitemap, LocalBusiness
       JSON-LD, Google Business Profile
 

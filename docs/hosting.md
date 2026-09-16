@@ -104,6 +104,37 @@ fallback if anything goes wrong.
 
 ---
 
+## Email and DMARC
+
+The domain is `fieldsbowls.com`, registered at Porkbun, DNS on Cloudflare.
+
+Inbound mail uses **Porkbun forwarding** — two `MX` records to `fwd1`/`fwd2
+.porkbun.com` plus an SPF `TXT`. Those were imported when Cloudflare scanned
+the domain and are deliberately kept; they are unrelated to the website and
+deleting them breaks any address at the domain.
+
+A `_dmarc` `TXT` record is published as `v=DMARC1; p=reject;`.
+
+**Why reject, and why now.** Nothing currently sends mail *from* the domain, so
+a strict policy costs nothing and blocks anyone spoofing the brand while it
+goes up on signage and a public site. This is the safest window to publish it.
+
+> **When catering email is set up — read this first.**
+>
+> Real outbound mail (`hello@`, `catering@`, a POS emailing receipts, a mailing
+> list) must have SPF **and** DKIM configured for whichever provider sends it.
+> With `p=reject` in place, anything sending as `@fieldsbowls.com` without
+> being authorised will be **rejected outright**.
+>
+> That is deliberate. A rejection bounces visibly and gets investigated;
+> `p=quarantine` would route it silently to spam and be far harder to diagnose
+> months after the record was set. Whoever configures the mailbox will be in
+> this same DNS panel adding `MX` and DKIM records, so the `_dmarc` record is
+> right there to review.
+>
+> Adding a `rua=mailto:` address at that point is also worth doing — it turns
+> DMARC from a blunt policy into something that reports who is sending as you.
+
 ## Launch checklist
 
 Everything below is deliberately *not* done yet, because the site is still a
