@@ -44,7 +44,7 @@ ALMOND = (244, 233, 225)
 SUNSHINE = (249, 225, 77)
 
 TAGLINE = "Good things take thyme."
-EYEBROW = "COMING SOON"
+EYEBROW = "COMING SOON"        # may contain \n for a second line
 
 
 def sh(cmd):
@@ -97,7 +97,9 @@ def scrim_layer(w, h, strength):
         "RGBA", (*[Image.new("L", (w, h), c) for c in SCRIM], lin)))
 
 
-def build_overlay(w, h, strength, tmp):
+def build_overlay(w, h, strength, tmp, eyebrow=None):
+    eyebrow = EYEBROW if eyebrow is None else eyebrow
+    eye_lines = eyebrow.split("\n")
     portrait = h > w
     base = min(w, h) if portrait else w
 
@@ -122,22 +124,28 @@ def build_overlay(w, h, strength, tmp):
     tracking = eye_size * 0.42
 
     tag_w = draw.textlength(TAGLINE, font=tag_font)
-    eye_w = tracked_width(draw, EYEBROW, eye_font, tracking)
+    eye_ws = [tracked_width(draw, ln, eye_font, tracking) for ln in eye_lines]
 
-    block_h = logo.height + gap_logo + tag_size + gap_eye + eye_size
+    # Letterspaced caps need generous leading or the two lines read as one block.
+    eye_leading = int(eye_size * 1.65)
+    eye_block = eye_size + eye_leading * (len(eye_lines) - 1)
+
+    block_h = logo.height + gap_logo + tag_size + gap_eye + eye_block
     top = int(h * 0.5 - block_h * 0.52)
 
     layer.alpha_composite(logo, ((w - logo.width) // 2, top))
     y = top + logo.height + gap_logo
     draw.text(((w - tag_w) / 2, y), TAGLINE, font=tag_font, fill=ALMOND)
     y += tag_size + gap_eye
-    # tracking pads the right side, so shift left by half to stay optically centred
-    draw_tracked(draw, ((w - eye_w) / 2 - tracking / 2, y), EYEBROW, eye_font,
-                 SUNSHINE, tracking)
+    for line, lw in zip(eye_lines, eye_ws):
+        # tracking pads the right side, so shift left by half to stay optically centred
+        draw_tracked(draw, ((w - lw) / 2 - tracking / 2, y), line, eye_font,
+                     SUNSHINE, tracking)
+        y += eye_leading
 
     # title-safe check: panels overscan, so nothing may sit outside 90%
     margin = 0.05
-    widest = max(logo.width, tag_w, eye_w)
+    widest = max([logo.width, tag_w] + eye_ws)
     if widest > w * (1 - 2 * margin):
         print(f"  ! content is {widest:.0f}px wide inside a {w}px frame — "
               f"outside the title-safe area", file=sys.stderr)
@@ -162,6 +170,8 @@ def main():
     ap.add_argument("--crf", type=int, default=0)   # 0 = pick by resolution
     ap.add_argument("--scrim", type=float, default=0.25)
     ap.add_argument("--name", default="fields-signage")
+    ap.add_argument("--eyebrow", default=None,
+                    help=r'overrides the coming-soon line; \n makes a second line')
     a = ap.parse_args()
 
     w, h = (1080, 1920) if a.portrait else (a.width, a.height)
@@ -178,7 +188,8 @@ def main():
     with tempfile.TemporaryDirectory() as td:
         tmp = pathlib.Path(td)
         print(f"── overlay ─── {w}x{h}")
-        build_overlay(w, h, a.scrim, tmp).save(tmp / "overlay.png")
+        eyebrow = a.eyebrow.replace("\\n", "\n") if a.eyebrow else None
+        build_overlay(w, h, a.scrim, tmp, eyebrow).save(tmp / "overlay.png")
 
         # Grade matches the site exactly. hqdn3d stays (it helps the encoder);
         # the web build's gblur does not — at this bitrate it only costs sharpness.
