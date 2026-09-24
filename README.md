@@ -1,5 +1,18 @@
 # Fields — website
 
+**Repo location: `~/Developer/fields-website`. Do not move it into Tresorit.**
+
+It lived in the Tresorit client folder briefly and Tresorit deleted every
+dot-prefixed file — `.git/`, `.gitignore`, `.github/`, `site/.assetsignore` —
+while leaving everything else intact. `site/_headers` survived only because it
+starts with an underscore. Git operations on that mount also hang for minutes,
+because Tresorit dehydrates files to cloud-only placeholders and every object
+read has to fault one in.
+
+Nothing was lost, because everything was already pushed to GitHub, which is the
+authoritative copy. The client-facing assets can still live in Tresorit; the
+repo cannot.
+
 Lives entirely inside this folder. Nothing here touches the packaging,
 signage, or logo-exploration folders alongside it.
 

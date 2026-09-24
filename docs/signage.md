@@ -10,11 +10,29 @@ python3 tools/build-signage.py --portrait               # 1080x1920
 python3 tools/build-signage.py --width 3840 --height 2160   # 4K
 ```
 
-| Render | Bitrate | Size | H.264 level |
-|---|---|---|---|
-| 3840x2160 | 51 Mbps | 190 MB | 5.1 |
-| 1920x1080 | 27 Mbps | 98 MB | 4.2 |
-| 1080x1920 | 18 Mbps | 67 MB | 4.2 |
+| Render | Use | Bitrate | Size | Level |
+|---|---|---|---|---|
+| 3840x2160 | 4K panels | 51 Mbps | 190 MB | 5.1 |
+| 1920x1080 | standard landscape | 27 Mbps | 98 MB | 4.2 |
+| 1080x1920 | portrait 9:16 | 18 Mbps | 67 MB | 4.2 |
+| 1600x2000 | **CU Anschutz internal displays (4:5)** | 22 Mbps | 80 MB | 5.1 |
+| 800x1000 | same, at their literal spec | 11 Mbps | 40 MB | 4.2 |
+
+### The 4:5 request
+
+The university asked for 800x1000. **1600x2000 is the one to send** — double
+their spec, so it scales down cleanly on whatever panel they actually have,
+and 800x1000 ships alongside in case their system rejects anything off-spec.
+
+2400x3000 was considered and rejected. A 16:9 source can only yield a
+**1728x2160** 4:5 crop natively — the height is the limit, and 55% of the frame
+width is discarded. Anything taller than 2160 upscales the footage. 1600x2000
+is still a downscale from that native crop, so it stays crisp; 2400x3000 would
+have stretched the grass 1.39x for no real gain.
+
+Note the type would have stayed sharp either way: the lockup and text are
+rendered at output resolution and composited *after* the scale, so only the
+video underneath is bound by the source.
 
 **The level is picked from the resolution, and it matters.** H.264 level 4.2
 does not cover 3840x2160; a 4K file tagged 4.2 is out of spec and strict
