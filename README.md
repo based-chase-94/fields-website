@@ -30,14 +30,12 @@ website/
 │   │                     Tresorit drops the executable bit on sync)
 │   ├── encode-hero-video.sh
 │   ├── build-logo.py
-│   ├── build-menu.py
 │   ├── build-signage.py
 │   └── stamp-assets.py
 └── docs/
     ├── video-prep.md  ← how to prep the hero clip, and why
     ├── palette.md     ← brand colours + how the page uses them
     ├── motion.md      ← the intro choreography, and why there's no library
-    ├── menu.md        ← the menu section, and the contrast work behind it
     ├── signage.md     ← the looping video for screens in the space
     └── hosting.md     ← Porkbun + Cloudflare runbook, and the launch checklist
 ```
