@@ -98,8 +98,8 @@ Five things worth confirming, because they change the render:
 
 The text lives at the top of `tools/build-signage.py` (`TAGLINE`, `EYEBROW`).
 
-The signage line reads just **"Coming Soon"**, not "Coming Soon to CU Anschutz"
-like the website. These screens are *on* the Anschutz campus, so naming it
+The 16:9, 4K and 9:16 renders read just **"Coming Soon"**, not "Coming Soon to
+CU Anschutz" like the website. These screens are *on* the Anschutz campus, so naming it
 there is redundant. The website keeps the longer line, because its visitors
 are not standing in the building.
 
@@ -109,3 +109,21 @@ tracking (0.32em to 0.42em). Short all-caps lines carry more tracking
 gracefully than long ones do.
 
 There is deliberately no address.
+
+## Current messages per render
+
+| Render | Line |
+|---|---|
+| 1920x1080, 3840x2160, 1080x1920 | `COMING SOON` |
+| 1600x2000, 800x1000 (CU Anschutz 4:5) | `OPENING OCTOBER 21ST` / `RESEARCH COMPLEX 2` |
+
+The 4:5 pair carries a dated message, so **it expires on 21 October 2026**.
+Re-run with a new `--eyebrow` after opening — something like `NOW OPEN` — or the
+screens will be advertising a date that has passed.
+
+```bash
+python3 tools/build-signage.py --width 1600 --height 2000 --name fields-signage-4x5 \
+  --eyebrow 'NOW OPEN\nRESEARCH COMPLEX 2'
+python3 tools/build-signage.py --width 800 --height 1000 --name fields-signage-4x5 \
+  --eyebrow 'NOW OPEN\nRESEARCH COMPLEX 2'
+```
