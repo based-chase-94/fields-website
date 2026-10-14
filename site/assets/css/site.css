@@ -196,6 +196,17 @@ html, body {
 }
 .hero__meta:empty { display: none; }
 
+/* Hours matter more to someone standing outside than the street address does,
+   so they get a touch more weight than the line above them. */
+.hero__hours {
+  margin: clamp(0.5rem, 1.2vw, 0.7rem) 0 0;
+  font-size: clamp(0.72rem, 1.25vw, 0.82rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: rgba(244, 233, 225, 0.92);
+}
+
 /* --- fallbacks ------------------------------------------------------------ */
 
 /* No video playing: the poster alone has to carry the frame, so lean on the
@@ -284,7 +295,8 @@ html, body {
 [data-intro="pending"] .hero__logo,
 [data-intro="pending"] .hero__tagline,
 [data-intro="pending"] .hero__status,
-[data-intro="pending"] .hero__meta { opacity: 0; }
+[data-intro="pending"] .hero__meta,
+[data-intro="pending"] .hero__hours { opacity: 0; }
 
 [data-intro="pending"] .hero__veil { opacity: 0.38; }
 
@@ -298,7 +310,8 @@ html, body {
 
 [data-intro="run"] .hero__tagline,
 [data-intro="run"] .hero__status,
-[data-intro="run"] .hero__meta {
+[data-intro="run"] .hero__meta,
+[data-intro="run"] .hero__hours {
   animation: intro-settle var(--intro-dur, 850ms) var(--ease-settle) both;
   animation-delay: var(--intro-delay, 0ms);
 }
@@ -306,6 +319,7 @@ html, body {
 [data-intro="run"] .hero__tagline { --intro-y: 12px; --intro-blur: 7px;  --intro-delay: 380ms; }
 [data-intro="run"] .hero__status  { --intro-y: 9px;  --intro-blur: 5px;  --intro-delay: 700ms; --intro-dur: 800ms; }
 [data-intro="run"] .hero__meta    { --intro-y: 7px;  --intro-blur: 4px;  --intro-delay: 860ms; --intro-dur: 800ms; }
+[data-intro="run"] .hero__hours   { --intro-y: 7px;  --intro-blur: 4px;  --intro-delay: 980ms; --intro-dur: 800ms; }
 
 /* Word-level stagger on the tagline, applied only once site.js has split it.
    Tight — 55ms — so it reads as one soft sweep across the line rather than
@@ -338,7 +352,8 @@ html, body {
   [data-intro] .hero__tagline,
   [data-intro] .hero__tagline .word,
   [data-intro] .hero__status,
-  [data-intro] .hero__meta {
+  [data-intro] .hero__meta,
+  [data-intro] .hero__hours {
     animation: none !important;
     opacity: 1 !important;
     filter: none;
