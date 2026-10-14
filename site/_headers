@@ -4,10 +4,6 @@
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  # LAUNCH: delete the next line when the site goes public. Until then this is
-  # the real directive — a header outranks the <meta> tag and, unlike the tag,
-  # applies to every file, not just the HTML.
-  X-Robots-Tag: noindex, nofollow
 
 # HTML must always revalidate, or a content change can sit stale behind a CDN
 # edge and a browser cache at the same time.

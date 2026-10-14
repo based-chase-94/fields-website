@@ -4,9 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fields — Grains &amp; Greens</title>
-<!-- This is the client-review deployment, not the live site. Drop both this
-     and robots.txt when it moves to the real domain. -->
-<meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Fields — grains &amp; greens. Coming soon to Research Complex 2 at CU Anschutz.">
 <link rel="canonical" href="https://fieldsbowls.com/">
 
@@ -32,6 +29,48 @@
 <meta name="twitter:image:alt" content="The Fields logo over a field of grass, with the words Coming Soon to CU Anschutz.">
 
 <meta name="theme-color" content="#283628">
+
+<!-- Structured data. Feeds the Google knowledge panel and maps results;
+     the address here must match the Google Business Profile exactly.
+     No telephone yet — omitted rather than invented. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  "name": "Fields",
+  "alternateName": "Fields Grains + Greens",
+  "description": "Grains and greens, built to order. On the CU Anschutz campus.",
+  "url": "https://fieldsbowls.com/",
+  "image": "https://fieldsbowls.com/assets/img/og-image.jpg",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "12700 East 19th St",
+    "addressLocality": "Aurora",
+    "addressRegion": "CO",
+    "postalCode": "80045",
+    "addressCountry": "US"
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "10:30",
+      "closes": "15:00"
+    }
+  ],
+  "servesCuisine": [
+    "Salads",
+    "Bowls"
+  ],
+  "priceRange": "$$"
+}
+</script>
 
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">

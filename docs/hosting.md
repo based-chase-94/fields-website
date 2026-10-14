@@ -190,24 +190,22 @@ goes up on signage and a public site. This is the safest window to publish it.
 > Adding a `rua=mailto:` address at that point is also worth doing — it turns
 > DMARC from a blunt policy into something that reports who is sending as you.
 
-## Launch checklist
+## Launch — done 14 Oct 2026
 
-Everything below is deliberately *not* done yet, because the site is still a
-private review link.
+The site went public for a limited opening on 15 October.
 
-- [ ] Delete the `X-Robots-Tag` line from `site/_headers`
-- [ ] Delete `<meta name="robots" content="noindex, nofollow">` from `index.html`
-- [ ] Replace `site/robots.txt` with a real one (at an apex domain it is finally
-      honoured — see the note in that file about why it was inert on Pages)
-- [ ] Add `<link rel="canonical">` with the real domain
-- [ ] Add `sitemap.xml`
-- [ ] Add `LocalBusiness` JSON-LD — name, the Research Complex 2 address, hours,
-      the ordering links. **The address must match the Google Business Profile
-      character for character.**
-- [ ] Update `og:image` to an absolute URL on the real domain (relative paths
-      do not work for social scrapers)
-- [ ] Claim the Google Business Profile. For a campus location this drives more
-      traffic than the site does.
+- [x] `X-Robots-Tag` removed from `site/_headers`
+- [x] `<meta name="robots" content="noindex, nofollow">` removed
+- [x] `robots.txt` rewritten for the live domain, with a `Sitemap:` line
+- [x] `sitemap.xml`
+- [x] `<link rel="canonical">` (added earlier with the Open Graph work)
+- [x] `Restaurant` JSON-LD — address, hours, price range, image
+- [x] Absolute `og:image`
+- [ ] **Google Business Profile** — not claimed. For a campus location this
+      drives more traffic than the site does. The address and hours in the
+      JSON-LD must match it character for character.
+- [ ] No telephone number anywhere. Omitted from the structured data rather
+      than invented; worth adding once there is one.
 
 ## A note on file handling
 
