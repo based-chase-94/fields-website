@@ -215,7 +215,7 @@ html, body {
 
 .hero.is-still .hero__video { display: none; }
 .hero.is-still {
-  background-image: image-set(url("../img/hero-poster.jpg") 1x);
+  background-image: image-set(url("../img/hero-fields-poster.jpg") 1x);
   background-size: cover;
   background-position: center;
 }
