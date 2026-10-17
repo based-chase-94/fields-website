@@ -145,6 +145,16 @@ html, body {
 /* Inline SVG, so the fill rides on `color` and the mark paints with the
    document rather than waiting on a second request. 2:1 artboard — the
    padding inside the viewBox is the logo's clearspace, leave it alone. */
+/* The wordmark is the page's h1. The SVG carries the accessible name via
+   role/aria-label, so this element only needs its UA margin and font-size
+   neutralised -- it contributes no text of its own. */
+.hero__title {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: 0;
+}
+
 .hero__logo {
   display: block;
   width: clamp(15rem, 40vw, 27rem);
@@ -633,4 +643,50 @@ html, body {
   font-variant-numeric: tabular-nums;
   color: var(--price);
   white-space: nowrap;
+}
+
+/* A flat price for a whole group (Refreshers), sat at the right of its head. */
+.group__price {
+  margin: 0 0 0 auto;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--price);
+}
+
+/* Name plus a description — drinks, where the name is the product and the
+   line beneath says what is in it. */
+.named {
+  list-style: none;
+  margin: 1.125rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem clamp(1.5rem, 5vw, 3rem);
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+}
+
+.named__name {
+  display: block;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.named__detail {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--ink-muted);
+  line-height: 1.45;
+}
+
+/* Sourcing notes. Quiet — they are reassurance, not an ingredient list. */
+.menu__foot {
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(40, 54, 40, 0.16);
+}
+
+.menu__foot p {
+  margin: 0 0 0.3rem;
+  font-size: 0.875rem;
+  color: var(--ink-muted);
 }

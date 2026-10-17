@@ -78,7 +78,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap">
-<link rel="stylesheet" href="assets/css/site.css?v=f6b71c35">
+<link rel="stylesheet" href="assets/css/site.css?v=cefa61e9">
 
 <script>
 /* Runs before first paint: marks the intro as pending so the hero starts
@@ -119,6 +119,7 @@
   <div class="hero__veil" aria-hidden="true"></div>
 
   <div class="hero__content">
+    <h1 class="hero__title">
     <!-- logo:start -->
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 384 192" class="hero__logo" role="img" aria-label="Fields — grains + greens">
 <g>
@@ -146,6 +147,7 @@
 </g>
 </svg>
     <!-- logo:end -->
+    </h1>
 
     <p class="hero__tagline">Good things take thyme.</p>
     <p class="hero__status">Opening October 15th</p>
@@ -237,7 +239,21 @@
     </ol>
     <section class="group" aria-labelledby="menu-list-0">
       <header class="group__head">
-        <h3 class="group__title" id="menu-list-0">Field Ingredients</h3>
+        <h3 class="group__title" id="menu-list-0">Greens + Grains</h3>
+        <p class="group__note">Select 2</p>
+      </header>
+      <ul class="cols">
+        <li>Romaine Hearts</li>
+        <li>Arugula</li>
+        <li>Kale</li>
+        <li>Baby Spinach</li>
+        <li>Wild Rice</li>
+        <li>Tri-Color Quinoa</li>
+      </ul>
+    </section>
+    <section class="group" aria-labelledby="menu-list-1">
+      <header class="group__head">
+        <h3 class="group__title" id="menu-list-1">Field Ingredients</h3>
         <p class="group__note">Pick 6</p>
       </header>
       <ul class="cols">
@@ -247,12 +263,12 @@
         <li>Edamame</li>
         <li>Black Beans</li>
         <li>Grilled Corn</li>
-        <li>Roasted Sweet Potato</li>
         <li>Cherry Tomatoes</li>
-        <li>Watermelon Radish</li>
+        <li>Grilled Poblano</li>
         <li>Roasted Chickpeas</li>
         <li>Roasted Broccoli</li>
-        <li>Grilled Poblano</li>
+        <li>Roasted Sweet Potato</li>
+        <li>Watermelon Radish</li>
         <li>Pico de Gallo</li>
         <li>Green Apples</li>
         <li>Strawberries</li>
@@ -260,9 +276,9 @@
         <li>Chives</li>
       </ul>
     </section>
-    <section class="group" aria-labelledby="menu-list-1">
+    <section class="group" aria-labelledby="menu-list-2">
       <header class="group__head">
-        <h3 class="group__title" id="menu-list-1">Proteins</h3>
+        <h3 class="group__title" id="menu-list-2">Proteins</h3>
       </header>
       <ul class="priced">
         <li class="priced__row">
@@ -281,7 +297,7 @@
           <span class="priced__price">+$6.50</span>
         </li>
         <li class="priced__row">
-          <span class="priced__name">Applewood Bacon</span>
+          <span class="priced__name">Smoked Applewood Bacon</span>
           <span class="priced__rule" aria-hidden="true"></span>
           <span class="priced__price">+$2.85</span>
         </li>
@@ -291,7 +307,7 @@
           <span class="priced__price">+$3.50</span>
         </li>
         <li class="priced__row">
-          <span class="priced__name">Roasted Shiitake Mushroom Medley</span>
+          <span class="priced__name">Roasted Shiitake Mushroom Mix</span>
           <span class="priced__rule" aria-hidden="true"></span>
           <span class="priced__price">+$2.00</span>
         </li>
@@ -302,9 +318,9 @@
         </li>
       </ul>
     </section>
-    <section class="group" aria-labelledby="menu-list-2">
+    <section class="group" aria-labelledby="menu-list-3">
       <header class="group__head">
-        <h3 class="group__title" id="menu-list-2">Upgrades</h3>
+        <h3 class="group__title" id="menu-list-3">Upgrades</h3>
       </header>
       <ul class="priced">
         <li class="priced__row">
@@ -339,9 +355,9 @@
         </li>
       </ul>
     </section>
-    <section class="group" aria-labelledby="menu-list-3">
+    <section class="group" aria-labelledby="menu-list-4">
       <header class="group__head">
-        <h3 class="group__title" id="menu-list-3">Crunch</h3>
+        <h3 class="group__title" id="menu-list-4">Crunch</h3>
       </header>
       <ul class="priced">
         <li class="priced__row">
@@ -386,9 +402,9 @@
         </li>
       </ul>
     </section>
-    <section class="group" aria-labelledby="menu-list-4">
+    <section class="group" aria-labelledby="menu-list-5">
       <header class="group__head">
-        <h3 class="group__title" id="menu-list-4">Dressings</h3>
+        <h3 class="group__title" id="menu-list-5">Dressings</h3>
         <p class="group__note">Made fresh in-house · All vegan or vegetarian</p>
       </header>
       <ul class="cols">
@@ -405,6 +421,34 @@
         <li>Lime/Lemon Wedge</li>
       </ul>
     </section>
+    <section class="group" aria-labelledby="menu-list-6">
+      <header class="group__head">
+        <h3 class="group__title" id="menu-list-6">Refreshers</h3>
+        <p class="group__price">$4.50</p>
+      </header>
+      <ul class="named">
+        <li class="named__item">
+          <span class="named__name">Palm Springs</span>
+          <span class="named__detail">iced tea + lemonade</span>
+        </li>
+        <li class="named__item">
+          <span class="named__name">Valencia</span>
+          <span class="named__detail">orange</span>
+        </li>
+        <li class="named__item">
+          <span class="named__name">Flamingo</span>
+          <span class="named__detail">hibiscus lemonade</span>
+        </li>
+        <li class="named__item">
+          <span class="named__name">Bluebird</span>
+          <span class="named__detail">blueberry iced tea</span>
+        </li>
+      </ul>
+    </section>
+    <footer class="menu__foot">
+      <p>We only use Italian olive oil in our marinades and dressings.</p>
+      <p>All proteins ethically sourced and sustainable.</p>
+    </footer>
   </div>
 </section>
 <!-- menu:end -->

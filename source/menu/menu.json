@@ -1,5 +1,5 @@
 {
-  "_source": "House Bowls board image + byo-instructions.pdf + byo-extras.pdf, supplied 17 Oct 2026.",
+  "_source": "House Bowls board + Greens/Proteins/Refreshers board + byo-instructions.pdf + byo-extras.pdf, supplied 17 Oct 2026.",
 
   "houseBowls": {
     "title": "House Bowls",
@@ -33,20 +33,24 @@
   },
 
   "lists": [
+    { "title": "Greens + Grains", "note": "Select 2", "layout": "columns",
+      "items": ["Romaine Hearts", "Arugula", "Kale",
+                "Baby Spinach", "Wild Rice", "Tri-Color Quinoa"] },
+
     { "title": "Field Ingredients", "note": "Pick 6", "layout": "columns",
       "items": ["Cucumber", "Carrot Ribbons", "Red Onion", "Edamame", "Black Beans", "Grilled Corn",
-                "Roasted Sweet Potato", "Cherry Tomatoes", "Watermelon Radish", "Roasted Chickpeas",
-                "Roasted Broccoli", "Grilled Poblano", "Pico de Gallo", "Green Apples", "Strawberries",
-                "Cilantro", "Chives"] },
+                "Cherry Tomatoes", "Grilled Poblano", "Roasted Chickpeas", "Roasted Broccoli",
+                "Roasted Sweet Potato", "Watermelon Radish", "Pico de Gallo", "Green Apples",
+                "Strawberries", "Cilantro", "Chives"] },
 
     { "title": "Proteins", "layout": "priced",
       "items": [
         { "name": "Citrus-Herb Chicken", "price": 4.25 },
         { "name": "Blackened Chicken", "price": 4.50 },
         { "name": "Sesame Miso Alaskan Salmon", "price": 6.50 },
-        { "name": "Applewood Bacon", "price": 2.85 },
+        { "name": "Smoked Applewood Bacon", "price": 2.85 },
         { "name": "Hot Honey Tofu", "price": 3.50 },
-        { "name": "Roasted Shiitake Mushroom Medley", "price": 2.00 },
+        { "name": "Roasted Shiitake Mushroom Mix", "price": 2.00 },
         { "name": "Hardboiled Egg", "price": 1.25 }
       ] },
 
@@ -75,13 +79,26 @@
     { "title": "Dressings", "note": "Made fresh in-house · All vegan or vegetarian", "layout": "columns",
       "items": ["Baja Lime Vinaigrette", "Thai Maple Peanut", "Sesame Miso", "Colorado Ranch",
                 "Green Goddess", "Vegan Caesar", "Fields Honey Vinaigrette", "Olive Oil + Balsamic",
-                "Citrus Poppyseed Vinaigrette", "Hot Honey Drizzle", "Lime/Lemon Wedge"] }
+                "Citrus Poppyseed Vinaigrette", "Hot Honey Drizzle", "Lime/Lemon Wedge"] },
+
+    { "title": "Refreshers", "layout": "named", "price": 4.50,
+      "items": [
+        { "name": "Palm Springs", "detail": "iced tea + lemonade" },
+        { "name": "Valencia",     "detail": "orange" },
+        { "name": "Flamingo",     "detail": "hibiscus lemonade" },
+        { "name": "Bluebird",     "detail": "blueberry iced tea" }
+      ] }
+  ],
+
+  "footnotes": [
+    "We only use Italian olive oil in our marinades and dressings.",
+    "All proteins ethically sourced and sustainable."
   ],
 
   "_unresolved": [
-    "Step 1 says 'Select 2 greens and/or grains' but no greens/grains list appears in either PDF. The bowls imply spinach, kale, romaine hearts and tri-color quinoa, but that is inference -- not rendered.",
-    "Build-your-own base price is $9.95 here. The earlier recipe sheet said $9.85 and the digital Build board said $9.75. Three different figures.",
-    "'Mixed mushrooms' in Fields Notes vs 'Roasted Shiitake Mushroom Medley' in Proteins -- likely the same item under two names.",
-    "Bowls are rendered in the board's row-major reading order (Strawberry Fields, Baja, High Plains, Coastal Caesar, Blue Zone, Fields Notes), not its column order."
+    "Protein names differ between sources. The board says 'Smoked Applewood Bacon' and 'Roasted Shiitake Mushroom Mix'; byo-extras.pdf says 'Applewood Bacon' and 'Roasted Shiitake Mushroom Medley'. The board's wording is rendered. Prices agree.",
+    "The mushroom item has three names across sources: 'Mushroom Mix' (board), 'Mushroom Medley' (PDF), and 'mixed mushrooms' (inside the Fields Notes bowl).",
+    "Build-your-own base price is $9.95 on the instructions board. The earlier recipe sheet said $9.85 and the digital Build board said $9.75. Three different figures.",
+    "Plain-name lists are in board order, not alphabetical."
   ]
 }

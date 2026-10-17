@@ -79,6 +79,8 @@ def lists(ls):
               f'    <h3 class="group__title" id="{hid}">{esc(l["title"])}</h3>']
         if l.get("note"):
             o.append(f'    <p class="group__note">{esc(l["note"])}</p>')
+        if l.get("price") is not None:
+            o.append(f'    <p class="group__price">{money(l["price"])}</p>')
         o.append('  </header>')
 
         if l["layout"] == "priced":
@@ -88,6 +90,14 @@ def lists(ls):
                       f'      <span class="priced__name">{esc(it["name"])}</span>',
                       '      <span class="priced__rule" aria-hidden="true"></span>',
                       f'      <span class="priced__price">+{money(it["price"])}</span>',
+                      '    </li>']
+            o.append('  </ul>')
+        elif l["layout"] == "named":
+            o.append('  <ul class="named">')
+            for it in l["items"]:
+                o += ['    <li class="named__item">',
+                      f'      <span class="named__name">{esc(it["name"])}</span>',
+                      f'      <span class="named__detail">{esc(it["detail"])}</span>',
                       '    </li>']
             o.append('  </ul>')
         else:
@@ -106,6 +116,11 @@ def build(d):
     o.append('    <hr class="menu__rule">')
     o += ["    " + x for x in byo(d["buildYourOwn"])]
     o += ["    " + x for x in lists(d["lists"])]
+    if d.get("footnotes"):
+        o.append('    <footer class="menu__foot">')
+        for f in d["footnotes"]:
+            o.append(f'      <p>{esc(f)}</p>')
+        o.append('    </footer>')
     o += ['  </div>', '</section>']
     return "\n".join(o)
 

@@ -23,12 +23,16 @@ render would buy nothing and cost all three.
 
 ## Shapes
 
-Two list layouts cover everything:
+Three list layouts cover everything:
 
 - `"layout": "columns"` — plain names, flowed into CSS columns.
 - `"layout": "priced"` — name, leader rule, figure.
+- `"layout": "named"` — name over a description, with one `price` on the
+  group rather than per item. Drinks use this.
 
 Bowls are their own shape: name, price, and an ingredient string.
+
+`footnotes` closes the section with quiet sourcing notes.
 
 ## Colour
 
