@@ -1,0 +1,87 @@
+{
+  "_source": "House Bowls board image + byo-instructions.pdf + byo-extras.pdf, supplied 17 Oct 2026.",
+
+  "houseBowls": {
+    "title": "House Bowls",
+    "kicker": "Our favorite places, in a bowl",
+    "note": "All bowls can be made vegetarian upon request",
+    "items": [
+      { "name": "Strawberry Fields", "price": 13.25,
+        "ingredients": "Spinach, tri-color quinoa, citrus-herb chicken, strawberries, walnuts, avocado, crumbled feta, almond brittle, citrus-poppyseed vinaigrette" },
+      { "name": "Baja", "price": 13.50,
+        "ingredients": "Spinach, citrus-herb chicken, grilled corn, black beans, avocado, roasted sweet potato, pico de gallo, cotija waffles, chili-lime vinaigrette, lime wedge" },
+      { "name": "High Plains", "price": 14.50,
+        "ingredients": "Spinach + kale, blackened chicken, applewood bacon, hardboiled egg, grilled corn, cherry tomatoes, avocado, grilled poblano, sourdough croutons, Colorado ranch, hot honey drizzle" },
+      { "name": "Coastal Caesar", "price": 12.95,
+        "ingredients": "Shredded kale + romaine hearts, blackened chicken, cherry tomatoes, sourdough croutons, parmesan, vegan caesar dressing, lemon wedge" },
+      { "name": "Blue Zone", "price": 15.75,
+        "ingredients": "Spinach + romaine hearts, miso-glazed salmon, roasted sweet potato, watermelon radish, carrot ribbons, toasted nori puffs, avocado, edamame, sesame-miso dressing" },
+      { "name": "Fields Notes", "price": 13.50, "vegetarian": true,
+        "ingredients": "Kale + spinach, roasted sweet potato, roasted broccoli, mixed mushrooms, apple, blue cheese, almonds, fields honey vinaigrette, hot honey drizzle" }
+    ]
+  },
+
+  "buildYourOwn": {
+    "title": "Build Your Own",
+    "startsAt": 9.95,
+    "steps": [
+      { "title": "Pick your field base",  "detail": "Select 2 greens and/or grains" },
+      { "title": "Harvest 6 toppings",    "detail": "Pick up to 6 field ingredients", "aside": "+$0.85 each for extras" },
+      { "title": "Upgrade your trip",     "detail": "Fuel up with proteins + premium extras" },
+      { "title": "Final approach",        "detail": "Choose a house-made dressing" }
+    ]
+  },
+
+  "lists": [
+    { "title": "Field Ingredients", "note": "Pick 6", "layout": "columns",
+      "items": ["Cucumber", "Carrot Ribbons", "Red Onion", "Edamame", "Black Beans", "Grilled Corn",
+                "Roasted Sweet Potato", "Cherry Tomatoes", "Watermelon Radish", "Roasted Chickpeas",
+                "Roasted Broccoli", "Grilled Poblano", "Pico de Gallo", "Green Apples", "Strawberries",
+                "Cilantro", "Chives"] },
+
+    { "title": "Proteins", "layout": "priced",
+      "items": [
+        { "name": "Citrus-Herb Chicken", "price": 4.25 },
+        { "name": "Blackened Chicken", "price": 4.50 },
+        { "name": "Sesame Miso Alaskan Salmon", "price": 6.50 },
+        { "name": "Applewood Bacon", "price": 2.85 },
+        { "name": "Hot Honey Tofu", "price": 3.50 },
+        { "name": "Roasted Shiitake Mushroom Medley", "price": 2.00 },
+        { "name": "Hardboiled Egg", "price": 1.25 }
+      ] },
+
+    { "title": "Upgrades", "layout": "priced",
+      "items": [
+        { "name": "Avocado", "price": 1.75 },
+        { "name": "Shaved Cheddar", "price": 1.25 },
+        { "name": "Shaved Parmesan", "price": 1.75 },
+        { "name": "Blue Cheese", "price": 1.75 },
+        { "name": "Sheep's Milk Feta", "price": 1.75 },
+        { "name": "Hummus", "price": 1.25 }
+      ] },
+
+    { "title": "Crunch", "layout": "priced",
+      "items": [
+        { "name": "Dried Cherries", "price": 1.25 },
+        { "name": "Shaved Coconut", "price": 1.25 },
+        { "name": "Toasted Nori Puffs", "price": 1.25 },
+        { "name": "Sliced Almonds", "price": 1.25 },
+        { "name": "Natural Walnuts", "price": 1.25 },
+        { "name": "Almond Brittle", "price": 0.50 },
+        { "name": "Cotija Waffles", "price": 0.50 },
+        { "name": "Sourdough Croutons", "price": 0.50 }
+      ] },
+
+    { "title": "Dressings", "note": "Made fresh in-house · All vegan or vegetarian", "layout": "columns",
+      "items": ["Baja Lime Vinaigrette", "Thai Maple Peanut", "Sesame Miso", "Colorado Ranch",
+                "Green Goddess", "Vegan Caesar", "Fields Honey Vinaigrette", "Olive Oil + Balsamic",
+                "Citrus Poppyseed Vinaigrette", "Hot Honey Drizzle", "Lime/Lemon Wedge"] }
+  ],
+
+  "_unresolved": [
+    "Step 1 says 'Select 2 greens and/or grains' but no greens/grains list appears in either PDF. The bowls imply spinach, kale, romaine hearts and tri-color quinoa, but that is inference -- not rendered.",
+    "Build-your-own base price is $9.95 here. The earlier recipe sheet said $9.85 and the digital Build board said $9.75. Three different figures.",
+    "'Mixed mushrooms' in Fields Notes vs 'Roasted Shiitake Mushroom Medley' in Proteins -- likely the same item under two names.",
+    "Bowls are rendered in the board's row-major reading order (Strawberry Fields, Baja, High Plains, Coastal Caesar, Blue Zone, Fields Notes), not its column order."
+  ]
+}

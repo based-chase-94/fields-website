@@ -25,6 +25,14 @@
   --scrim-rgb: 11, 38, 0;
 
   --ink-on-dark: var(--almond);
+
+  /* Page below the hero. Measured on #F6EAE1: Forest 10.8:1, Burgundy 9.8:1.
+     Sunshine is 1.12:1 there -- effectively invisible -- so the yellow the
+     digital boards use for prices cannot carry text on this background. */
+  --page:  #F6EAE1;
+  --ink:   var(--forest);
+  --ink-muted: #5c6457;   /* 5.2:1 on --page */
+  --price: var(--burgundy);
   /* The lockup is two-tone: the script in Sunshine, the GRAINS + GREENS line
      under it in white. The inline SVG reads both of these directly, so this is
      the only place either colour is set. */
@@ -60,10 +68,9 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html, body {
-  height: 100%;
   margin: 0;
-  background: var(--forest);
-  color: var(--ink-on-dark);
+  background: var(--page);
+  color: var(--ink);
   font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
 }
@@ -72,8 +79,11 @@ html, body {
 
 .hero {
   position: relative;
-  /* svh keeps mobile browser chrome from cropping the bottom of the frame. */
-  min-height: 100svh;
+  /* Stops short of the fold on purpose: the sliver of menu below is what
+     tells you there is more page. svh keeps mobile browser chrome from
+     cropping the frame. min- not fixed, so a short viewport still fits the
+     type rather than clipping it. */
+  min-height: 88svh;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -360,4 +370,267 @@ html, body {
     transform: none;
   }
   [data-intro] .hero__veil { animation: none !important; opacity: 0 !important; }
+}
+
+/* ---------------------------------------------------------------------------
+   Menu
+   Constrained measure, not full width: long ingredient strings are the bulk of
+   this content and they stop being readable much past ~70 characters. Two
+   list shapes carry everything — `cols` for plain names, `priced` for a name
+   against a figure.
+   --------------------------------------------------------------------------- */
+
+.menu {
+  background: var(--page);
+  color: var(--ink);
+  padding: clamp(3.5rem, 9vw, 7rem) clamp(1.25rem, 5vw, 2.5rem) clamp(4rem, 10vw, 8rem);
+}
+
+.menu__inner {
+  max-width: 54rem;
+  margin: 0 auto;
+}
+
+.menu__title {
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.menu__kicker {
+  margin: 0.5rem 0 0;
+  font-size: clamp(1rem, 2.4vw, 1.125rem);
+  color: var(--ink-muted);
+}
+
+.menu__note {
+  margin: 1.75rem 0 0;
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+}
+
+.menu__rule {
+  border: 0;
+  border-top: 1px solid rgba(40, 54, 40, 0.16);
+  margin: clamp(3rem, 8vw, 5.5rem) 0 0;
+}
+
+/* --- house bowls ---------------------------------------------------------- */
+
+.bowls {
+  list-style: none;
+  margin: clamp(2rem, 5vw, 3rem) 0 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+/* Two up only when there is room for the ingredient line to stay readable. */
+@media (min-width: 46rem) {
+  .bowls { grid-template-columns: 1fr 1fr; column-gap: clamp(2rem, 5vw, 3.5rem); }
+}
+
+.bowls__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.bowls__name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* A real element, not ::after — a pseudo is always the last child, which puts
+   the leader past the price instead of between name and figure. */
+.bowls__rule {
+  flex: 1 1 auto;
+  border-bottom: 1px dotted rgba(40, 54, 40, 0.28);
+  transform: translateY(-0.2em);
+}
+
+.bowls__price {
+  margin: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--price);
+  white-space: nowrap;
+}
+
+.bowls__veg {
+  display: inline-grid;
+  place-items: center;
+  width: 1.1em;
+  height: 1.1em;
+  margin-left: 0.3em;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.7em;
+  font-weight: 600;
+  text-decoration: none;
+  vertical-align: 0.1em;
+}
+
+.bowls__ingredients {
+  margin: 0.5rem 0 0;
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+/* --- build your own ------------------------------------------------------- */
+
+.byo__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  margin-top: clamp(3rem, 8vw, 5.5rem);
+}
+
+.byo__from {
+  margin: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--price);
+}
+
+.steps {
+  list-style: none;
+  counter-reset: step;
+  margin: clamp(1.75rem, 4vw, 2.5rem) 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 46rem) {
+  .steps { grid-template-columns: 1fr 1fr; column-gap: clamp(2rem, 5vw, 3.5rem); }
+}
+
+.steps__item {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.875rem;
+  align-items: start;
+}
+
+/* Sunshine works here because it is a fill behind dark ink, not ink itself:
+   Forest on Sunshine measures 8.6:1. */
+.steps__item::before {
+  content: counter(step);
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: var(--sunshine);
+  color: var(--forest);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.steps__name {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  align-self: center;
+}
+
+.steps__detail {
+  margin: 0.25rem 0 0;
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+.steps__aside {
+  display: block;
+  font-size: 0.875rem;
+}
+
+/* --- ingredient groups ---------------------------------------------------- */
+
+.group { margin-top: clamp(2.5rem, 6vw, 4rem); }
+
+.group__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.875rem;
+  padding-bottom: 0.625rem;
+  border-bottom: 1px solid rgba(40, 54, 40, 0.16);
+}
+
+.group__title {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.group__note {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+
+/* Plain name lists. Columns rather than a grid so a long name flows to the
+   next line instead of being truncated or forcing every column wider. */
+.cols {
+  list-style: none;
+  margin: 1.125rem 0 0;
+  padding: 0;
+  columns: 2;
+  column-gap: clamp(1.5rem, 5vw, 3rem);
+  line-height: 1.5;
+}
+
+@media (min-width: 40rem) { .cols { columns: 3; } }
+
+/* Space between items has to exceed the leading inside one, or a name that
+   wraps ("Roasted Sweet Potato") reads as two separate ingredients. */
+.cols li {
+  break-inside: avoid;
+  margin-bottom: 0.45rem;
+}
+
+/* Name against a figure, with a leader rule between them. */
+.priced {
+  list-style: none;
+  margin: 1.125rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+@media (min-width: 46rem) {
+  .priced { grid-template-columns: 1fr 1fr; column-gap: clamp(2rem, 5vw, 3.5rem); }
+}
+
+.priced__row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.625rem;
+}
+
+.priced__rule {
+  flex: 1 1 auto;
+  border-bottom: 1px dotted rgba(40, 54, 40, 0.28);
+  transform: translateY(-0.2em);
+}
+
+.priced__price {
+  font-variant-numeric: tabular-nums;
+  color: var(--price);
+  white-space: nowrap;
 }

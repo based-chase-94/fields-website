@@ -78,7 +78,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap">
-<link rel="stylesheet" href="assets/css/site.css?v=b1074d58">
+<link rel="stylesheet" href="assets/css/site.css?v=f6b71c35">
 
 <script>
 /* Runs before first paint: marks the intro as pending so the hero starts
@@ -99,7 +99,9 @@
 </head>
 <body>
 
-<main class="hero">
+<main>
+
+<section class="hero">
 
   <!-- Background video. Sources are attached by site.js so we can pick the
        right size for the viewport and skip it entirely on reduced-motion /
@@ -151,6 +153,261 @@
       <p class="hero__meta">at RC2 on the CU Anschutz Campus<br>12700 East 19th St, Aurora, CO 80045</p>
       <p class="hero__hours">10:30am – 3pm &middot; Monday to Friday</p>
   </div>
+
+</section>
+
+<!-- menu:start -->
+<section class="menu" id="menu" aria-labelledby="menu-bowls">
+  <div class="menu__inner">
+    <h2 class="menu__title" id="menu-bowls">House Bowls</h2>
+    <p class="menu__kicker">Our favorite places, in a bowl</p>
+    <ul class="bowls">
+      <li class="bowls__item">
+        <div class="bowls__head">
+          <h3 class="bowls__name">Strawberry Fields</h3>
+          <span class="bowls__rule" aria-hidden="true"></span>
+          <p class="bowls__price">$13.25</p>
+        </div>
+        <p class="bowls__ingredients">Spinach, tri-color quinoa, citrus-herb chicken, strawberries, walnuts, avocado, crumbled feta, almond brittle, citrus-poppyseed vinaigrette</p>
+      </li>
+      <li class="bowls__item">
+        <div class="bowls__head">
+          <h3 class="bowls__name">Baja</h3>
+          <span class="bowls__rule" aria-hidden="true"></span>
+          <p class="bowls__price">$13.50</p>
+        </div>
+        <p class="bowls__ingredients">Spinach, citrus-herb chicken, grilled corn, black beans, avocado, roasted sweet potato, pico de gallo, cotija waffles, chili-lime vinaigrette, lime wedge</p>
+      </li>
+      <li class="bowls__item">
+        <div class="bowls__head">
+          <h3 class="bowls__name">High Plains</h3>
+          <span class="bowls__rule" aria-hidden="true"></span>
+          <p class="bowls__price">$14.50</p>
+        </div>
+        <p class="bowls__ingredients">Spinach + kale, blackened chicken, applewood bacon, hardboiled egg, grilled corn, cherry tomatoes, avocado, grilled poblano, sourdough croutons, Colorado ranch, hot honey drizzle</p>
+      </li>
+      <li class="bowls__item">
+        <div class="bowls__head">
+          <h3 class="bowls__name">Coastal Caesar</h3>
+          <span class="bowls__rule" aria-hidden="true"></span>
+          <p class="bowls__price">$12.95</p>
+        </div>
+        <p class="bowls__ingredients">Shredded kale + romaine hearts, blackened chicken, cherry tomatoes, sourdough croutons, parmesan, vegan caesar dressing, lemon wedge</p>
+      </li>
+      <li class="bowls__item">
+        <div class="bowls__head">
+          <h3 class="bowls__name">Blue Zone</h3>
+          <span class="bowls__rule" aria-hidden="true"></span>
+          <p class="bowls__price">$15.75</p>
+        </div>
+        <p class="bowls__ingredients">Spinach + romaine hearts, miso-glazed salmon, roasted sweet potato, watermelon radish, carrot ribbons, toasted nori puffs, avocado, edamame, sesame-miso dressing</p>
+      </li>
+      <li class="bowls__item">
+        <div class="bowls__head">
+          <h3 class="bowls__name">Fields Notes <abbr class="bowls__veg" title="Vegetarian">V</abbr></h3>
+          <span class="bowls__rule" aria-hidden="true"></span>
+          <p class="bowls__price">$13.50</p>
+        </div>
+        <p class="bowls__ingredients">Kale + spinach, roasted sweet potato, roasted broccoli, mixed mushrooms, apple, blue cheese, almonds, fields honey vinaigrette, hot honey drizzle</p>
+      </li>
+    </ul>
+    <p class="menu__note">All bowls can be made vegetarian upon request</p>
+    <hr class="menu__rule">
+    <div class="byo__head">
+      <h2 class="menu__title" id="menu-byo">Build Your Own</h2>
+      <p class="byo__from">Starts at $9.95</p>
+    </div>
+    <ol class="steps">
+      <li class="steps__item">
+        <h3 class="steps__name">Pick your field base</h3>
+        <p class="steps__detail">Select 2 greens and/or grains</p>
+      </li>
+      <li class="steps__item">
+        <h3 class="steps__name">Harvest 6 toppings</h3>
+        <p class="steps__detail">Pick up to 6 field ingredients<span class="steps__aside">+$0.85 each for extras</span></p>
+      </li>
+      <li class="steps__item">
+        <h3 class="steps__name">Upgrade your trip</h3>
+        <p class="steps__detail">Fuel up with proteins + premium extras</p>
+      </li>
+      <li class="steps__item">
+        <h3 class="steps__name">Final approach</h3>
+        <p class="steps__detail">Choose a house-made dressing</p>
+      </li>
+    </ol>
+    <section class="group" aria-labelledby="menu-list-0">
+      <header class="group__head">
+        <h3 class="group__title" id="menu-list-0">Field Ingredients</h3>
+        <p class="group__note">Pick 6</p>
+      </header>
+      <ul class="cols">
+        <li>Cucumber</li>
+        <li>Carrot Ribbons</li>
+        <li>Red Onion</li>
+        <li>Edamame</li>
+        <li>Black Beans</li>
+        <li>Grilled Corn</li>
+        <li>Roasted Sweet Potato</li>
+        <li>Cherry Tomatoes</li>
+        <li>Watermelon Radish</li>
+        <li>Roasted Chickpeas</li>
+        <li>Roasted Broccoli</li>
+        <li>Grilled Poblano</li>
+        <li>Pico de Gallo</li>
+        <li>Green Apples</li>
+        <li>Strawberries</li>
+        <li>Cilantro</li>
+        <li>Chives</li>
+      </ul>
+    </section>
+    <section class="group" aria-labelledby="menu-list-1">
+      <header class="group__head">
+        <h3 class="group__title" id="menu-list-1">Proteins</h3>
+      </header>
+      <ul class="priced">
+        <li class="priced__row">
+          <span class="priced__name">Citrus-Herb Chicken</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$4.25</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Blackened Chicken</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$4.50</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Sesame Miso Alaskan Salmon</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$6.50</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Applewood Bacon</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$2.85</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Hot Honey Tofu</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$3.50</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Roasted Shiitake Mushroom Medley</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$2.00</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Hardboiled Egg</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$1.25</span>
+        </li>
+      </ul>
+    </section>
+    <section class="group" aria-labelledby="menu-list-2">
+      <header class="group__head">
+        <h3 class="group__title" id="menu-list-2">Upgrades</h3>
+      </header>
+      <ul class="priced">
+        <li class="priced__row">
+          <span class="priced__name">Avocado</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$1.75</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Shaved Cheddar</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$1.25</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Shaved Parmesan</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$1.75</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Blue Cheese</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$1.75</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Sheep's Milk Feta</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$1.75</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Hummus</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$1.25</span>
+        </li>
+      </ul>
+    </section>
+    <section class="group" aria-labelledby="menu-list-3">
+      <header class="group__head">
+        <h3 class="group__title" id="menu-list-3">Crunch</h3>
+      </header>
+      <ul class="priced">
+        <li class="priced__row">
+          <span class="priced__name">Dried Cherries</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$1.25</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Shaved Coconut</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$1.25</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Toasted Nori Puffs</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$1.25</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Sliced Almonds</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$1.25</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Natural Walnuts</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$1.25</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Almond Brittle</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$0.50</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Cotija Waffles</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$0.50</span>
+        </li>
+        <li class="priced__row">
+          <span class="priced__name">Sourdough Croutons</span>
+          <span class="priced__rule" aria-hidden="true"></span>
+          <span class="priced__price">+$0.50</span>
+        </li>
+      </ul>
+    </section>
+    <section class="group" aria-labelledby="menu-list-4">
+      <header class="group__head">
+        <h3 class="group__title" id="menu-list-4">Dressings</h3>
+        <p class="group__note">Made fresh in-house · All vegan or vegetarian</p>
+      </header>
+      <ul class="cols">
+        <li>Baja Lime Vinaigrette</li>
+        <li>Thai Maple Peanut</li>
+        <li>Sesame Miso</li>
+        <li>Colorado Ranch</li>
+        <li>Green Goddess</li>
+        <li>Vegan Caesar</li>
+        <li>Fields Honey Vinaigrette</li>
+        <li>Olive Oil + Balsamic</li>
+        <li>Citrus Poppyseed Vinaigrette</li>
+        <li>Hot Honey Drizzle</li>
+        <li>Lime/Lemon Wedge</li>
+      </ul>
+    </section>
+  </div>
+</section>
+<!-- menu:end -->
 
 </main>
 
