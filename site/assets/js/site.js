@@ -111,7 +111,7 @@
 /* Fields — hero intro.
  *
  * The pre-paint state is set by the inline script in <head>; this only
- * enhances (splits the tagline into words) and decides when to start.
+ * decides when to start.
  *
  * Starting is gated on the webfont, because an entrance that plays while Jost
  * is still swapping in animates the fallback and then jumps. The head script's
@@ -123,25 +123,6 @@
 
   var html = document.documentElement;
   if (html.getAttribute("data-intro") !== "pending") return;  // reduced motion, or already run
-
-  // Split the tagline so it can sweep word by word. Done before the start
-  // signal, so nothing animates and then re-renders underneath itself.
-  var tagline = document.querySelector(".hero__tagline");
-  if (tagline && !tagline.querySelector(".word")) {
-    var words = tagline.textContent.trim().split(/\s+/);
-    if (words.length > 1 && words.length <= 12) {
-      tagline.textContent = "";
-      words.forEach(function (word, i) {
-        var span = document.createElement("span");
-        span.className = "word";
-        span.style.setProperty("--i", i);
-        span.textContent = word;
-        tagline.appendChild(span);
-        if (i < words.length - 1) tagline.appendChild(document.createTextNode(" "));
-      });
-      tagline.classList.add("is-split");
-    }
-  }
 
   function start() {
     if (html.getAttribute("data-intro") === "pending") html.setAttribute("data-intro", "run");

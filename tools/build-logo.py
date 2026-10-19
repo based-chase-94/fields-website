@@ -54,6 +54,11 @@ FOREST = "#283628"
 FAVICON_VIEWBOX = "5.55 -7.65 176.5 176.5"
 FAVICON_GLYPH = "path15"
 
+# The script's own extent inside the master's 384x192 artboard. The full
+# lockup's viewBox reserves room for the sub-line underneath; keeping it
+# would hang the corner mark off a band of empty space.
+MARK_VIEWBOX = "28 24 330 108"
+
 
 def clean(wordmark_fill, sub_fill):
     """Return the master as a minimal <svg> tree, the two groups filled
@@ -122,6 +127,26 @@ def favicon():
     return dest
 
 
+def wordmark_block():
+    """The "Fields" script alone -- path15-20, no GRAINS + GREENS -- tightened
+    to its own bounds for use as the small corner mark. Fills with
+    currentColor so the header can colour it."""
+    root = clean("currentColor", "currentColor")
+    for el in root.iter():
+        for child in list(el):
+            if child.tag == "{%s}path" % SVG and child.get("id") not in WORDMARK_PATHS:
+                el.remove(child)
+    # The master's viewBox is the full lockup's clearspace; with the sub-line
+    # gone it leaves a band of empty space beneath the script. These numbers
+    # are the script's own extent in the master's coordinates.
+    root.set("viewBox", MARK_VIEWBOX)
+    root.attrib.pop("width", None)
+    root.attrib.pop("height", None)
+    root.set("class", "topbar__wordmark")
+    root.set("aria-hidden", "true")
+    return serialise(root)
+
+
 def rasterise(src):
     """iOS home-screen icons must be PNG; everything else takes the SVG."""
     rsvg = shutil.which("rsvg-convert")
@@ -148,17 +173,12 @@ def main():
         )
         print(f"  {dest.relative_to(ROOT)}  ({dest.stat().st_size // 1024} KB)")
 
-    # Inline copy: currentColor means one CSS declaration recolours it, and the
-    # logo paints with the document instead of waiting on a second request.
-    inline = clean("var(--logo-ink, #F9E14D)", "var(--logo-sub-ink, #FFFFFF)")
-    inline.attrib.pop("width", None)
-    inline.attrib.pop("height", None)
-    inline.set("class", "hero__logo")
-    inline.set("role", "img")
-    inline.set("aria-label", "Fields — grains + greens")
-
+    # Inline copy: the script alone, as the corner mark. currentColor means
+    # one CSS declaration recolours it, and it paints with the document
+    # instead of waiting on a second request. The link around it carries the
+    # accessible name, so the drawing itself is decorative.
     html = INDEX.read_text()
-    block = serialise(inline)
+    block = wordmark_block()
     new, n = re.subn(
         r"(<!-- logo:start -->).*?(<!-- logo:end -->)",
         lambda m: m.group(1) + "\n" + block + "\n    " + m.group(2),
@@ -168,7 +188,7 @@ def main():
     if not n:
         raise SystemExit("index.html is missing the <!-- logo:start/end --> markers")
     INDEX.write_text(new)
-    print(f"  {INDEX.relative_to(ROOT)}  (inline logo, {len(block) // 1024} KB)")
+    print(f"  {INDEX.relative_to(ROOT)}  (corner wordmark, {len(block) // 1024} KB)")
 
     rasterise(favicon())
 

@@ -159,87 +159,17 @@ html, body {
 /* Inline SVG, so the fill rides on `color` and the mark paints with the
    document rather than waiting on a second request. 2:1 artboard — the
    padding inside the viewBox is the logo's clearspace, leave it alone. */
-/* The wordmark is the page's h1. The SVG carries the accessible name via
-   role/aria-label, so this element only needs its UA margin and font-size
-   neutralised -- it contributes no text of its own. */
-.hero__title {
-  margin: 0;
-  font-size: inherit;
-  font-weight: inherit;
-  line-height: 0;
-}
 
-.hero__logo {
-  display: block;
-  width: clamp(15rem, 40vw, 27rem);
-  height: auto;
-  margin: 0 auto;
-  filter: drop-shadow(0 2px 24px rgba(0, 0, 0, 0.35));
-}
 
-.hero__tagline {
-  margin: clamp(2.75rem, 6.5vw, 4.25rem) 0 0;
-  font-family: var(--display);
-  font-weight: 300;
-  font-size: clamp(1.08rem, 2.7vw, 1.5rem);
-  line-height: 1.35;
-  letter-spacing: 0.01em;
-  color: var(--almond);
-  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.4);
-}
 
-.hero__status {
-  margin: clamp(1rem, 2.5vw, 1.4rem) 0 0;
-  font-family: var(--sans);
-  font-weight: 500;
-  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
-  /* 0.32em, not the 0.42em this carried when it read just "Coming Soon" —
-     at the longer string that tracking made the eyebrow the widest thing on
-     the page, wider than the lockup, and on a 375px phone it came to exactly
-     the available width with nothing to spare. */
-  letter-spacing: 0.32em;
-  text-indent: 0.32em;         /* re-centre against the trailing letterspace */
-  text-transform: uppercase;
-  line-height: 1.9;            /* letterspaced caps need air if they wrap */
-  color: var(--accent);
-}
 
 /* Below ~352px the line genuinely doesn't fit, so break it at the phrase
    rather than letting the browser choose. Deterministic, and it doesn't rely
    on text-wrap support or guessing at ch widths. */
 @media (max-width: 22rem) {
-  .hero__status span { display: block; }
 }
 
-/* Sizes here are ~5% under their Jost equivalents: Fredoka's x-height measures
-   7.6% larger and it sets ~8% wider, so like-for-like numbers would have let
-   the supporting text creep up on the lockup. Uppercase is barely affected
-   (cap height only 4% larger), which is why the eyebrow keeps its size.
 
-   Sits under the eyebrow, and has to read as subordinate to it — so it's
-   smaller at every viewport, not just at the large end. Normal capitals at
-   regular tracking, per the client's note on using Jost outside the eyebrow;
-   an address is also simply easier to read that way than letterspaced. */
-.hero__meta {
-  margin: clamp(0.7rem, 1.8vw, 1rem) 0 0;
-  font-size: clamp(0.66rem, 1.15vw, 0.75rem);
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  line-height: 1.5;
-  color: rgba(244, 233, 225, 0.78);  /* almond, held back from the tagline */
-}
-.hero__meta:empty { display: none; }
-
-/* Hours matter more to someone standing outside than the street address does,
-   so they get a touch more weight than the line above them. */
-.hero__hours {
-  margin: clamp(0.5rem, 1.2vw, 0.7rem) 0 0;
-  font-size: clamp(0.72rem, 1.25vw, 0.82rem);
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  line-height: 1.5;
-  color: rgba(244, 233, 225, 0.92);
-}
 
 /* --- fallbacks ------------------------------------------------------------ */
 
@@ -272,7 +202,6 @@ html, body {
 /* Portrait phones: a 16:9 clip cropped to a tall frame loses most of its
    subject, so tighten the logo and pull the type inward. */
 @media (max-width: 30rem) {
-  .hero__logo { width: clamp(12rem, 74vw, 17rem); }
   .hero { --scrim-strength: 0.29; }
 }
 
@@ -304,96 +233,56 @@ html, body {
   }
 }
 
-/* The logo keeps its drop-shadow through the move, so it needs its own
-   keyframe — `filter` is one property and a blur alone would drop the shadow. */
-@keyframes intro-settle-logo {
-  from {
-    opacity: 0;
-    transform: translateY(18px) scale(0.985);
-    filter: blur(14px) drop-shadow(0 2px 24px rgba(0, 0, 0, 0.35));
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    filter: blur(0) drop-shadow(0 2px 24px rgba(0, 0, 0, 0.35));
-  }
-}
-
 @keyframes intro-veil {
   from { opacity: 0.38; }
   to   { opacity: 0; }
 }
 
-/* Pre-paint state. Only ever set by the inline head script, so a no-JS
-   visitor and anyone on reduced-motion gets the finished page directly. */
-[data-intro="pending"] .hero__logo,
-[data-intro="pending"] .hero__tagline,
-[data-intro="pending"] .hero__status,
-[data-intro="pending"] .hero__meta,
-[data-intro="pending"] .hero__hours { opacity: 0; }
 
 [data-intro="pending"] .hero__veil { opacity: 0.38; }
 
-[data-intro="run"] .hero__logo {
-  animation: intro-settle-logo 1100ms var(--ease-settle) both;
-}
+[data-intro="pending"] .topbar,
+[data-intro="pending"] .hero__line { opacity: 0; }
 
 [data-intro="run"] .hero__veil {
   animation: intro-veil 1900ms var(--ease-settle) both;
 }
 
-[data-intro="run"] .hero__tagline,
-[data-intro="run"] .hero__status,
-[data-intro="run"] .hero__meta,
-[data-intro="run"] .hero__hours {
-  animation: intro-settle var(--intro-dur, 850ms) var(--ease-settle) both;
-  animation-delay: var(--intro-delay, 0ms);
+/* The headline carries the entrance now that the lockup is gone. Two lines,
+   staggered, with the blur doing the work rather than distance. */
+[data-intro="run"] .hero__line {
+  --intro-y: 16px;
+  --intro-blur: 12px;
+  animation: intro-settle 1100ms var(--ease-settle) both;
 }
 
-[data-intro="run"] .hero__tagline { --intro-y: 12px; --intro-blur: 7px;  --intro-delay: 380ms; }
-[data-intro="run"] .hero__status  { --intro-y: 9px;  --intro-blur: 5px;  --intro-delay: 700ms; --intro-dur: 800ms; }
-[data-intro="run"] .hero__meta    { --intro-y: 7px;  --intro-blur: 4px;  --intro-delay: 860ms; --intro-dur: 800ms; }
-[data-intro="run"] .hero__hours   { --intro-y: 7px;  --intro-blur: 4px;  --intro-delay: 980ms; --intro-dur: 800ms; }
+[data-intro="run"] .hero__line + .hero__line { animation-delay: 130ms; }
 
-/* Word-level stagger on the tagline, applied only once site.js has split it.
-   Tight — 55ms — so it reads as one soft sweep across the line rather than
-   four words arriving separately. */
-.hero__tagline .word {
-  display: inline-block;
-  white-space: pre;
+[data-intro="run"] .topbar {
+  --intro-y: -10px;
+  --intro-blur: 6px;
+  animation: intro-settle 900ms var(--ease-settle) both;
+  animation-delay: 320ms;
 }
 
-[data-intro="run"] .hero__tagline.is-split {
-  animation: none;
-  opacity: 1;
-}
 
-[data-intro="run"] .hero__tagline.is-split .word {
-  --intro-y: 12px;
-  --intro-blur: 7px;
-  animation: intro-settle 850ms var(--ease-settle) both;
-  animation-delay: calc(380ms + var(--i) * 55ms);
-}
 
-[data-intro="pending"] .hero__tagline.is-split { opacity: 1; }
-[data-intro="pending"] .hero__tagline.is-split .word { opacity: 0; }
+
+
+
 
 /* Belt and braces: the media query in the base sheet already covers this, but
    the intro is the one thing on the page with real movement, so it gets an
    explicit override too. */
 @media (prefers-reduced-motion: reduce) {
-  [data-intro] .hero__logo,
-  [data-intro] .hero__tagline,
-  [data-intro] .hero__tagline .word,
-  [data-intro] .hero__status,
-  [data-intro] .hero__meta,
-  [data-intro] .hero__hours {
+  [data-intro] .hero__veil { animation: none !important; opacity: 0 !important; }
+  [data-intro] .topbar,
+  [data-intro] .hero__line {
     animation: none !important;
     opacity: 1 !important;
-    filter: none;
-    transform: none;
+    transform: none !important;
+    filter: none !important;
   }
-  [data-intro] .hero__veil { animation: none !important; opacity: 0 !important; }
 }
 
 /* ---------------------------------------------------------------------------
@@ -756,7 +645,8 @@ html, body {
   line-height: 0;
 }
 
-.loc__titleline + .loc__titleline { margin-top: 0.14em; }
+.loc__line { display: block; }
+.loc__line + .loc__line { margin-top: 0.14em; }
 
 .loc__address {
   display: flex;
@@ -920,4 +810,113 @@ html, body {
   vertical-align: 0.72em;
   margin-right: 0.04em;
   letter-spacing: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Top bar
+   Sits over the video rather than above it, so the frame stays full bleed.
+   --------------------------------------------------------------------------- */
+
+.topbar {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1.1rem, 3vw, 1.9rem) clamp(1.25rem, 4vw, 3rem);
+}
+
+.topbar__mark {
+  display: block;
+  flex: none;
+  color: var(--sunshine);
+  line-height: 0;
+}
+
+.topbar__wordmark {
+  display: block;
+  width: clamp(5.5rem, 13vw, 8.5rem);
+  height: auto;
+}
+
+.topbar__nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.25rem);
+}
+
+/* Real text, not outlines: these are navigation, and they need to stay
+   selectable, translatable and focusable as ordinary links. */
+.topbar__nav a {
+  position: relative;
+  /* Flex + min-height rather than padding: the tap target has to clear 44px,
+     but padding that tall would drag the underline away from the word. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.25rem;
+  color: var(--ink-on-dark);
+  font-size: clamp(0.9375rem, 2vw, 1.0625rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.18s linear;
+}
+
+/* The rule sits just under the text, not at the edge of the hit area. */
+.topbar__nav a::after {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  right: 0.25rem;
+  top: calc(50% + 0.75em);
+  height: 2px;
+  background: var(--sunshine);
+  opacity: 0;
+  transition: opacity 0.18s linear;
+}
+
+.topbar__nav a:hover,
+.topbar__nav a:focus-visible { color: var(--sunshine); }
+
+.topbar__nav a:hover::after,
+.topbar__nav a:focus-visible::after { opacity: 1; }
+
+/* ---------------------------------------------------------------------------
+   Hero headline
+   --------------------------------------------------------------------------- */
+
+.hero__headline {
+  margin: 0;
+  color: var(--sunshine);
+  font-size: clamp(2.4rem, 8.5vw, 6rem);
+  line-height: 0;
+  text-align: center;
+}
+
+.hero__headline-line {
+  display: block;
+  width: calc(var(--sw) * 1em);
+  height: auto;
+  aspect-ratio: var(--sw) / var(--sh);
+  max-width: 100%;
+  margin-inline: auto;
+  overflow: visible;
+}
+
+.hero__line { display: block; }
+.hero__line + .hero__line { margin-top: 0.12em; }
+
+/* Anchored sections clear the top bar when jumped to. */
+#menu, #visit { scroll-margin-top: 1rem; }
+
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .topbar__nav a,
+  .topbar__nav a::after { transition: none; }
 }
