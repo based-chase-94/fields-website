@@ -904,12 +904,25 @@ html, body {
    Sizing each line off its own width and capping with max-width is what made
    the long line render smaller than the short one. */
 .hero__lines {
-  display: block;
   --gutter: calc(2 * clamp(1.25rem, 5vw, 3rem));
   font-size: min(
     6rem,
     calc((min(100vw, 72rem) - var(--gutter)) / (var(--maxsw) * 1.02))
   );
+}
+
+/* Two sets ship; one shows. display:none rather than visibility or opacity,
+   so the hidden set is out of the layout entirely. The words live once on the
+   heading as hidden text, so neither set carries them. */
+.hero__lines--wide { display: block; }
+.hero__lines--narrow { display: none; }
+
+/* Below this the two-line break leaves the type under a 30px cap height. The
+   three-line set takes the longest line from 10.4em to 7.5em, which buys
+   about 37% back. */
+@media (max-width: 30rem) {
+  .hero__lines--wide { display: none; }
+  .hero__lines--narrow { display: block; }
 }
 
 .hero__headline-line {
