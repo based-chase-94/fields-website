@@ -151,7 +151,7 @@ html, body {
 .hero__content {
   position: relative;
   z-index: 1;
-  width: min(100%, 46rem);
+  width: min(100%, 72rem);
   padding: clamp(2rem, 6vw, 4rem) clamp(1.25rem, 5vw, 3rem);
   text-align: center;
 }
@@ -891,24 +891,37 @@ html, body {
 
 .hero__headline {
   margin: 0;
-  color: var(--sunshine);
-  font-size: clamp(2.4rem, 8.5vw, 6rem);
+  /* White, not Sunshine: measured against the video it is the stronger of the
+     two anyway — 4.6:1 at the worst scene against Sunshine's 3.5:1. */
+  color: #FFFFFF;
   line-height: 0;
   text-align: center;
+}
+
+/* One font-size for every line, derived from the longest one, so all lines
+   share a cap height. --maxsw is the widest line's width in ems, written by
+   tools/build-hero.py. The 1.02 is slack for rounding and the drop-shadow.
+   Sizing each line off its own width and capping with max-width is what made
+   the long line render smaller than the short one. */
+.hero__lines {
+  display: block;
+  --gutter: calc(2 * clamp(1.25rem, 5vw, 3rem));
+  font-size: min(
+    6rem,
+    calc((min(100vw, 72rem) - var(--gutter)) / (var(--maxsw) * 1.02))
+  );
 }
 
 .hero__headline-line {
   display: block;
   width: calc(var(--sw) * 1em);
-  height: auto;
-  aspect-ratio: var(--sw) / var(--sh);
-  max-width: 100%;
+  height: calc(var(--sh) * 1em);
   margin-inline: auto;
   overflow: visible;
 }
 
 .hero__line { display: block; }
-.hero__line + .hero__line { margin-top: 0.12em; }
+.hero__line + .hero__line { margin-top: 0.1em; }
 
 /* Anchored sections clear the top bar when jumped to. */
 #menu, #visit { scroll-margin-top: 1rem; }

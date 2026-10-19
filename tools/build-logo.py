@@ -57,7 +57,9 @@ FAVICON_GLYPH = "path15"
 # The script's own extent inside the master's 384x192 artboard. The full
 # lockup's viewBox reserves room for the sub-line underneath; keeping it
 # would hang the corner mark off a band of empty space.
-MARK_VIEWBOX = "28 24 330 108"
+# Measured from the paths themselves, with 2 units of air. Eyeballing this
+# cropped 7 units off the top of the script and 12 off its descenders.
+MARK_VIEWBOX = "23.89 15.07 336.22 130.96"
 
 
 def clean(wordmark_fill, sub_fill):

@@ -34,6 +34,19 @@ LINES = ["A world of Fields", "in your bowl"]
 TRACKING = 0.015
 
 
+def max_ratio():
+    """Width-to-em of the longest line. The stylesheet divides the available
+    width by this to pick one font-size that fits every line, so all lines
+    render at the same cap height. Sizing each line off its own width and
+    capping with max-width instead makes the longest line render SMALLER than
+    the short one, which is what it used to do."""
+    widest = 0.0
+    for line in LINES:
+        svg = scripttype.render(line, font_path=scripttype.HEART, tracking=TRACKING)
+        widest = max(widest, float(re.search(r"--sw:([\d.]+)", svg).group(1)))
+    return widest
+
+
 def build():
     # Each line gets a wrapper. replace() emits a hidden <span> before the
     # drawing, so without one the two svgs are not adjacent siblings and
@@ -48,14 +61,15 @@ def build():
 
 
 def main():
-    block = build()
+    block = f'<span class="hero__lines" style="--maxsw:{max_ratio():.4f}">\n' \
+            + build() + "\n</span>"
     s = INDEX.read_text(encoding="utf-8")
     assert s.count(START) == 1 and s.count(END) == 1, "headline markers missing"
     out, n = re.subn(re.escape(START) + r".*?" + re.escape(END),
                      lambda _: START + "\n" + block + "\n" + END, s, flags=re.S)
     assert n == 1 and block in out, "headline substitution did not apply"
     INDEX.write_text(out, encoding="utf-8")
-    print(f"headline: {len(LINES)} lines, {len(block)/1024:.1f} KB")
+    print(f"headline: {len(LINES)} lines, {len(block)/1024:.1f} KB, widest {max_ratio():.2f}em")
     for line in LINES:
         print(f"  {line}")
 
