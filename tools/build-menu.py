@@ -27,16 +27,30 @@ except ImportError:                      # running from outside tools/
 WARNINGS = []
 
 
-def script_title(text, cls, hid):
-    """Section title set in Midstar outlines, or plain text if the font is
-    absent. source/fonts/ is gitignored, so a fresh clone has no Midstar and
-    must still build rather than failing."""
+def outline(text, font, cls, tracking=0.0):
+    """Text as outlines with the words kept behind them, or plain escaped text
+    if the font is missing. source/fonts/ is gitignored, so a fresh clone has
+    neither face and must still build rather than failing."""
     try:
-        svg = scripttype.render(text, css_class="scripttype", label=text)
-        return f'<h2 class="{cls} {cls}--script" id="{hid}">{svg}</h2>'
+        return scripttype.replace(text, font_path=font, css_class=cls,
+                                  tracking=tracking)
     except Exception as e:
         WARNINGS.append(f"{text!r} set as plain text — {type(e).__name__}: {e}")
-        return f'<h2 class="{cls}" id="{hid}">{esc(text)}</h2>'
+        return esc(text)
+
+
+def script_title(text, cls, hid):
+    """Section title in Midstar — the script is the point here, so this one
+    face stays."""
+    body = outline(text, scripttype.FONT, "scripttype")
+    mod = f" {cls}--script" if "<svg" in body else ""
+    return f'<h2 class="{cls}{mod}" id="{hid}">{body}</h2>'
+
+
+def caps(text, tracking=0.03):
+    """An all-caps line in Heart of the Land. The face is unicase, so the
+    source casing is immaterial -- it sets as capitals either way."""
+    return outline(text, scripttype.HEART, "capsline", tracking)
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA = ROOT / "source/menu/menu.json"
@@ -64,7 +78,7 @@ def bowls(d):
         veg = ' <abbr class="bowls__veg" title="Vegetarian">V</abbr>' if b.get("vegetarian") else ""
         o += ['  <li class="bowls__item">',
               '    <div class="bowls__head">',
-              f'      <h3 class="bowls__name">{esc(b["name"])}{veg}</h3>',
+              f'      <h3 class="bowls__name">{caps(b["name"])}{veg}</h3>',
               '      <span class="bowls__rule" aria-hidden="true"></span>',
               f'      <p class="bowls__price">{money(b["price"])}</p>',
               '    </div>',
@@ -77,13 +91,15 @@ def bowls(d):
 def byo(d):
     o = ['<div class="byo__head">',
          "  " + script_title(d["title"], "menu__title", "menu-byo"),
-         f'  <p class="byo__from">Starts at {money(d["startsAt"])}</p>',
+         f'  <p class="byo__from"><span class="byo__from-label">Starts at</span>'
+         f'<span class="price"><span class="price__cur">$</span>'
+         f'{d["startsAt"]:,.2f}</span></p>',
          '</div>',
          '<ol class="steps">']
     for s in d["steps"]:
         aside = f'<span class="steps__aside">{esc(s["aside"])}</span>' if s.get("aside") else ""
         o += ['  <li class="steps__item">',
-              f'    <h3 class="steps__name">{esc(s["title"])}</h3>',
+              f'    <h3 class="steps__name">{caps(s["title"])}</h3>',
               f'    <p class="steps__detail">{esc(s["detail"])}{aside}</p>',
               '  </li>']
     o.append('</ol>')
@@ -96,7 +112,7 @@ def lists(ls):
         hid = "menu-list-%d" % i
         o += ['<section class="group" aria-labelledby="%s">' % hid,
               '  <header class="group__head">',
-              f'    <h3 class="group__title" id="{hid}">{esc(l["title"])}</h3>']
+              f'    <h3 class="group__title" id="{hid}">{caps(l["title"], 0.05)}</h3>']
         if l.get("note"):
             o.append(f'    <p class="group__note">{esc(l["note"])}</p>')
         if l.get("price") is not None:
@@ -116,7 +132,7 @@ def lists(ls):
             o.append('  <ul class="named">')
             for it in l["items"]:
                 o += ['    <li class="named__item">',
-                      f'      <span class="named__name">{esc(it["name"])}</span>',
+                      f'      <span class="named__name">{caps(it["name"])}</span>',
                       f'      <span class="named__detail">{esc(it["detail"])}</span>',
                       '    </li>']
             o.append('  </ul>')

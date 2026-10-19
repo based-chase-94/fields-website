@@ -83,3 +83,29 @@ a `kern` feature and `liga` substitutions.
 
 Without the font the build still succeeds: titles fall back to plain text and
 the build prints a `FONT:` warning. Check for that line before shipping.
+
+## All-caps lines are Heart of the Land
+
+Everything in the menu that was uppercase Fredoka — bowl names, step names,
+group titles, refresher names — is set in Heart of the Land outlines. 21
+drawings in all. Both display faces are rendered rather than served; see the
+licence note above and in `tools/scripttype.py`.
+
+Two consequences worth knowing:
+
+**The words stay in the markup.** `scripttype.replace()` emits the real text
+in a visually-hidden span and marks the drawing `aria-hidden`. `render()`
+alone puts the words only in an `aria-label`, which screen readers announce
+but crawlers do not index — fine for a section title, a mistake for
+"Strawberry Fields", which is exactly the phrase someone searches. Check that
+product names still appear in `site/index.html` after any change here.
+
+**`letter-spacing` and `text-transform` do nothing.** Both are baked at render
+time. Tracking is a `tracking=` argument in ems on the call; the face is
+unicase, so casing in the JSON is immaterial.
+
+Outlines size from `--sw` / `--sh` custom properties rather than an inline
+width, because an inline width cannot be overridden by CSS — the drawings
+could not shrink inside a flex row and pushed the page 7px wider than a phone
+viewport. The stylesheet turns the ratios into `width` + `aspect-ratio` and
+caps them with `max-width: 100%`.

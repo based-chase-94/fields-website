@@ -223,8 +223,10 @@ def inject(s, start, end, block, what):
 
 
 def title():
-    lines = [scripttype.render(t, font_path=scripttype.HEART,
-                               css_class="loc__titleline", label=t)
+    # replace(), not render(): the words ship as hidden text behind the
+    # drawing so crawlers and screen readers get them.
+    lines = [scripttype.replace(t, font_path=scripttype.HEART,
+                                css_class="loc__titleline")
              for t in TITLE_LINES]
     return "\n".join(lines)
 

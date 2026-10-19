@@ -66,7 +66,8 @@ def _shape(hbfont, text):
     return list(zip(buf.glyph_infos, buf.glyph_positions))
 
 
-def render(text, font_path=FONT, css_class="scripttype", label=None):
+def render(text, font_path=FONT, css_class="scripttype", label=None,
+           tracking=0.0, aria_hidden=False):
     """Return an <svg> whose paths are `text` set in Midstar.
 
     The svg is sized in em, so it scales with the font-size of whatever
@@ -88,7 +89,8 @@ def render(text, font_path=FONT, css_class="scripttype", label=None):
         if d:
             paths.append(d)
         glyphs[name].draw(TransformPen(bounds, tf))
-        pen_x += pos.x_advance
+        # CSS letter-spacing cannot reach outlines — it has to be baked in.
+        pen_x += pos.x_advance + tracking * upm
 
     if bounds.bounds is None:
         raise ValueError(f"{text!r} produced no outlines")
@@ -96,13 +98,37 @@ def render(text, font_path=FONT, css_class="scripttype", label=None):
     x0, y0, x1, y1 = bounds.bounds
     w, h = x1 - x0, y1 - y0
 
+    a11y = ('aria-hidden="true"' if aria_hidden
+            else f'role="img" aria-label="{html.escape(label or text, quote=True)}"')
     return (
-        f'<svg class="{css_class}" role="img" aria-label="{label or text}" '
+        # Size as unitless ratios, not a fixed width: an inline width cannot
+        # be overridden by CSS, so the drawing could not shrink inside a flex
+        # row and pushed the layout wider than the viewport. The stylesheet
+        # turns these into width/aspect-ratio and can cap them.
+        f'<svg class="{css_class}" {a11y} '
         f'viewBox="{x0:.0f} {y0:.0f} {w:.0f} {h:.0f}" '
-        f'style="width:{w / upm:.4f}em;height:{h / upm:.4f}em" '
+        f'style="--sw:{w / upm:.4f};--sh:{h / upm:.4f}" '
         f'preserveAspectRatio="xMinYMid meet" fill="currentColor">'
         f'<path d="{"".join(paths)}"/></svg>'
     )
+
+
+def replace(text, font_path=FONT, css_class="scripttype", tracking=0.0):
+    """Outlines, with the real text kept in the markup behind them.
+
+    `render` alone puts the words in an aria-label, which screen readers
+    announce but crawlers do not index. For section titles that is a nuisance;
+    for the bowl names it would be a mistake -- "Strawberry Fields" is exactly
+    the phrase someone searches. So the text ships as a visually-hidden span
+    and the drawing is marked decorative. Standard image replacement: what is
+    hidden and what is shown are the same words.
+    """
+    svg = render(text, font_path=font_path, css_class=css_class,
+                 tracking=tracking, aria_hidden=True)
+    return f'<span class="vh">{html.escape(text, quote=False)}</span>{svg}'
+
+
+import html  # noqa: E402  (kept beside the only function that needs it)
 
 
 if __name__ == "__main__":

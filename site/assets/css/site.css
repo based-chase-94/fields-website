@@ -75,6 +75,20 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Keeps text in the markup for crawlers and screen readers while an outline
+   drawing carries the look. Not display:none, which removes it from both. */
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* --- stage ---------------------------------------------------------------- */
 
 .hero {
@@ -704,11 +718,6 @@ html, body {
   margin-bottom: 0.1em;
 }
 
-.menu__title--script .scripttype {
-  display: block;
-  overflow: visible;
-}
-
 /* ---------------------------------------------------------------------------
    Location
    Forest panel beside the map. Full-bleed on purpose — it is the one band on
@@ -745,11 +754,6 @@ html, body {
   color: var(--sunshine);
   font-size: clamp(2.25rem, 6.5vw, 4rem);
   line-height: 0;
-}
-
-.loc__titleline {
-  display: block;
-  overflow: visible;
 }
 
 .loc__titleline + .loc__titleline { margin-top: 0.14em; }
@@ -830,4 +834,90 @@ html, body {
 @media (prefers-reduced-motion: reduce) {
   .loc__cta { transition: none; }
   .loc__cta:hover, .loc__cta:focus-visible { transform: none; }
+}
+
+
+/* ---------------------------------------------------------------------------
+   Heart of the Land caps lines
+   Everything in the menu that used to be uppercase Fredoka. The face is
+   unicase and sits wider than Fredoka's capitals, so each of these is a step
+   up in size and the rows that hold them align on centres rather than
+   baselines: an svg has no text baseline to align to.
+   --------------------------------------------------------------------------- */
+
+/* Every outline drawing sizes off its own em and may shrink to fit. The
+   ratios come from the svg's --sw / --sh custom properties. */
+.scripttype,
+.capsline,
+.loc__titleline {
+  display: block;
+  width: calc(var(--sw) * 1em);
+  height: auto;
+  aspect-ratio: var(--sw) / var(--sh);
+  max-width: 100%;
+  overflow: visible;
+}
+
+/* The outline is a block, so the vegetarian badge beside it wrapped onto its
+   own line. Flex keeps them on one. */
+.bowls__name {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  min-width: 0;
+  font-size: 1.625rem;
+}
+.steps__name  { font-size: 1.4375rem; }
+.group__title { font-size: 1.5rem; }
+.named__name  { font-size: 1.375rem; }
+
+/* letter-spacing and text-transform do nothing to baked outlines; tracking is
+   applied at render time in tools/build-menu.py. */
+.bowls__name,
+.steps__name,
+.group__title,
+.named__name {
+  letter-spacing: normal;
+  text-transform: none;
+  line-height: 0;
+}
+
+.bowls__head,
+.group__head { align-items: center; }
+
+.steps__name { align-self: center; }
+
+/* ---------------------------------------------------------------------------
+   Build-your-own price
+   Small raised currency mark against heavy numerals, pushed to the right edge
+   of the heading row.
+   --------------------------------------------------------------------------- */
+
+.byo__from {
+  margin-left: auto;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  text-align: right;
+}
+
+.byo__from-label {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.price {
+  font-size: 2.75rem;
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.015em;
+  font-variant-numeric: tabular-nums;
+}
+
+.price__cur {
+  font-size: 0.5em;
+  font-weight: 700;
+  vertical-align: 0.72em;
+  margin-right: 0.04em;
+  letter-spacing: 0;
 }
