@@ -402,7 +402,7 @@ html, body {
 }
 
 .menu__title {
-  font-size: clamp(2rem, 6vw, 3rem);
+  font-size: clamp(2.5rem, 7.5vw, 4rem);
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.05;
@@ -410,8 +410,8 @@ html, body {
 }
 
 .menu__kicker {
-  margin: 0.5rem 0 0;
-  font-size: clamp(1rem, 2.4vw, 1.125rem);
+  margin: 0.6rem 0 0;
+  font-size: clamp(1.0625rem, 2.6vw, 1.25rem);
   color: var(--ink-muted);
 }
 
@@ -449,7 +449,7 @@ html, body {
 }
 
 .bowls__name {
-  font-size: 1.125rem;
+  font-size: 1.375rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   text-transform: uppercase;
@@ -466,6 +466,7 @@ html, body {
 
 .bowls__price {
   margin: 0;
+  font-size: 1.1875rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   color: var(--price);
@@ -498,12 +499,15 @@ html, body {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.5rem 1rem;
+  /* Wider than it looks necessary: the svg box is tight to Midstar's
+     outlines, so its terminal swash sits right at the edge. */
+  gap: 0.5rem 1.75rem;
   margin-top: clamp(3rem, 8vw, 5.5rem);
 }
 
 .byo__from {
   margin: 0;
+  font-size: 1.1875rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   color: var(--price);
@@ -537,19 +541,19 @@ html, body {
   grid-row: 1 / span 2;
   display: grid;
   place-items: center;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 2rem;
+  height: 2rem;
   border-radius: 999px;
   background: var(--sunshine);
   color: var(--forest);
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
 .steps__name {
   margin: 0;
-  font-size: 1.0625rem;
+  font-size: 1.25rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.01em;
@@ -582,7 +586,7 @@ html, body {
 
 .group__title {
   margin: 0;
-  font-size: 1.0625rem;
+  font-size: 1.3125rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -590,7 +594,7 @@ html, body {
 
 .group__note {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   color: var(--ink-muted);
 }
 
@@ -666,6 +670,7 @@ html, body {
 
 .named__name {
   display: block;
+  font-size: 1.1875rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
@@ -732,16 +737,22 @@ html, body {
   align-items: flex-start;
 }
 
-/* Sunshine on Forest measures 9.7:1. */
+/* Heart of the Land outlines, two stacked lines. Sized in em off this
+   font-size, so the block scales like type. Sunshine on Forest is 9.7:1.
+   See tools/scripttype.py for why the font itself is not served. */
 .loc__title {
   margin: 0;
   color: var(--sunshine);
-  font-size: clamp(2.5rem, 7vw, 4.5rem);
-  font-weight: 600;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
+  font-size: clamp(2.25rem, 6.5vw, 4rem);
+  line-height: 0;
 }
+
+.loc__titleline {
+  display: block;
+  overflow: visible;
+}
+
+.loc__titleline + .loc__titleline { margin-top: 0.14em; }
 
 .loc__address {
   display: flex;

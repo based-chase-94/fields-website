@@ -31,7 +31,13 @@ from fontTools.ttLib import TTFont
 import uharfbuzz as hb
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-FONT = ROOT / "source/fonts/Midstar.otf"
+
+# Both are licensed and both are rendered to outlines rather than served.
+# Midstar's own metadata forbids sharing the file outright; Heart of the Land
+# carries no embedded terms either way, and nobody has the purchase record, so
+# it gets the same treatment. Absence of a prohibition is not a grant.
+FONT = ROOT / "source/fonts/Midstar.otf"                      # script, menu titles
+HEART = ROOT / "source/fonts/Heart-of-the-Land-Regular.otf"   # unicase, display
 
 
 class FontMissing(Exception):

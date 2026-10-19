@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 """
-Fields — the location map.
+Fields — the location section.
 
-    python3 tools/build-map.py
+    python3 tools/build-location.py
 
-Draws the campus around Research Complex 2 from cached OpenStreetMap data in
-source/map/ and writes it into site/index.html between the map markers.
+Writes two things into site/index.html: the "See you in the fields." heading,
+set in Heart of the Land outlines, and the campus map drawn from cached
+OpenStreetMap data in source/map/.
+
+Heart of the Land is unicase -- all 26 lowercase glyphs are byte-identical to
+their capitals -- so the source text's casing is immaterial; it sets as caps
+either way. It is rendered to outlines, not served: nobody has the purchase
+record, and absence of an embedded prohibition is not a licence grant. See
+tools/scripttype.py.
 
 Why draw it rather than screenshot a tile service:
 
@@ -30,12 +37,23 @@ import json
 import math
 import pathlib
 import re
+import sys
+
+try:
+    import scripttype
+except ImportError:
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+    import scripttype
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA = ROOT / "source/map"
 INDEX = ROOT / "site/index.html"
 
-START, END = "<!-- map:start -->", "<!-- map:end -->"
+MAP_START, MAP_END = "<!-- map:start -->", "<!-- map:end -->"
+TITLE_START, TITLE_END = "<!-- loctitle:start -->", "<!-- loctitle:end -->"
+
+# Two lines, each its own svg, so they stack and scale as a block.
+TITLE_LINES = ["See you in", "the fields."]
 
 LAT, LON = 39.7451140, -104.8406552   # 12700 E 19th Ave — geocoded, inside "Research 2"
 HOME_ID = 133073725                   # OSM way id of that building
@@ -196,16 +214,34 @@ def build():
     return "\n".join(out), len(roads), len(seen)
 
 
+def inject(s, start, end, block, what):
+    assert s.count(start) == 1 and s.count(end) == 1, f"{what} markers missing or duplicated"
+    out, n = re.subn(re.escape(start) + r".*?" + re.escape(end),
+                     lambda _: start + "\n" + block + "\n" + end, s, flags=re.S)
+    assert n == 1 and block in out, f"{what} substitution did not apply"
+    return out
+
+
+def title():
+    lines = [scripttype.render(t, font_path=scripttype.HEART,
+                               css_class="loc__titleline", label=t)
+             for t in TITLE_LINES]
+    return "\n".join(lines)
+
+
 def main():
-    svg, nroads, nlabels = build()
     s = INDEX.read_text(encoding="utf-8")
-    assert s.count(START) == 1 and s.count(END) == 1, "map markers missing or duplicated"
-    out, n = re.subn(re.escape(START) + r".*?" + re.escape(END),
-                     lambda _: START + "\n" + svg + "\n" + END, s, flags=re.S)
-    assert n == 1 and svg in out, "map substitution did not apply"
-    INDEX.write_text(out, encoding="utf-8")
-    print(f"map rendered: {nroads} roads, {nlabels} street labels, "
-          f"{len(svg)/1024:.0f} KB of SVG")
+
+    t = title()
+    s = inject(s, TITLE_START, TITLE_END, t, "location title")
+
+    svg, nroads, nlabels = build()
+    s = inject(s, MAP_START, MAP_END, svg, "map")
+
+    INDEX.write_text(s, encoding="utf-8")
+    print(f"title: {len(TITLE_LINES)} lines in Heart of the Land outlines "
+          f"({len(t)/1024:.1f} KB)")
+    print(f"map:   {nroads} roads, {nlabels} street labels ({len(svg)/1024:.0f} KB)")
 
 
 if __name__ == "__main__":

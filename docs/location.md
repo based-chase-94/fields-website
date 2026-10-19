@@ -1,12 +1,33 @@
-# The location map
+# The location section
 
-Drawn, not screenshotted. `tools/build-map.py` renders OpenStreetMap data from
-`source/map/` into `site/index.html` between the map markers.
+`tools/build-location.py` writes two things into `site/index.html`: the
+heading, and the map.
 
 ```bash
-python3 tools/build-map.py
+python3 tools/build-location.py
 python3 tools/stamp-assets.py   # only if CSS or JS also changed
 ```
+
+## The heading
+
+"See you in the fields." is set in **Heart of the Land** and rendered to SVG
+outlines, the same treatment Midstar gets on the menu titles, and for a
+blunter reason: nobody has the purchase record, so nobody knows whether a web
+licence was ever bought.
+
+Unlike Midstar, the file carries no embedded prohibition — no licence
+description, no licence URL. That is not a grant. `fsType` is 8 (Editable
+Embedding), which governs embedding in *documents*, not serving a webfont, so
+it does not speak to this either way. If the EULA turns up and covers web use,
+it is an 11 KB woff2 and the swap is small.
+
+The face is **unicase**: all 26 lowercase glyphs are byte-identical to their
+capitals, verified by comparing outlines rather than advance widths. Source
+casing is therefore immaterial — it sets as caps regardless. That is also why
+it suits this heading and would ruin the menu titles, where Midstar's script
+is doing the work.
+
+## The map
 
 ## Why drawn
 
