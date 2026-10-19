@@ -690,3 +690,16 @@ html, body {
   font-size: 0.875rem;
   color: var(--ink-muted);
 }
+
+/* Midstar section titles, set as outlines at build time (see
+   tools/scripttype.py for why the font file cannot ship). The svg is sized in
+   em, so it scales with this font-size exactly as live text would. */
+.menu__title--script {
+  line-height: 0;
+  margin-bottom: 0.1em;
+}
+
+.menu__title--script .scripttype {
+  display: block;
+  overflow: visible;
+}

@@ -58,3 +58,28 @@ using it.
 `_unresolved` in the JSON holds questions about the client's own data. The
 build prints them every run — that is deliberate. They are not rendered to the
 page.
+
+## Section titles are Midstar outlines
+
+`House Bowls` and `Build Your Own` are set in Midstar and rendered to SVG
+paths at build time by `tools/scripttype.py`. The font file never ships.
+
+Midstar is licensed from Subectype and its own embedded metadata says:
+
+> You can not resell, share or giveaway the font files
+
+Serving a webfont hands the file to every visitor, and this repo is public, so
+self-hosting is out on both counts. Outlines are how the wordmark already
+works — the shapes travel, the font does not.
+
+Put `Midstar.otf` in `source/fonts/` (already gitignored). Build-time tools:
+
+```bash
+python3 -m pip install --user fonttools uharfbuzz
+```
+
+Text is shaped with HarfBuzz, not by stacking advance widths — Midstar carries
+a `kern` feature and `liga` substitutions.
+
+Without the font the build still succeeds: titles fall back to plain text and
+the build prints a `FONT:` warning. Check for that line before shipping.

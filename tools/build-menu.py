@@ -18,6 +18,26 @@ import pathlib
 import re
 import sys
 
+try:
+    import scripttype
+except ImportError:                      # running from outside tools/
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+    import scripttype
+
+WARNINGS = []
+
+
+def script_title(text, cls, hid):
+    """Section title set in Midstar outlines, or plain text if the font is
+    absent. source/fonts/ is gitignored, so a fresh clone has no Midstar and
+    must still build rather than failing."""
+    try:
+        svg = scripttype.render(text, css_class="scripttype", label=text)
+        return f'<h2 class="{cls} {cls}--script" id="{hid}">{svg}</h2>'
+    except Exception as e:
+        WARNINGS.append(f"{text!r} set as plain text — {type(e).__name__}: {e}")
+        return f'<h2 class="{cls}" id="{hid}">{esc(text)}</h2>'
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA = ROOT / "source/menu/menu.json"
 INDEX = ROOT / "site/index.html"
@@ -37,7 +57,7 @@ def esc(s):
 
 
 def bowls(d):
-    o = [f'<h2 class="menu__title" id="menu-bowls">{esc(d["title"])}</h2>',
+    o = [script_title(d["title"], "menu__title", "menu-bowls"),
          f'<p class="menu__kicker">{esc(d["kicker"])}</p>',
          '<ul class="bowls">']
     for b in d["items"]:
@@ -56,7 +76,7 @@ def bowls(d):
 
 def byo(d):
     o = ['<div class="byo__head">',
-         f'  <h2 class="menu__title" id="menu-byo">{esc(d["title"])}</h2>',
+         "  " + script_title(d["title"], "menu__title", "menu-byo"),
          f'  <p class="byo__from">Starts at {money(d["startsAt"])}</p>',
          '</div>',
          '<ol class="steps">']
@@ -147,6 +167,11 @@ def main():
 
     # Print every build. These are open questions about the client's own data;
     # silence would let them ship unnoticed.
+    if WARNINGS:
+        print("\nFONT:")
+        for w in WARNINGS:
+            print(f"  ! {w}")
+
     if d.get("_unresolved"):
         print("\nUNRESOLVED — needs the client:")
         for q in d["_unresolved"]:
