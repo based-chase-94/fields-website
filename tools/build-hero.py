@@ -42,7 +42,10 @@ BLOCKS = {
         "markers": ("<!-- headline:start -->", "<!-- headline:end -->"),
         "phrase": "Every field tastes different",
         "cls": "hero__headline-line",
-        "tracking": 0.015,
+        # Midstar, the script. Zero tracking: the letters are drawn to join,
+        # and spacing them apart breaks the joins.
+        "font": "FONT",
+        "tracking": 0.0,
         "sets": {
             "wide":   ["Every field", "tastes different"],
             "narrow": ["Every field", "tastes", "different"],
@@ -52,6 +55,7 @@ BLOCKS = {
         "markers": ("<!-- subhead:start -->", "<!-- subhead:end -->"),
         "phrase": "Bright. Crunchy. A little unexpected.",
         "cls": "hero__subhead-line",
+        "font": "HEART",
         "tracking": 0.03,
         "sets": {
             "wide":   ["Bright. Crunchy. A little unexpected."],
@@ -61,22 +65,22 @@ BLOCKS = {
 }
 
 
-def line_svg(text, cls, tracking):
-    return scripttype.render(text, font_path=scripttype.HEART, css_class=cls,
+def line_svg(text, cls, tracking, font):
+    return scripttype.render(text, font_path=getattr(scripttype, font), css_class=cls,
                              tracking=tracking, aria_hidden=True)
 
 
-def ratio(text, cls, tracking):
-    return float(re.search(r"--sw:([\d.]+)", line_svg(text, cls, tracking)).group(1))
+def ratio(text, cls, tracking, font):
+    return float(re.search(r"--sw:([\d.]+)", line_svg(text, cls, tracking, font)).group(1))
 
 
-def line_set(name, lines, cls, tracking):
+def line_set(name, lines, cls, tracking, font):
     """--maxsw is the widest line's width in ems. The stylesheet divides the
     available width by it, so every line in the set shares a font-size and
     therefore a cap height. Sizing each line off its own width and capping
     with max-width makes the LONGEST line render smallest."""
-    widest = max(ratio(l, cls, tracking) for l in lines)
-    body = "\n".join(f'<span class="hero__line">{line_svg(l, cls, tracking)}</span>'
+    widest = max(ratio(l, cls, tracking, font) for l in lines)
+    body = "\n".join(f'<span class="hero__line">{line_svg(l, cls, tracking, font)}</span>'
                      for l in lines)
     return (f'<span class="hero__lines hero__lines--{name}" '
             f'style="--maxsw:{widest:.4f}" aria-hidden="true">\n{body}\n</span>')
@@ -84,7 +88,7 @@ def line_set(name, lines, cls, tracking):
 
 def build(b):
     return (f'<span class="vh">{b["phrase"]}</span>\n'
-            + "\n".join(line_set(n, ls, b["cls"], b["tracking"])
+            + "\n".join(line_set(n, ls, b["cls"], b["tracking"], b["font"])
                         for n, ls in b["sets"].items()))
 
 
@@ -99,7 +103,7 @@ def main():
         assert n == 1 and block in s, f"{key} substitution did not apply"
         print(f"{key}: {len(block)/1024:.1f} KB")
         for name, lines in b["sets"].items():
-            widest = max(ratio(l, b["cls"], b["tracking"]) for l in lines)
+            widest = max(ratio(l, b["cls"], b["tracking"], b["font"]) for l in lines)
             print(f"  {name:7} {len(lines)} line(s), widest {widest:5.2f}em  "
                   f"({' / '.join(lines)})")
     INDEX.write_text(s, encoding="utf-8")

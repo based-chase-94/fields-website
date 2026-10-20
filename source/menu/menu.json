@@ -77,7 +77,7 @@
         { "name": "Sourdough Croutons", "price": 0.50 }
       ] },
 
-    { "title": "Dressings", "note": "Made fresh in-house · All vegan or vegetarian", "layout": "columns",
+    { "title": "Dressings", "note": "Made from scratch in-house · All vegan or vegetarian", "layout": "columns",
       "items": ["Baja Lime Vinaigrette", "Thai Maple Peanut", "Sesame Miso", "Colorado Ranch",
                 "Green Goddess", "Vegan Caesar", "Fields Honey Vinaigrette", "Olive Oil + Balsamic",
                 "Citrus Poppyseed Vinaigrette", "Hot Honey Drizzle", "Lime/Lemon Wedge"] },

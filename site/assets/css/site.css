@@ -945,9 +945,11 @@ html, body {
   --gutter: calc(2 * clamp(1.25rem, 5vw, 3rem));
 }
 
+/* 8rem, not 6: Midstar sets about 39% narrower than Heart of the Land, so
+   the old cap left the headline filling barely half its width. */
 .hero__headline .hero__lines {
   font-size: min(
-    6rem,
+    8rem,
     calc((min(100vw, 72rem) - var(--gutter)) / (var(--maxsw) * 1.02))
   );
 }
