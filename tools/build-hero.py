@@ -7,13 +7,14 @@ Fields — the hero headline and subhead.
 Both are set in Heart of the Land outlines and written into site/index.html
 between their markers.
 
-Each block ships two sets of lines and the stylesheet shows one, because the
-type size is set by the LONGEST line and a phone is narrow:
+A block may ship one set, or a wide and a narrow set that the stylesheet
+swaps, because the type size is set by the LONGEST line and a phone is narrow:
 
-  headline  wide "Every field / tastes different"   9.7em  -> 25px cap at 375
-            narrow "Every field / tastes / different" 6.4em -> 37px cap
-  subhead   wide "Bright. Crunchy. A little unexpected."  22.0em
+  headline  only   "Different fields." / "Different flavors."   6.9em
+  subhead   wide   "Bright. Crunchy. A little unexpected."      22.0em
             narrow "Bright. Crunchy." / "A little unexpected."  12.0em
+
+A set named "only" is shown at every width.
 
 The real words appear once per block, as hidden text on the heading and the
 paragraph; the drawn sets are decorative. Emitting them with each set would
@@ -40,15 +41,19 @@ INDEX = ROOT / "site/index.html"
 BLOCKS = {
     "headline": {
         "markers": ("<!-- headline:start -->", "<!-- headline:end -->"),
-        "phrase": "Every field tastes different",
+        "phrase": "Different fields. Different flavors.",
         "cls": "hero__headline-line",
         # Midstar, the script. Zero tracking: the letters are drawn to join,
         # and spacing them apart breaks the joins.
         "font": "FONT",
         "tracking": 0.0,
+        # One set, not two. The copy is a parallel pair; breaking either half
+        # across lines to buy size on a phone would wreck the structure that
+        # is the whole point of it. At 375px these two lines still set at
+        # ~47px, which is larger than the three-line Heart of the Land
+        # version they replace.
         "sets": {
-            "wide":   ["Every field", "tastes different"],
-            "narrow": ["Every field", "tastes", "different"],
+            "only": ["Different fields.", "Different flavors."],
         },
     },
     "subhead": {

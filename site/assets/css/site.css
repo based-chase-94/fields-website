@@ -957,7 +957,8 @@ html, body {
 /* Two sets ship; one shows. display:none rather than visibility or opacity,
    so the hidden set is out of the layout entirely. The words live once on the
    heading as hidden text, so neither set carries them. */
-.hero__lines--wide { display: block; }
+.hero__lines--wide,
+.hero__lines--only { display: block; }
 .hero__lines--narrow { display: none; }
 
 /* Below this the two-line break leaves the type under a 30px cap height. The
@@ -966,6 +967,8 @@ html, body {
 @media (max-width: 30rem) {
   .hero__lines--wide { display: none; }
   .hero__lines--narrow { display: block; }
+  /* --only is deliberately untouched: a block with a single set shows it at
+     every width. */
 }
 
 .hero__headline-line {

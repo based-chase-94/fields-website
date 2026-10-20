@@ -53,7 +53,7 @@ MAP_START, MAP_END = "<!-- map:start -->", "<!-- map:end -->"
 TITLE_START, TITLE_END = "<!-- loctitle:start -->", "<!-- loctitle:end -->"
 
 # Two lines, each its own svg, so they stack and scale as a block.
-TITLE_LINES = ["See you in", "the fields."]
+TITLE_LINES = ["Meet us in", "the field."]
 
 LAT, LON = 39.7451140, -104.8406552   # 12700 E 19th Ave — geocoded, inside "Research 2"
 HOME_ID = 133073725                   # OSM way id of that building
