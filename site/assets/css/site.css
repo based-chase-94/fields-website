@@ -242,7 +242,8 @@ html, body {
 [data-intro="pending"] .hero__veil { opacity: 0.38; }
 
 [data-intro="pending"] .topbar,
-[data-intro="pending"] .hero__line { opacity: 0; }
+[data-intro="pending"] .hero__line,
+[data-intro="pending"] .hero__subhead { opacity: 0; }
 
 [data-intro="run"] .hero__veil {
   animation: intro-veil 1900ms var(--ease-settle) both;
@@ -257,6 +258,13 @@ html, body {
 }
 
 [data-intro="run"] .hero__line + .hero__line { animation-delay: 130ms; }
+
+[data-intro="run"] .hero__subhead {
+  --intro-y: 12px;
+  --intro-blur: 8px;
+  animation: intro-settle 1000ms var(--ease-settle) both;
+  animation-delay: 260ms;
+}
 
 [data-intro="run"] .topbar {
   --intro-y: -10px;
@@ -277,6 +285,7 @@ html, body {
 @media (prefers-reduced-motion: reduce) {
   [data-intro] .hero__veil { animation: none !important; opacity: 0 !important; }
   [data-intro] .topbar,
+  [data-intro] .hero__subhead,
   [data-intro] .hero__line {
     animation: none !important;
     opacity: 1 !important;
@@ -837,7 +846,7 @@ html, body {
 
 .topbar__wordmark {
   display: block;
-  width: clamp(5.5rem, 13vw, 8.5rem);
+  width: clamp(7rem, 17vw, 11.5rem);
   height: auto;
 }
 
@@ -898,6 +907,35 @@ html, body {
   text-align: center;
 }
 
+/* Subordinate on purpose: it fits its own width like the headline, but the
+   cap keeps it well under the headline rather than letting it grow to fill. */
+.hero__subhead {
+  /* Not em: this element carries no font-size of its own (the size lives on
+     the .hero__lines inside it), so an em here would resolve against the
+     inherited 16px and sit far too close under a 96px headline. */
+  margin: clamp(1.1rem, 2.8vw, 2.25rem) 0 0;
+  color: #FFFFFF;
+  line-height: 0;
+  text-align: center;
+}
+
+.hero__subhead .hero__lines {
+  font-size: min(
+    2.25rem,
+    calc((min(100vw, 72rem) - var(--gutter)) / (var(--maxsw) * 1.02))
+  );
+}
+
+.hero__subhead-line {
+  display: block;
+  width: calc(var(--sw) * 1em);
+  height: calc(var(--sh) * 1em);
+  margin-inline: auto;
+  overflow: visible;
+}
+
+.hero__subhead .hero__line + .hero__line { margin-top: 0.34em; }
+
 /* One font-size for every line, derived from the longest one, so all lines
    share a cap height. --maxsw is the widest line's width in ems, written by
    tools/build-hero.py. The 1.02 is slack for rounding and the drop-shadow.
@@ -905,6 +943,9 @@ html, body {
    the long line render smaller than the short one. */
 .hero__lines {
   --gutter: calc(2 * clamp(1.25rem, 5vw, 3rem));
+}
+
+.hero__headline .hero__lines {
   font-size: min(
     6rem,
     calc((min(100vw, 72rem) - var(--gutter)) / (var(--maxsw) * 1.02))
