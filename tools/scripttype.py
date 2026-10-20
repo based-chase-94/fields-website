@@ -113,6 +113,95 @@ def render(text, font_path=FONT, css_class="scripttype", label=None,
     )
 
 
+def render_runs(runs, css_class="scripttype", label=None, gap=0.0,
+                aria_hidden=False):
+    """One line, several faces, one baseline.
+
+    `runs` is a list of (text, font_path, tracking, scale) or
+    (text, font_path, tracking, scale, shift). Every run is drawn against the
+    same baseline at y=0 and the pen carries across them, so the faces sit on
+    a shared line instead of being stacked images nudged into place by eye.
+
+    `shift` moves a run off that baseline, in ems, positive downward. Growing
+    a run by scale alone grows it about the baseline, so a script gains all
+    its new height upward and appears to climb out of the line; a shift of
+    `centre_shift()` holds its optical centre where it was.
+
+    `scale` exists because the faces disagree about size: Midstar's cap is
+    1.31x Heart of the Land's at the same em, and its lowercase x-height is
+    0.469em against HotL's 0.700em cap. One em value cannot serve both.
+    `gap` is the space between runs, in ems of the unscaled size.
+    """
+    paths, pen_x = [], 0.0
+    bounds = None
+    upm_ref = None
+
+    for i, run in enumerate(runs):
+        text, font_path, tracking, scale = run[:4]
+        shift = run[4] if len(run) > 4 else 0.0
+        tt, glyphs, upm, hbfont = _load(str(font_path))
+        if upm_ref is None:
+            upm_ref = upm
+        order = tt.getGlyphOrder()
+        if i:
+            pen_x += gap * upm_ref
+
+        if bounds is None:
+            bounds = BoundsPen(glyphs)
+        for info, pos in _shape(hbfont, text):
+            name = order[info.codepoint]
+            # scale about the baseline origin, so baselines stay aligned
+            k = scale * upm_ref / upm
+            tf = Transform(k, 0, 0, -k,
+                           pen_x + pos.x_offset * k,
+                           -pos.y_offset * k + shift * upm_ref)
+            spen = SVGPathPen(glyphs)
+            glyphs[name].draw(TransformPen(spen, tf))
+            d = spen.getCommands()
+            if d:
+                paths.append(d)
+            bp = BoundsPen(glyphs)
+            glyphs[name].draw(TransformPen(bp, tf))
+            if bp.bounds:
+                bounds = bp.bounds if not isinstance(bounds, tuple) else (
+                    min(bounds[0], bp.bounds[0]), min(bounds[1], bp.bounds[1]),
+                    max(bounds[2], bp.bounds[2]), max(bounds[3], bp.bounds[3]))
+            pen_x += (pos.x_advance + tracking * upm) * k
+
+    if not isinstance(bounds, tuple):
+        raise ValueError("runs produced no outlines")
+    x0, y0, x1, y1 = bounds
+    w, h = x1 - x0, y1 - y0
+    a11y = ('aria-hidden="true"' if aria_hidden
+            else f'role="img" aria-label="{html.escape(label or "", quote=True)}"')
+    return (
+        f'<svg class="{css_class}" {a11y} '
+        f'viewBox="{x0:.0f} {y0:.0f} {w:.0f} {h:.0f}" '
+        f'style="--sw:{w / upm_ref:.4f};--sh:{h / upm_ref:.4f}" '
+        f'preserveAspectRatio="xMinYMid meet" fill="currentColor">'
+        f'<path d="{"".join(paths)}"/></svg>'
+    )
+
+
+def centre_shift(text, font_path, from_scale, to_scale, tracking=0.0):
+    """Ems to shift a run so its optical centre does not move when its scale
+    changes. Scaling happens about the baseline, not about the run's middle."""
+    tt, glyphs, upm, hbfont = _load(str(font_path))
+    order = tt.getGlyphOrder()
+    bounds = BoundsPen(glyphs)
+    pen_x = 0.0
+    for info, pos in _shape(hbfont, text):
+        name = order[info.codepoint]
+        tf = Transform(1, 0, 0, -1, pen_x + pos.x_offset, -pos.y_offset)
+        glyphs[name].draw(TransformPen(bounds, tf))
+        pen_x += pos.x_advance + tracking * upm
+    if not bounds.bounds:
+        return 0.0
+    _, y0, _, y1 = bounds.bounds
+    centre = (y0 + y1) / 2 / upm          # ems from the baseline, +ve downward
+    return centre * (from_scale - to_scale)
+
+
 def replace(text, font_path=FONT, css_class="scripttype", tracking=0.0):
     """Outlines, with the real text kept in the markup behind them.
 
