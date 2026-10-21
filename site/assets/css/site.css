@@ -1102,7 +1102,9 @@ html { scroll-behavior: smooth; }
   min-height: 40px;
 }
 
-.topbar__order::after { content: none; }
+/* Qualified by the nav, otherwise it loses to `.topbar__nav a::after`
+   (0,1,2 against 0,1,1) and the pill grows an underline on hover. */
+.topbar__nav a.topbar__order::after { content: none; }
 
 .topbar__order:hover,
 .topbar__order:focus-visible { background: #FBEA7E; }
