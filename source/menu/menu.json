@@ -1,0 +1,102 @@
+{
+  "_source": "House Bowls / Grow Your Own / Upgrade Your Crop boards, supplied 19 Oct 2026. These supersede the earlier board image and the two BYO PDFs.",
+
+  "houseBowls": {
+    "title": "House Bowls",
+    "kicker": "Our favorite places, in a bowl",
+    "note": "All bowls can be made vegetarian upon request",
+    "items": [
+      { "name": "Strawberry Fields", "price": 13.25,
+        "ingredients": "Spinach, quinoa, citrus-herb chicken, strawberries, walnuts, avocado, feta, almond brittle, citrus-poppyseed vinaigrette" },
+      { "name": "Baja", "price": 13.50,
+        "ingredients": "Spinach, blackened chicken, grilled corn, black beans, avocado, sweet potato, pico, cotija waffles, chili-lime vinaigrette, lime wedge" },
+      { "name": "High Plains", "price": 14.50,
+        "ingredients": "Spinach + kale, blackened chicken, bacon, hardboiled egg, grilled corn, cherry tomatoes, avocado, poblano, croutons, Colorado ranch, hot honey drizzle" },
+      { "name": "Coastal Caesar", "price": 12.95,
+        "ingredients": "Shredded kale + romaine hearts, blackened chicken, cherry tomatoes, croutons, parmesan, vegan caesar dressing, lemon wedge" },
+      { "name": "Blue Zone", "price": 15.75,
+        "ingredients": "Spinach + romaine hearts, miso-glazed salmon, sweet potato, watermelon radish, carrot, toasted nori puffs, avocado, edamame, sesame-miso dressing" },
+      { "name": "Fields Notes", "price": 13.50, "vegetarian": true,
+        "ingredients": "Kale + spinach, sweet potato, broccoli, mixed mushrooms, apple, blue cheese, almonds, fields honey vinaigrette, hot honey drizzle" }
+    ]
+  },
+
+  "buildYourOwn": {
+    "title": "Grow Your Own",
+    "startsAt": 9.95,
+    "steps": [
+      { "title": "Pick a field base",  "detail": "Select 2 greens and/or grains" },
+      { "title": "Harvest 6 toppings", "detail": "Pick up to 6 field ingredients", "aside": "+$0.85 each for extras" },
+      { "title": "Upgrade your crop",  "detail": "Add proteins + upgrades" },
+      { "title": "Dress your field",   "detail": "Choose a house-made dressing" }
+    ]
+  },
+
+  "lists": [
+    { "title": "Greens + Grains", "note": "Select 2", "layout": "columns",
+      "items": ["Romaine Hearts", "Arugula", "Kale",
+                "Spinach", "Wild Rice", "Tri-Color Quinoa"] },
+
+    { "title": "Field Ingredients", "note": "Pick 6", "layout": "columns",
+      "items": ["Cucumber", "Red Onion", "Grilled Corn", "Cherry Tomatoes",
+                "Roasted Chickpeas", "Roasted Sweet Potato", "Pico de Gallo",
+                "Strawberries", "Chives", "Carrot Ribbons", "Edamame",
+                "Black Beans", "Grilled Poblano", "Roasted Broccoli",
+                "Watermelon Radish", "Green Apples", "Cilantro"] },
+
+    { "title": "Proteins", "layout": "priced",
+      "items": [
+        { "name": "Citrus-Herb Chicken", "price": 4.25 },
+        { "name": "Blackened Chicken", "price": 4.25 },
+        { "name": "Sesame Miso Alaskan Salmon", "price": 6.50 },
+        { "name": "Smoked Applewood Bacon", "price": 2.85 },
+        { "name": "Sweet Chili Tofu", "price": 3.50 },
+        { "name": "Roasted Shiitake Mushroom Mix", "price": 3.50 },
+        { "name": "Hardboiled Egg", "price": 1.25 }
+      ] },
+
+    { "title": "Upgrades", "layout": "priced",
+      "items": [
+        { "name": "Avocado", "price": 1.75 },
+        { "name": "Hummus", "price": 1.25 },
+        { "name": "Shaved Cheddar", "price": 1.25 },
+        { "name": "Shaved Parmesan", "price": 1.75 },
+        { "name": "Blue Cheese", "price": 1.75 },
+        { "name": "Sheep's Milk Feta", "price": 1.75 }
+      ] },
+
+    { "title": "Crunch", "layout": "priced",
+      "items": [
+        { "name": "Dried Cherries", "price": 0.85 },
+        { "name": "Shaved Coconut", "price": 0.85 },
+        { "name": "Toasted Nori Puffs", "price": 0.85 },
+        { "name": "Sliced Almonds", "price": 0.85 },
+        { "name": "Natural Walnuts", "price": 0.85 },
+        { "name": "Crushed Peanuts", "price": 0.85 },
+        { "name": "Almond Brittle", "price": 0.85 },
+        { "name": "Cotija Waffles", "price": 0.85 },
+        { "name": "Sourdough Croutons", "price": 0.85 }
+      ] },
+
+    { "title": "Dressings", "note": "Made from scratch in-house · All vegan or vegetarian", "layout": "columns",
+      "items": ["Baja Lime Vinaigrette", "Thai Maple Peanut", "Sesame Miso", "Colorado Ranch",
+                "Green Goddess", "Vegan Caesar", "Fields Honey Vinaigrette", "Olive Oil + Balsamic",
+                "Citrus Poppyseed Vinaigrette", "Hot Honey Drizzle", "Lime/Lemon Wedge"] },
+
+    { "title": "Refreshers", "layout": "named", "price": 4.50,
+      "items": [
+        { "name": "Palm Springs", "detail": "iced tea + lemonade" },
+        { "name": "Valencia",     "detail": "orange" },
+        { "name": "Flamingo",     "detail": "hibiscus lemonade" },
+        { "name": "Bluebird",     "detail": "blueberry iced tea" }
+      ] }
+  ],
+
+  "footnotes": [
+    "We only use Italian olive oil in our marinades and dressings.",
+    "All proteins ethically sourced and sustainable."
+  ],
+
+  "_note": "Dressings, Refreshers and Crunch are all confirmed current (client, 21 Oct) -- the three October boards simply do not cover them. The bowls say 'mixed mushrooms' where the protein list says 'Roasted Shiitake Mushroom Mix'; confirmed as intended. Plain-name lists are in board order, not alphabetical.",
+  "_unresolved": []
+}

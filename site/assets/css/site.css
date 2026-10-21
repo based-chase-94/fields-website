@@ -25,6 +25,14 @@
   --scrim-rgb: 11, 38, 0;
 
   --ink-on-dark: var(--almond);
+
+  /* Page below the hero. Measured on #F6EAE1: Forest 10.8:1, Burgundy 9.8:1.
+     Sunshine is 1.12:1 there -- effectively invisible -- so the yellow the
+     digital boards use for prices cannot carry text on this background. */
+  --page:  #F6EAE1;
+  --ink:   var(--forest);
+  --ink-muted: #5c6457;   /* 5.2:1 on --page */
+  --price: var(--burgundy);
   /* The lockup is two-tone: the script in Sunshine, the GRAINS + GREENS line
      under it in white. The inline SVG reads both of these directly, so this is
      the only place either colour is set. */
@@ -60,20 +68,36 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html, body {
-  height: 100%;
   margin: 0;
-  background: var(--forest);
-  color: var(--ink-on-dark);
+  background: var(--page);
+  color: var(--ink);
   font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Keeps text in the markup for crawlers and screen readers while an outline
+   drawing carries the look. Not display:none, which removes it from both. */
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* --- stage ---------------------------------------------------------------- */
 
 .hero {
   position: relative;
-  /* svh keeps mobile browser chrome from cropping the bottom of the frame. */
-  min-height: 100svh;
+  /* Stops short of the fold on purpose: the sliver of menu below is what
+     tells you there is more page. svh keeps mobile browser chrome from
+     cropping the frame. min- not fixed, so a short viewport still fits the
+     type rather than clipping it. */
+  min-height: 88svh;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -127,7 +151,7 @@ html, body {
 .hero__content {
   position: relative;
   z-index: 1;
-  width: min(100%, 46rem);
+  width: min(100%, 72rem);
   padding: clamp(2rem, 6vw, 4rem) clamp(1.25rem, 5vw, 3rem);
   text-align: center;
 }
@@ -135,77 +159,17 @@ html, body {
 /* Inline SVG, so the fill rides on `color` and the mark paints with the
    document rather than waiting on a second request. 2:1 artboard — the
    padding inside the viewBox is the logo's clearspace, leave it alone. */
-.hero__logo {
-  display: block;
-  width: clamp(15rem, 40vw, 27rem);
-  height: auto;
-  margin: 0 auto;
-  filter: drop-shadow(0 2px 24px rgba(0, 0, 0, 0.35));
-}
 
-.hero__tagline {
-  margin: clamp(2.75rem, 6.5vw, 4.25rem) 0 0;
-  font-family: var(--display);
-  font-weight: 300;
-  font-size: clamp(1.08rem, 2.7vw, 1.5rem);
-  line-height: 1.35;
-  letter-spacing: 0.01em;
-  color: var(--almond);
-  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.4);
-}
 
-.hero__status {
-  margin: clamp(1rem, 2.5vw, 1.4rem) 0 0;
-  font-family: var(--sans);
-  font-weight: 500;
-  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
-  /* 0.32em, not the 0.42em this carried when it read just "Coming Soon" —
-     at the longer string that tracking made the eyebrow the widest thing on
-     the page, wider than the lockup, and on a 375px phone it came to exactly
-     the available width with nothing to spare. */
-  letter-spacing: 0.32em;
-  text-indent: 0.32em;         /* re-centre against the trailing letterspace */
-  text-transform: uppercase;
-  line-height: 1.9;            /* letterspaced caps need air if they wrap */
-  color: var(--accent);
-}
+
 
 /* Below ~352px the line genuinely doesn't fit, so break it at the phrase
    rather than letting the browser choose. Deterministic, and it doesn't rely
    on text-wrap support or guessing at ch widths. */
 @media (max-width: 22rem) {
-  .hero__status span { display: block; }
 }
 
-/* Sizes here are ~5% under their Jost equivalents: Fredoka's x-height measures
-   7.6% larger and it sets ~8% wider, so like-for-like numbers would have let
-   the supporting text creep up on the lockup. Uppercase is barely affected
-   (cap height only 4% larger), which is why the eyebrow keeps its size.
 
-   Sits under the eyebrow, and has to read as subordinate to it — so it's
-   smaller at every viewport, not just at the large end. Normal capitals at
-   regular tracking, per the client's note on using Jost outside the eyebrow;
-   an address is also simply easier to read that way than letterspaced. */
-.hero__meta {
-  margin: clamp(0.7rem, 1.8vw, 1rem) 0 0;
-  font-size: clamp(0.66rem, 1.15vw, 0.75rem);
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  line-height: 1.5;
-  color: rgba(244, 233, 225, 0.78);  /* almond, held back from the tagline */
-}
-.hero__meta:empty { display: none; }
-
-/* Hours matter more to someone standing outside than the street address does,
-   so they get a touch more weight than the line above them. */
-.hero__hours {
-  margin: clamp(0.5rem, 1.2vw, 0.7rem) 0 0;
-  font-size: clamp(0.72rem, 1.25vw, 0.82rem);
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  line-height: 1.5;
-  color: rgba(244, 233, 225, 0.92);
-}
 
 /* --- fallbacks ------------------------------------------------------------ */
 
@@ -215,7 +179,7 @@ html, body {
 
 .hero.is-still .hero__video { display: none; }
 .hero.is-still {
-  background-image: image-set(url("../img/hero-poster.jpg") 1x);
+  background-image: image-set(url("../img/hero-fields-poster.jpg") 1x);
   background-size: cover;
   background-position: center;
 }
@@ -238,7 +202,6 @@ html, body {
 /* Portrait phones: a 16:9 clip cropped to a tall frame loses most of its
    subject, so tighten the logo and pull the type inward. */
 @media (max-width: 30rem) {
-  .hero__logo { width: clamp(12rem, 74vw, 17rem); }
   .hero { --scrim-strength: 0.29; }
 }
 
@@ -270,94 +233,784 @@ html, body {
   }
 }
 
-/* The logo keeps its drop-shadow through the move, so it needs its own
-   keyframe — `filter` is one property and a blur alone would drop the shadow. */
-@keyframes intro-settle-logo {
-  from {
-    opacity: 0;
-    transform: translateY(18px) scale(0.985);
-    filter: blur(14px) drop-shadow(0 2px 24px rgba(0, 0, 0, 0.35));
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    filter: blur(0) drop-shadow(0 2px 24px rgba(0, 0, 0, 0.35));
-  }
-}
-
 @keyframes intro-veil {
   from { opacity: 0.38; }
   to   { opacity: 0; }
 }
 
-/* Pre-paint state. Only ever set by the inline head script, so a no-JS
-   visitor and anyone on reduced-motion gets the finished page directly. */
-[data-intro="pending"] .hero__logo,
-[data-intro="pending"] .hero__tagline,
-[data-intro="pending"] .hero__status,
-[data-intro="pending"] .hero__meta,
-[data-intro="pending"] .hero__hours { opacity: 0; }
 
 [data-intro="pending"] .hero__veil { opacity: 0.38; }
 
-[data-intro="run"] .hero__logo {
-  animation: intro-settle-logo 1100ms var(--ease-settle) both;
-}
+[data-intro="pending"] .topbar,
+[data-intro="pending"] .hero__line,
+[data-intro="pending"] .hero__subhead { opacity: 0; }
 
 [data-intro="run"] .hero__veil {
   animation: intro-veil 1900ms var(--ease-settle) both;
 }
 
-[data-intro="run"] .hero__tagline,
-[data-intro="run"] .hero__status,
-[data-intro="run"] .hero__meta,
-[data-intro="run"] .hero__hours {
-  animation: intro-settle var(--intro-dur, 850ms) var(--ease-settle) both;
-  animation-delay: var(--intro-delay, 0ms);
+/* The headline carries the entrance now that the lockup is gone. Two lines,
+   staggered, with the blur doing the work rather than distance. */
+[data-intro="run"] .hero__line {
+  --intro-y: 16px;
+  --intro-blur: 12px;
+  animation: intro-settle 1100ms var(--ease-settle) both;
 }
 
-[data-intro="run"] .hero__tagline { --intro-y: 12px; --intro-blur: 7px;  --intro-delay: 380ms; }
-[data-intro="run"] .hero__status  { --intro-y: 9px;  --intro-blur: 5px;  --intro-delay: 700ms; --intro-dur: 800ms; }
-[data-intro="run"] .hero__meta    { --intro-y: 7px;  --intro-blur: 4px;  --intro-delay: 860ms; --intro-dur: 800ms; }
-[data-intro="run"] .hero__hours   { --intro-y: 7px;  --intro-blur: 4px;  --intro-delay: 980ms; --intro-dur: 800ms; }
+[data-intro="run"] .hero__line + .hero__line { animation-delay: 130ms; }
 
-/* Word-level stagger on the tagline, applied only once site.js has split it.
-   Tight — 55ms — so it reads as one soft sweep across the line rather than
-   four words arriving separately. */
-.hero__tagline .word {
-  display: inline-block;
-  white-space: pre;
-}
-
-[data-intro="run"] .hero__tagline.is-split {
-  animation: none;
-  opacity: 1;
-}
-
-[data-intro="run"] .hero__tagline.is-split .word {
+[data-intro="run"] .hero__subhead {
   --intro-y: 12px;
-  --intro-blur: 7px;
-  animation: intro-settle 850ms var(--ease-settle) both;
-  animation-delay: calc(380ms + var(--i) * 55ms);
+  --intro-blur: 8px;
+  animation: intro-settle 1000ms var(--ease-settle) both;
+  animation-delay: 260ms;
 }
 
-[data-intro="pending"] .hero__tagline.is-split { opacity: 1; }
-[data-intro="pending"] .hero__tagline.is-split .word { opacity: 0; }
+[data-intro="run"] .topbar {
+  --intro-y: -10px;
+  --intro-blur: 6px;
+  animation: intro-settle 900ms var(--ease-settle) both;
+  animation-delay: 320ms;
+}
+
+
+
+
+
+
 
 /* Belt and braces: the media query in the base sheet already covers this, but
    the intro is the one thing on the page with real movement, so it gets an
    explicit override too. */
 @media (prefers-reduced-motion: reduce) {
-  [data-intro] .hero__logo,
-  [data-intro] .hero__tagline,
-  [data-intro] .hero__tagline .word,
-  [data-intro] .hero__status,
-  [data-intro] .hero__meta,
-  [data-intro] .hero__hours {
+  [data-intro] .hero__veil { animation: none !important; opacity: 0 !important; }
+  [data-intro] .topbar,
+  [data-intro] .hero__subhead,
+  [data-intro] .hero__line {
     animation: none !important;
     opacity: 1 !important;
-    filter: none;
-    transform: none;
+    transform: none !important;
+    filter: none !important;
   }
-  [data-intro] .hero__veil { animation: none !important; opacity: 0 !important; }
 }
+
+/* ---------------------------------------------------------------------------
+   Menu
+   Constrained measure, not full width: long ingredient strings are the bulk of
+   this content and they stop being readable much past ~70 characters. Two
+   list shapes carry everything — `cols` for plain names, `priced` for a name
+   against a figure.
+   --------------------------------------------------------------------------- */
+
+.menu {
+  background: var(--page);
+  color: var(--ink);
+  padding: clamp(3.5rem, 9vw, 7rem) clamp(1.25rem, 5vw, 2.5rem) clamp(4rem, 10vw, 8rem);
+}
+
+.menu__inner {
+  max-width: 54rem;
+  margin: 0 auto;
+}
+
+.menu__title {
+  font-size: clamp(2.5rem, 7.5vw, 4rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.menu__kicker {
+  margin: 0.6rem 0 0;
+  font-size: clamp(1.0625rem, 2.6vw, 1.25rem);
+  color: var(--ink-muted);
+}
+
+.menu__note {
+  margin: 1.75rem 0 0;
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+}
+
+.menu__rule {
+  border: 0;
+  border-top: 1px solid rgba(40, 54, 40, 0.16);
+  margin: clamp(3rem, 8vw, 5.5rem) 0 0;
+}
+
+/* --- house bowls ---------------------------------------------------------- */
+
+.bowls {
+  list-style: none;
+  margin: clamp(2rem, 5vw, 3rem) 0 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(1.75rem, 4vw, 2.5rem);
+}
+
+/* Two up only when there is room for the ingredient line to stay readable. */
+@media (min-width: 46rem) {
+  .bowls { grid-template-columns: 1fr 1fr; column-gap: clamp(2rem, 5vw, 3.5rem); }
+}
+
+.bowls__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.bowls__name {
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* A real element, not ::after — a pseudo is always the last child, which puts
+   the leader past the price instead of between name and figure. */
+.bowls__rule {
+  flex: 1 1 auto;
+  border-bottom: 1px dotted rgba(40, 54, 40, 0.28);
+  transform: translateY(-0.2em);
+}
+
+.bowls__price {
+  margin: 0;
+  font-size: 1.1875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--price);
+  white-space: nowrap;
+}
+
+.bowls__veg {
+  display: inline-grid;
+  place-items: center;
+  width: 1.1em;
+  height: 1.1em;
+  margin-left: 0.3em;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.7em;
+  font-weight: 600;
+  text-decoration: none;
+  vertical-align: 0.1em;
+}
+
+.bowls__ingredients {
+  margin: 0.5rem 0 0;
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
+/* --- build your own ------------------------------------------------------- */
+
+.byo__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  /* Wider than it looks necessary: the svg box is tight to Midstar's
+     outlines, so its terminal swash sits right at the edge. */
+  gap: 0.5rem 1.75rem;
+  margin-top: clamp(3rem, 8vw, 5.5rem);
+}
+
+.byo__from {
+  margin: 0;
+  font-size: 1.1875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--price);
+}
+
+.steps {
+  list-style: none;
+  counter-reset: step;
+  margin: clamp(1.75rem, 4vw, 2.5rem) 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 46rem) {
+  .steps { grid-template-columns: 1fr 1fr; column-gap: clamp(2rem, 5vw, 3.5rem); }
+}
+
+.steps__item {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.875rem;
+  align-items: start;
+}
+
+/* Sunshine works here because it is a fill behind dark ink, not ink itself:
+   Forest on Sunshine measures 8.6:1. */
+.steps__item::before {
+  content: counter(step);
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: var(--sunshine);
+  color: var(--forest);
+  font-size: 1rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.steps__name {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  align-self: center;
+}
+
+.steps__detail {
+  margin: 0.25rem 0 0;
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+.steps__aside {
+  display: block;
+  font-size: 0.875rem;
+}
+
+/* --- ingredient groups ---------------------------------------------------- */
+
+.group { margin-top: clamp(2.5rem, 6vw, 4rem); }
+
+.group__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.875rem;
+  padding-bottom: 0.625rem;
+  border-bottom: 1px solid rgba(40, 54, 40, 0.16);
+}
+
+.group__title {
+  margin: 0;
+  font-size: 1.3125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.group__note {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+}
+
+/* Plain name lists. Columns rather than a grid so a long name flows to the
+   next line instead of being truncated or forcing every column wider. */
+.cols {
+  list-style: none;
+  margin: 1.125rem 0 0;
+  padding: 0;
+  columns: 2;
+  column-gap: clamp(1.5rem, 5vw, 3rem);
+  line-height: 1.5;
+}
+
+@media (min-width: 40rem) { .cols { columns: 3; } }
+
+/* Space between items has to exceed the leading inside one, or a name that
+   wraps ("Roasted Sweet Potato") reads as two separate ingredients. */
+.cols li {
+  break-inside: avoid;
+  margin-bottom: 0.45rem;
+}
+
+/* Name against a figure, with a leader rule between them. */
+.priced {
+  list-style: none;
+  margin: 1.125rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+@media (min-width: 46rem) {
+  .priced { grid-template-columns: 1fr 1fr; column-gap: clamp(2rem, 5vw, 3.5rem); }
+}
+
+.priced__row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.625rem;
+}
+
+.priced__rule {
+  flex: 1 1 auto;
+  border-bottom: 1px dotted rgba(40, 54, 40, 0.28);
+  transform: translateY(-0.2em);
+}
+
+.priced__price {
+  font-variant-numeric: tabular-nums;
+  color: var(--price);
+  white-space: nowrap;
+}
+
+/* A flat price for a whole group (Refreshers), sat at the right of its head. */
+.group__price {
+  margin: 0 0 0 auto;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--price);
+}
+
+/* Name plus a description — drinks, where the name is the product and the
+   line beneath says what is in it. */
+.named {
+  list-style: none;
+  margin: 1.125rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem clamp(1.5rem, 5vw, 3rem);
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+}
+
+.named__name {
+  display: block;
+  font-size: 1.1875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.named__detail {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--ink-muted);
+  line-height: 1.45;
+}
+
+/* Sourcing notes. Quiet — they are reassurance, not an ingredient list. */
+.menu__foot {
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(40, 54, 40, 0.16);
+}
+
+.menu__foot p {
+  margin: 0 0 0.3rem;
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+
+/* Midstar section titles, set as outlines at build time (see
+   tools/scripttype.py for why the font file cannot ship). The svg is sized in
+   em, so it scales with this font-size exactly as live text would. */
+.menu__title--script {
+  line-height: 0;
+  margin-bottom: 0.1em;
+}
+
+/* ---------------------------------------------------------------------------
+   Location
+   Forest panel beside the map. Full-bleed on purpose — it is the one band on
+   the page that breaks the menu's constrained measure, which is what makes it
+   read as the end of the page rather than another menu section.
+   --------------------------------------------------------------------------- */
+
+.loc {
+  display: grid;
+  grid-template-columns: 1fr;
+  background: var(--forest);
+  color: var(--ink-on-dark);
+}
+
+@media (min-width: 48rem) {
+  .loc { grid-template-columns: 1fr 1fr; }
+}
+
+.loc__panel {
+  box-sizing: border-box;
+  padding: clamp(3rem, 7vw, 5.5rem) clamp(1.5rem, 5vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(1.25rem, 3vw, 1.75rem);
+  align-items: flex-start;
+}
+
+/* Heart of the Land outlines, two stacked lines. Sized in em off this
+   font-size, so the block scales like type. Sunshine on Forest is 9.7:1.
+   See tools/scripttype.py for why the font itself is not served. */
+.loc__title {
+  margin: 0;
+  color: var(--sunshine);
+  font-size: clamp(2.25rem, 6.5vw, 4rem);
+  line-height: 0;
+}
+
+.loc__line { display: block; }
+.loc__line + .loc__line { margin-top: 0.14em; }
+
+.loc__address {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 0;
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  line-height: 1.45;
+}
+
+.loc__pin {
+  flex: none;
+  width: 1.375rem;
+  height: 1.375rem;
+  margin-top: 0.2em;
+}
+
+.loc__hours {
+  margin: 0;
+  font-size: 1.0625rem;
+  color: #C3C9BC;   /* 8.1:1 on Forest */
+}
+
+.loc__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-top: 0.5rem;
+  padding: 1rem 1.75rem;
+  border-radius: 999px;
+  background: var(--sunshine);
+  color: var(--forest);
+  font-size: 1.125rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform 0.18s var(--ease-settle), background-color 0.18s linear;
+}
+
+.loc__cta svg { width: 1rem; height: 1rem; }
+
+.loc__cta:hover,
+.loc__cta:focus-visible { background: #FBEA7E; transform: translateY(-2px); }
+
+.loc__figure {
+  position: relative;
+  min-height: 22rem;
+  overflow: hidden;
+}
+
+/* slice in the viewBox makes the drawing cover its box the way object-fit
+   cover would for a bitmap. */
+.loc__map {
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-family: var(--sans);
+}
+
+/* ODbL attribution. Required, so it is placed to be readable rather than
+   hidden: 5.1:1 on the map's own background. */
+.loc__credit {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 0.3rem 0.6rem;
+  background: rgba(230, 216, 201, 0.82);
+  color: #5A5047;
+  font-size: 0.6875rem;
+  line-height: 1.3;
+}
+
+.loc__credit a { color: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  .loc__cta { transition: none; }
+  .loc__cta:hover, .loc__cta:focus-visible { transform: none; }
+}
+
+
+/* ---------------------------------------------------------------------------
+   Heart of the Land caps lines
+   Everything in the menu that used to be uppercase Fredoka. The face is
+   unicase and sits wider than Fredoka's capitals, so each of these is a step
+   up in size and the rows that hold them align on centres rather than
+   baselines: an svg has no text baseline to align to.
+   --------------------------------------------------------------------------- */
+
+/* Every outline drawing sizes off its own em and may shrink to fit. The
+   ratios come from the svg's --sw / --sh custom properties. */
+.scripttype,
+.capsline,
+.loc__titleline {
+  display: block;
+  width: calc(var(--sw) * 1em);
+  height: auto;
+  aspect-ratio: var(--sw) / var(--sh);
+  max-width: 100%;
+  overflow: visible;
+}
+
+/* The outline is a block, so the vegetarian badge beside it wrapped onto its
+   own line. Flex keeps them on one. */
+.bowls__name {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  min-width: 0;
+  font-size: 1.625rem;
+}
+.steps__name  { font-size: 1.4375rem; }
+.group__title { font-size: 1.5rem; }
+.named__name  { font-size: 1.375rem; }
+
+/* letter-spacing and text-transform do nothing to baked outlines; tracking is
+   applied at render time in tools/build-menu.py. */
+.bowls__name,
+.steps__name,
+.group__title,
+.named__name {
+  letter-spacing: normal;
+  text-transform: none;
+  line-height: 0;
+}
+
+.bowls__head,
+.group__head { align-items: center; }
+
+.steps__name { align-self: center; }
+
+/* ---------------------------------------------------------------------------
+   Build-your-own price
+   Small raised currency mark against heavy numerals, pushed to the right edge
+   of the heading row.
+   --------------------------------------------------------------------------- */
+
+.byo__from {
+  margin-left: auto;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  text-align: right;
+}
+
+.byo__from-label {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.price {
+  font-size: 2.75rem;
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.015em;
+  font-variant-numeric: tabular-nums;
+}
+
+.price__cur {
+  font-size: 0.5em;
+  font-weight: 700;
+  vertical-align: 0.72em;
+  margin-right: 0.04em;
+  letter-spacing: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Top bar
+   Sits over the video rather than above it, so the frame stays full bleed.
+   --------------------------------------------------------------------------- */
+
+.topbar {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1.1rem, 3vw, 1.9rem) clamp(1.25rem, 4vw, 3rem);
+}
+
+.topbar__mark {
+  display: block;
+  flex: none;
+  color: var(--sunshine);
+  line-height: 0;
+}
+
+.topbar__wordmark {
+  display: block;
+  width: clamp(7rem, 17vw, 11.5rem);
+  height: auto;
+}
+
+.topbar__nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.25rem);
+}
+
+/* Real text, not outlines: these are navigation, and they need to stay
+   selectable, translatable and focusable as ordinary links. */
+.topbar__nav a {
+  position: relative;
+  /* Flex + min-height rather than padding: the tap target has to clear 44px,
+     but padding that tall would drag the underline away from the word. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.25rem;
+  color: var(--ink-on-dark);
+  font-size: clamp(0.9375rem, 2vw, 1.0625rem);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  /* Three items plus the wordmark is tight on a phone; without this both
+     "Find Us" and "Order Online" break across two lines. */
+  white-space: nowrap;
+  transition: color 0.18s linear;
+}
+
+/* The rule sits just under the text, not at the edge of the hit area. */
+.topbar__nav a::after {
+  content: "";
+  position: absolute;
+  left: 0.25rem;
+  right: 0.25rem;
+  top: calc(50% + 0.75em);
+  height: 2px;
+  background: var(--sunshine);
+  opacity: 0;
+  transition: opacity 0.18s linear;
+}
+
+.topbar__nav a:hover,
+.topbar__nav a:focus-visible { color: var(--sunshine); }
+
+.topbar__nav a:hover::after,
+.topbar__nav a:focus-visible::after { opacity: 1; }
+
+/* ---------------------------------------------------------------------------
+   Hero headline
+   --------------------------------------------------------------------------- */
+
+.hero__headline {
+  margin: 0;
+  /* White, not Sunshine: measured against the video it is the stronger of the
+     two anyway — 4.6:1 at the worst scene against Sunshine's 3.5:1. */
+  color: #FFFFFF;
+  line-height: 0;
+  text-align: center;
+}
+
+/* Subordinate on purpose: it fits its own width like the headline, but the
+   cap keeps it well under the headline rather than letting it grow to fill. */
+.hero__subhead {
+  /* Not em: this element carries no font-size of its own (the size lives on
+     the .hero__lines inside it), so an em here would resolve against the
+     inherited 16px and sit far too close under a 96px headline. */
+  margin: clamp(1.1rem, 2.8vw, 2.25rem) 0 0;
+  color: #FFFFFF;
+  line-height: 0;
+  text-align: center;
+}
+
+/* 3.25rem, not 2.25: this slot holds Midstar now. Its x-height is 0.469em
+   against Heart of the Land's 0.725em cap, so the same font-size reads far
+   smaller — the old cap left the script looking like fine print under a 93px
+   headline. */
+.hero__subhead .hero__lines {
+  font-size: min(
+    3.25rem,
+    calc((min(100vw, 72rem) - var(--gutter)) / (var(--maxsw) * 1.02))
+  );
+}
+
+.hero__subhead-line {
+  display: block;
+  width: calc(var(--sw) * 1em);
+  height: calc(var(--sh) * 1em);
+  margin-inline: auto;
+  overflow: visible;
+}
+
+.hero__subhead .hero__line + .hero__line { margin-top: 0.34em; }
+
+/* On a phone the headline is width-limited and shrinks, but the subhead's
+   own width limit does not, so it climbed to 81% of the headline where on a
+   desktop it sits at 45%. Cap it harder here. */
+@media (max-width: 30rem) {
+  .hero__subhead .hero__lines {
+    font-size: min(
+      2.1rem,
+      calc((min(100vw, 72rem) - var(--gutter)) / (var(--maxsw) * 1.02))
+    );
+  }
+}
+
+/* One font-size for every line, derived from the longest one, so all lines
+   share a cap height. --maxsw is the widest line's width in ems, written by
+   tools/build-hero.py. The 1.02 is slack for rounding and the drop-shadow.
+   Sizing each line off its own width and capping with max-width is what made
+   the long line render smaller than the short one. */
+.hero__lines {
+  --gutter: calc(2 * clamp(1.25rem, 5vw, 3rem));
+}
+
+/* 8rem, not 6: Midstar sets about 39% narrower than Heart of the Land, so
+   the old cap left the headline filling barely half its width. */
+.hero__headline .hero__lines {
+  font-size: min(
+    8rem,
+    calc((min(100vw, 72rem) - var(--gutter)) / (var(--maxsw) * 1.02))
+  );
+}
+
+/* Two sets ship; one shows. display:none rather than visibility or opacity,
+   so the hidden set is out of the layout entirely. The words live once on the
+   heading as hidden text, so neither set carries them. */
+.hero__lines--wide,
+.hero__lines--only { display: block; }
+.hero__lines--narrow { display: none; }
+
+/* Below this the two-line break leaves the type under a 30px cap height. The
+   three-line set takes the longest line from 10.4em to 7.5em, which buys
+   about 37% back. */
+@media (max-width: 30rem) {
+  .hero__lines--wide { display: none; }
+  .hero__lines--narrow { display: block; }
+  /* --only is deliberately untouched: a block with a single set shows it at
+     every width. */
+}
+
+.hero__headline-line {
+  display: block;
+  width: calc(var(--sw) * 1em);
+  height: calc(var(--sh) * 1em);
+  margin-inline: auto;
+  overflow: visible;
+}
+
+.hero__line { display: block; }
+.hero__line + .hero__line { margin-top: 0.1em; }
+
+/* Anchored sections clear the top bar when jumped to. */
+#menu, #visit { scroll-margin-top: 1rem; }
+
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .topbar__nav a,
+  .topbar__nav a::after { transition: none; }
+}
+
+
+
