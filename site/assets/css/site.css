@@ -919,9 +919,13 @@ html, body {
   text-align: center;
 }
 
+/* 3.25rem, not 2.25: this slot holds Midstar now. Its x-height is 0.469em
+   against Heart of the Land's 0.725em cap, so the same font-size reads far
+   smaller — the old cap left the script looking like fine print under a 93px
+   headline. */
 .hero__subhead .hero__lines {
   font-size: min(
-    2.25rem,
+    3.25rem,
     calc((min(100vw, 72rem) - var(--gutter)) / (var(--maxsw) * 1.02))
   );
 }
@@ -935,6 +939,18 @@ html, body {
 }
 
 .hero__subhead .hero__line + .hero__line { margin-top: 0.34em; }
+
+/* On a phone the headline is width-limited and shrinks, but the subhead's
+   own width limit does not, so it climbed to 81% of the headline where on a
+   desktop it sits at 45%. Cap it harder here. */
+@media (max-width: 30rem) {
+  .hero__subhead .hero__lines {
+    font-size: min(
+      2.1rem,
+      calc((min(100vw, 72rem) - var(--gutter)) / (var(--maxsw) * 1.02))
+    );
+  }
+}
 
 /* One font-size for every line, derived from the longest one, so all lines
    share a cap height. --maxsw is the widest line's width in ems, written by
