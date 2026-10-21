@@ -872,6 +872,9 @@ html, body {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   text-decoration: none;
+  /* Three items plus the wordmark is tight on a phone; without this both
+     "Find Us" and "Order Online" break across two lines. */
+  white-space: nowrap;
   transition: color 0.18s linear;
 }
 
@@ -1007,4 +1010,116 @@ html { scroll-behavior: smooth; }
   html { scroll-behavior: auto; }
   .topbar__nav a,
   .topbar__nav a::after { transition: none; }
+}
+
+/* ---------------------------------------------------------------------------
+   Order online
+   A Sunshine band between the cream menu and the forest location section, so
+   the page steps cream -> yellow -> green rather than running two large
+   fields of colour together. Forest on Sunshine measures 9.7:1.
+   --------------------------------------------------------------------------- */
+
+.order {
+  background: var(--sunshine);
+  color: var(--forest);
+  padding: clamp(3rem, 7vw, 4.75rem) clamp(1.25rem, 5vw, 2.5rem);
+  text-align: center;
+}
+
+.order__inner {
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
+.order__title {
+  margin: 0;
+  font-size: clamp(2.25rem, 6.5vw, 3.5rem);
+  line-height: 0;
+}
+
+.order__title .scripttype {
+  display: block;
+  width: calc(var(--sw) * 1em);
+  height: auto;
+  aspect-ratio: var(--sw) / var(--sh);
+  max-width: 100%;
+  margin-inline: auto;
+  overflow: visible;
+}
+
+.order__lead {
+  margin: 1.1rem 0 0;
+  font-size: clamp(1rem, 2.3vw, 1.1875rem);
+  color: #4A5547;          /* 7.0:1 on Sunshine */
+}
+
+.order__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  min-height: 52px;
+  margin-top: 1.5rem;
+  padding: 0.95rem 2rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--forest);
+  color: var(--sunshine);
+  font-family: var(--sans);
+  font-size: 1.125rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.18s var(--ease-settle), background-color 0.18s linear;
+}
+
+.order__cta:hover,
+.order__cta:focus-visible { background: #35482F; transform: translateY(-2px); }
+
+/* Pending ChowNow. Still legible and still clearly the call to action, but
+   it does not pretend to be clickable. */
+.order__cta:disabled {
+  cursor: default;
+  opacity: 0.72;
+  transform: none;
+}
+
+.order__cta:disabled:hover { background: var(--forest); transform: none; }
+
+.order__note {
+  margin: 0.75rem 0 0;
+  font-size: 0.9375rem;
+  color: #4A5547;
+}
+
+/* The nav's ordering button. Sunshine on Forest reads as the one action in
+   the bar; Forest text on it measures 9.7:1. */
+.topbar__order {
+  background: var(--sunshine);
+  color: var(--forest) !important;
+  padding: 0 1.1rem !important;
+  border-radius: 999px;
+  min-height: 40px;
+}
+
+.topbar__order::after { content: none; }
+
+.topbar__order:hover,
+.topbar__order:focus-visible { background: #FBEA7E; }
+
+@media (prefers-reduced-motion: reduce) {
+  .order__cta { transition: none; }
+  .order__cta:hover, .order__cta:focus-visible { transform: none; }
+}
+
+#order { scroll-margin-top: 1rem; }
+
+/* The bar carries the wordmark and three items. On a phone they only fit
+   once the type tightens; measured at 375px the row lands at 208px inside
+   223px of free space. */
+@media (max-width: 30rem) {
+  .topbar { gap: 0.5rem; padding-inline: 1rem; }
+  .topbar__nav { gap: 0.6rem; }
+  .topbar__nav a { font-size: 0.8125rem; letter-spacing: 0.02em; }
+  .topbar__order { padding: 0 0.8rem !important; min-height: 36px; }
 }

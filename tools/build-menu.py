@@ -59,6 +59,15 @@ INDEX = ROOT / "site/index.html"
 START = "<!-- menu:start -->"
 END = "<!-- menu:end -->"
 
+ORDER_START, ORDER_END = "<!-- order:start -->", "<!-- order:end -->"
+CTA_START, CTA_END = "<!-- ordercta:start -->", "<!-- ordercta:end -->"
+
+# ChowNow is still being built. Until there is a real destination this stays
+# None and the call to action renders as a disabled control, never a link --
+# a button that 404s or goes nowhere is worse than one that says "not yet".
+# Set it to the ordering URL and the same markup becomes a live link.
+ORDER_URL = None
+
 
 def money(v):
     # Always two decimals. "$6" next to "$4.25" in the same column reads as a
@@ -161,6 +170,19 @@ def build(d):
     return "\n".join(o)
 
 
+def order_cta():
+    """The ordering button. A real link once ORDER_URL is set; until then a
+    disabled button, which is honest to a screen reader and cannot be
+    followed anywhere."""
+    if ORDER_URL:
+        return (f'    <a class="order__cta" href="{esc(ORDER_URL)}" '
+                f'target="_blank" rel="noopener">Order Online</a>')
+    WARNINGS.append("ORDER_URL is unset — the ordering button renders disabled. "
+                    "Set it in tools/build-menu.py when ChowNow is live.")
+    return ('    <button class="order__cta" type="button" disabled>Order Online</button>\n'
+            '    <p class="order__note">Online ordering opens soon.</p>')
+
+
 def main():
     d = json.loads(DATA.read_text(encoding="utf-8"))
     s = INDEX.read_text(encoding="utf-8")
@@ -173,6 +195,15 @@ def main():
     out, n = pattern.subn(START + "\n" + block + "\n" + END, s)
     assert n == 1, "menu block substitution did not apply"
     assert block in out, "rendered block missing after substitution"
+
+    # the order band: a Midstar title and the call to action
+    title = outline("Order online", scripttype.FONT, "scripttype")
+    for a, b, body in ((ORDER_START, ORDER_END, title),
+                       (CTA_START, CTA_END, order_cta())):
+        assert out.count(a) == 1 and out.count(b) == 1, f"{a} markers missing"
+        out, k = re.subn(re.escape(a) + r".*?" + re.escape(b),
+                         lambda _: a + "\n" + body + "\n" + b, out, flags=re.S)
+        assert k == 1 and body in out, f"{a} substitution did not apply"
 
     INDEX.write_text(out, encoding="utf-8")
 
