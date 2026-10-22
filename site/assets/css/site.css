@@ -1006,6 +1006,33 @@ html, body {
 
 html { scroll-behavior: smooth; }
 
+/* The ordering button. Sunshine on Forest reads as the one action in the
+   bar; Forest text on it measures 9.7:1. */
+.topbar__order {
+  background: var(--sunshine);
+  color: var(--forest) !important;
+  padding: 0 1.1rem !important;
+  border-radius: 999px;
+  min-height: 40px;
+}
+
+/* Qualified by the nav, otherwise it loses to `.topbar__nav a::after`
+   (0,1,2 against 0,1,1) and the pill grows an underline on hover. */
+.topbar__nav a.topbar__order::after { content: none; }
+
+.topbar__order:hover,
+.topbar__order:focus-visible { background: #FBEA7E; }
+
+/* The bar carries the wordmark and three items. On a phone they only fit
+   once the type tightens; measured at 375px the row lands inside the free
+   space with both "Find Us" and "Order Online" on one line. */
+@media (max-width: 30rem) {
+  .topbar { gap: 0.5rem; padding-inline: 1rem; }
+  .topbar__nav { gap: 0.6rem; }
+  .topbar__nav a { font-size: 0.8125rem; letter-spacing: 0.02em; }
+  .topbar__order { padding: 0 0.8rem !important; min-height: 36px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .topbar__nav a,
