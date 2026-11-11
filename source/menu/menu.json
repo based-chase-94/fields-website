@@ -35,7 +35,7 @@
   "lists": [
     { "title": "Greens + Grains", "note": "Select 2", "layout": "columns",
       "items": ["Romaine Hearts", "Arugula", "Kale",
-                "Spinach", "Wild Rice", "Tri-Color Quinoa"] },
+                "Spinach", "Wild Rice", "Quinoa"] },
 
     { "title": "Field Ingredients", "note": "Pick 6", "layout": "columns",
       "items": ["Cucumber", "Red Onion", "Grilled Corn", "Cherry Tomatoes",
