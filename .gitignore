@@ -16,3 +16,6 @@ review/
 
 # Rendered signage deliverables — rebuild with tools/build-signage.py.
 signage/
+
+# Python bytecode from running tools/.
+__pycache__/
