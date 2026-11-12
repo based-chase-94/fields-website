@@ -53,22 +53,30 @@ encode() {  # board width height crf preset level [maxrate]
   local graph="[0:v]setpts=N/30/TB,$look,split[a][b];"
   graph+="[a]trim=start_frame=$FADE,setpts=PTS-STARTPTS[body];"
   graph+="[b]trim=end_frame=$FADE,setpts=PTS-STARTPTS[head];"
-  graph+="[body][head]xfade=transition=fade:duration=$((FADE / 30)):offset=$off,trim=end_frame=$FRAMES,split[l1][l2];"
-  # Rotate the loop so it starts at the board's moment: frames [start, end) then [0, start).
-  graph+="[l1]trim=start_frame=$start,setpts=PTS-STARTPTS[tail];"
-  graph+="[l2]trim=end_frame=$start,setpts=PTS-STARTPTS[lead];"
+  graph+="[body][head]xfade=transition=fade:duration=$((FADE / 30)):offset=$off,trim=end_frame=$FRAMES"
   # Back to YUV with the BT.709 matrix, and say so in the file. The look runs in RGB
   # (colorchannelmixer), and ffmpeg's default RGB->YUV matrix is BT.601 with no tag:
   # browsers then decode it as BT.709 and the grass comes out duller and shifted
   # towards yellow. The TV masters end tagged BT.709, so this matches them.
   local yuv="scale=out_color_matrix=bt709:out_range=tv,format=yuv420p,setparams=colorspace=bt709:color_primaries=bt709:color_trc=bt709:range=tv"
-  if [ "$start" -eq 0 ]; then
-    graph+="[tail]$yuv[v];[lead]nullsink"
-  else
-    graph+="[tail][lead]concat=n=2:v=1,$yuv[v]"
-  fi
-  ffmpeg -y -loglevel error -i "$SRC" -filter_complex "$graph" -map '[v]' -an -r 30 -frames:v "$FRAMES" \
-    -c:v libx264 -profile:v high -level:v "$level" -preset "$preset" -crf "$crf" ${cap:+-maxrate $cap -bufsize $((${cap%M} * 2))M} -colorspace bt709 -color_primaries bt709 -color_trc bt709 -movflags +faststart "$out"
+  local x264=(-c:v libx264 -profile:v high -level:v "$level" -preset "$preset" -crf "$crf"
+              ${cap:+-maxrate $cap -bufsize $((${cap%M} * 2))M} -colorspace bt709 -color_primaries bt709 -color_trc bt709)
+  # Rotate the loop so it starts at the board's moment: frames [start, end), then [0, start).
+  # Done as two encodes joined without re-encoding: rotating inside one filter graph holds
+  # every frame of [0, start) in memory until the first part is out, which at 4K is
+  # gigabytes (proteins-upgrades starts 525 frames in).
+  local tmp; tmp=$(mktemp -d)
+  part() {  # name, trim
+    ffmpeg -y -loglevel error -i "$SRC" -filter_complex "$graph,$2,setpts=PTS-STARTPTS,$yuv[v]" -map '[v]' -an -r 30 \
+      "${x264[@]}" "$tmp/$1.mp4"
+    echo "file '$tmp/$1.mp4'" >> "$tmp/list.txt"
+  }
+  part a "trim=start_frame=$start"
+  [ "$start" -gt 0 ] && part b "trim=end_frame=$start"
+  ffmpeg -y -loglevel error -f concat -safe 0 -i "$tmp/list.txt" -c copy -movflags +faststart "$out"
+  rm -rf "$tmp"
+  local n; n=$(ffprobe -v error -count_frames -select_streams v -show_entries stream=nb_read_frames -of csv=p=0 "$out")
+  [ "$n" -eq "$FRAMES" ] || { echo "$out has $n frames, expected $FRAMES" >&2; exit 1; }
   printf '  %s  %s MB\n' "$out" "$(python3 -c "import os; print(round(os.path.getsize('$out') / 1e6, 1))")"
 }
 

@@ -43,11 +43,17 @@
   "buildYourOwn": {
     "title": "Grow Your Own",
     "startsAt": 9.95,
+    "boardHours": "Open 11 AM - 3 pm  M-F",
     "steps": [
-      { "title": "Pick a field base",  "detail": "Select 2 greens and/or grains" },
-      { "title": "Harvest 6 toppings", "detail": "Pick up to 6 field ingredients", "aside": "+$0.85 each for extras" },
-      { "title": "Upgrade your crop",  "detail": "Add proteins + upgrades" },
-      { "title": "Dress your field",   "detail": "Choose a house-made dressing" }
+      { "title": "Pick a field base",  "detail": "Select 2 greens and/or grains",
+        "boardTitle": "Pick a *field base*", "boardDetail": "*Select 2* greens and/or grains" },
+      { "title": "Harvest 6 toppings", "detail": "Pick up to 6 field ingredients", "aside": "+$0.85 each for extras",
+        "boardTitle": "Harvest 6 *toppings*", "boardDetail": "Pick up to *6 field ingredients*",
+        "boardAside": ["+$0.85 each", "for extras"] },
+      { "title": "Upgrade your crop",  "detail": "Add proteins + upgrades",
+        "boardTitle": "*Upgrade* your crop" },
+      { "title": "Dress your field",   "detail": "Choose a house-made dressing",
+        "boardTitle": "Dress your field", "boardDetail": "Choose a *house-made dressing*" }
     ]
   },
 
@@ -100,7 +106,10 @@
     { "title": "Dressings", "note": "Made from scratch in-house · All vegan or vegetarian", "layout": "columns",
       "items": ["Baja Lime Vinaigrette", "Thai Maple Peanut", "Sesame Miso", "Colorado Ranch",
                 "Green Goddess", "Vegan Caesar", "Fields Honey Vinaigrette", "Olive Oil + Balsamic",
-                "Citrus Poppyseed Vinaigrette", "Hot Honey Drizzle", "Lime/Lemon Wedge"] },
+                "Citrus Poppyseed Vinaigrette", "Hot Honey Drizzle", "Lime/Lemon Wedge"],
+      "boardColumns": [
+        ["Baja Lime Vinaigrette", "Honey Vinaigrette", "Vegan Caesar", "Colorado Ranch", "Citrus Poppyseed|Vinaigrette"],
+        ["Thai Maple Peanut", "Sesame Miso", "Green Goddess", "Olive Oil + Balsamic", "Hot Honey Drizzle", "Lime or Lemon Wedge"]] },
 
     { "title": "Refreshers", "layout": "named", "price": 4.50,
       "items": [

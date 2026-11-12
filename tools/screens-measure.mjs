@@ -29,17 +29,25 @@ const result = await page.evaluate(() => {
   const outlines = [...document.querySelectorAll('[data-outline]')].map((el) => {
     const cs = getComputedStyle(el);
     const r = el.getBoundingClientRect();
+    // One entry per run of text: a line (lines split with <br>) or a coloured span within one.
     const lines = [];
-    for (const node of [...el.childNodes]) {
-      if (node.nodeType !== Node.TEXT_NODE || !node.textContent.trim()) continue;
+    const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    for (let n = walk.nextNode(); n; n = walk.nextNode()) if (n.textContent.trim()) nodes.push(n);
+    for (const node of nodes) {
+      const ps = getComputedStyle(node.parentElement);
       // A zero-size inline-block's bottom edge sits on the baseline.
       const mark = document.createElement('span');
+      mark.className = '__mark';
       mark.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
-      el.insertBefore(mark, node);
+      node.parentNode.insertBefore(mark, node);
       const m = mark.getBoundingClientRect();
-      lines.push({ text: node.textContent, x: m.left - stage.left, baseline: m.bottom - stage.top });
+      const ls = parseFloat(ps.letterSpacing) || 0;
+      lines.push({ text: node.textContent, x: m.left - stage.left, baseline: m.bottom - stage.top,
+                   color: ps.color, size: parseFloat(ps.fontSize), tracking: ls / parseFloat(ps.fontSize),
+                   pre: ps.whiteSpace === 'pre' });
     }
-    for (const m of el.querySelectorAll('span[style*="inline-block"]')) m.remove();
+    for (const m of el.querySelectorAll('.__mark')) m.remove();
     return { font: el.dataset.outline, size: parseFloat(cs.fontSize), color: cs.color,
              x: r.left - stage.left, y: r.top - stage.top, w: r.width, h: r.height, lines };
   });

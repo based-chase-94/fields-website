@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grow Your Own · Fields menu board</title>
+<link rel="preload" href="/screens/assets/fredoka.8d14f8dd64.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Fredoka';src:url(/screens/assets/fredoka.8d14f8dd64.woff2) format('woff2');font-weight:300 700;font-display:block;ascent-override:97.4000%;descent-override:23.6000%;line-gap-override:0.0000%}
+html,body{margin:0;height:100%;background:#1d2716;overflow:hidden;cursor:none}
+#stage{position:absolute;left:50%;top:50%;width:3840px;height:2160px;margin:-1080px 0 0 -1920px;overflow:hidden;
+  background:#1d2716 url(/screens/assets/grass-grow-your-own.9f31a18ad8.jpg) center/cover no-repeat;color:#ffffff;font-family:'Fredoka',sans-serif;
+  transform-origin:50% 50%;opacity:0;transition:opacity .4s}
+#stage.ready{opacity:1}
+#bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#board{position:absolute;inset:0}
+.outlines{position:absolute;inset:0;pointer-events:none}
+.ol{position:absolute;display:block;overflow:visible}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#dot{position:absolute;right:40px;bottom:40px;width:14px;height:14px;border-radius:50%;background:#7bc96f;opacity:.35}
+#dot.offline{background:#f0a43a;opacity:.7}
+.check #safe{position:absolute;inset:108px 192px;outline:4px dashed #f0f;pointer-events:none}
+.check #info{position:absolute;left:212px;top:128px;font:500 48px/1.3 Fredoka,sans-serif;color:#f0f;background:#000a;padding:12px 20px}
+</style>
+</head>
+<body>
+<div id="stage" data-board="grow-your-own" data-build="16d2cdd94b49" data-loop-hd="/screens/assets/grass-grow-your-own-1080.e3510ba23d.mp4" data-loop-uhd="/screens/assets/grass-grow-your-own-2160.942870e650.mp4">
+<video id="bg" muted loop playsinline autoplay preload="auto" disablepictureinpicture aria-hidden="true"></video>
+<div id="board">
+<img src="/screens/assets/grow-2.bea3a54368.svg" alt="Grow" style="position: absolute; left: 147px; top: 167.05px; width: 615.076px; height: 249.191px; display: block">
+<img src="/screens/assets/your.7f1e16c2b8.svg" alt="your" style="position: absolute; left: 801.47px; top: 298px; width: 281.533px; height: 74.069px; display: block">
+<img src="/screens/assets/own.8a1bb6852c.svg" alt="Own" style="position: absolute; left: 1129px; top: 159.43px; width: 489.883px; height: 248.033px; display: block">
+<img src="/screens/assets/starts-at-6.fbcef16d98.svg" alt="Starts at" style="position: absolute; left: 2969px; top: 244.55px; width: 258.121px; height: 92.342px; display: block">
+<img src="/screens/assets/price-6.f0a84052fd.svg" alt="$9.95" style="position: absolute; left: 3270.76px; top: 219.61px; width: 359.237px; height: 136.31px; display: block">
+<img src="/screens/assets/step1.0c21096521.svg" alt="1" style="position: absolute; left: 180px; top: 593px; width: 231px; height: 128.452px; display: block">
+<p data-o="Heart of the Land" style="visibility: hidden; width: 1216.30px; height: 123.59px; position: absolute; left: 464px; top: 592px; margin: 0; font-family: 'Heart of the Land'; font-weight: 400; font-size: 130px; line-height: 123.6px; white-space: nowrap">PICK A <span style="color: #f9e14d">FIELD BASE</span></p>
+<p data-fit style="position: absolute; left: 464px; top: 778px; margin: 0; font-size: 80px; font-weight: 400; line-height: normal; letter-spacing: -1px; white-space: nowrap; font-feature-settings: 'dlig' 1"><span style="font-weight: 500; color: #f9e14d">Select 2</span> greens and/or grains</p>
+<div style="position: absolute; left: 464px; top: 974px; width: 565px; display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); column-gap: 76px; row-gap: 53px; align-items: start; font-size: 74px; font-weight: 400; line-height: 90px; white-space: nowrap"><div style="grid-column: 1; grid-row: 1">Romaine Hearts</div><div style="grid-column: 1; grid-row: 2">Arugula</div><div style="grid-column: 1; grid-row: 3">Kale</div><div style="grid-column: 1; grid-row: 4">Spinach</div><div style="grid-column: 1; grid-row: 5">Wild Rice</div><div style="grid-column: 1; grid-row: 6">Quinoa</div></div>
+<img src="/screens/assets/step2.5cd3ba4231.svg" alt="2" style="position: absolute; left: 1920px; top: 592px; width: 231px; height: 129.712px; display: block">
+<p data-o="Heart of the Land" style="visibility: hidden; width: 1427.30px; height: 123.59px; position: absolute; left: 2203px; top: 592px; margin: 0; font-family: 'Heart of the Land'; font-weight: 400; font-size: 130px; line-height: 123.6px; white-space: nowrap">HARVEST 6 <span style="color: #f9e14d">TOPPINGS</span></p>
+<p data-fit style="position: absolute; left: 2203px; top: 782px; margin: 0; font-size: 80px; font-weight: 400; line-height: normal; letter-spacing: -1px; white-space: nowrap; font-feature-settings: 'dlig' 1">Pick up to <span style="font-weight: 500; color: #f9e14d">6 field ingredients</span></p>
+<p style="position: absolute; right: 210px; top: 805px; margin: 0; font-size: 55px; font-weight: 400; line-height: normal; letter-spacing: -1px; text-align: right; white-space: nowrap">+$0.85 each<br>for extras</p>
+<div style="position: absolute; left: 2203px; top: 974px; width: 1571px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 76px; row-gap: 32px; align-items: start; font-size: 74px; font-weight: 400; line-height: 90px; white-space: nowrap"><div style="grid-column: 1; grid-row: 1">Cucumber</div><div style="grid-column: 1; grid-row: 2">Red Onion</div><div style="grid-column: 1; grid-row: 3">Grilled Corn</div><div style="grid-column: 1; grid-row: 4">Cherry Tomatoes</div><div style="grid-column: 1; grid-row: 5">Roasted Chickpeas</div><div style="grid-column: 1; grid-row: 6">Roasted Sweet Potato</div><div style="grid-column: 1; grid-row: 7">Pico de Gallo</div><div style="grid-column: 1; grid-row: 8">Strawberries</div><div style="grid-column: 1; grid-row: 9">Chives</div><div style="grid-column: 2; grid-row: 1">Carrot Ribbons</div><div style="grid-column: 2; grid-row: 2">Edamame</div><div style="grid-column: 2; grid-row: 3">Black Beans</div><div style="grid-column: 2; grid-row: 4">Grilled Poblano</div><div style="grid-column: 2; grid-row: 5">Roasted Broccoli</div><div style="grid-column: 2; grid-row: 6">Watermelon Radish</div><div style="grid-column: 2; grid-row: 7">Green Apples</div><div style="grid-column: 2; grid-row: 8">Cilantro</div></div>
+<p data-o="Heart of the Land" style="visibility: hidden; width: 876.16px; height: 123.59px; position: absolute; left: 180px; top: 1929px; margin: 0; font-family: 'Heart of the Land'; font-weight: 400; font-size: 75px; line-height: 123.6px; white-space: nowrap"><span style="color: #f9e14d; white-space: pre">OPEN 11 AM - 3 PM  M-F</span></p>
+<div class="outlines" aria-hidden="true"><svg class="ol" style="left:473.10px;top:612.44px;width:417.30px;height:94.25px;color:rgb(255, 255, 255)" aria-hidden="true" viewBox="70 -712 3210 725" preserveAspectRatio="xMinYMid meet" fill="currentColor"><path d="M436 -700H121C92 -700 70 -678 70 -649V-51C70 -22 92 0 121 0H144C173 0 195 -22 195 -51V-244C195 -267 219 -294 245 -294H436C548 -294 643 -381 643 -497C643 -614 548 -700 436 -700ZM436 -409H245C219 -409 195 -436 195 -459V-535C195 -558 219 -585 245 -585H436C471 -585 515 -546 515 -497C515 -449 471 -409 436 -409ZM804 0H827C856 0 878 -22 878 -51V-649C878 -678 856 -700 827 -700H804C775 -700 753 -678 753 -649V-51C753 -22 775 0 804 0ZM1341 13C1453 13 1554 -38 1621 -119C1643 -145 1635 -171 1605 -187L1583 -199C1556 -214 1535 -207 1514 -184C1470 -134 1408 -101 1340 -102C1211 -103 1103 -220 1103 -350C1103 -480 1211 -597 1340 -597C1407 -597 1468 -566 1512 -518C1533 -494 1555 -489 1581 -505L1602 -518C1630 -536 1637 -562 1615 -588C1548 -664 1450 -712 1341 -712C1141 -712 978 -550 978 -350C978 -149 1141 13 1341 13ZM1785 0H1808C1837 0 1859 -22 1859 -51V-212C1859 -239 1877 -245 1896 -226L2088 -26C2106 -8 2124 0 2149 0H2201C2245 0 2257 -30 2227 -62L1983 -321C1961 -344 1962 -368 1983 -391L2214 -639C2244 -672 2231 -700 2187 -700H2147C2122 -700 2104 -692 2086 -674L1896 -474C1878 -455 1859 -462 1859 -489V-649C1859 -678 1837 -700 1808 -700H1785C1756 -700 1734 -678 1734 -649V-51C1734 -22 1756 0 1785 0ZM3274 -58 3023 -646C3008 -682 2982 -700 2942 -700H2932C2892 -700 2866 -682 2851 -646L2600 -58C2585 -24 2601 0 2638 0H2659C2687 0 2706 -12 2717 -39L2731 -71C2741 -95 2774 -121 2800 -121H3073C3099 -121 3133 -95 3143 -71L3157 -39C3168 -12 3187 0 3215 0H3236C3273 0 3289 -24 3274 -58ZM2849 -236C2824 -236 2809 -255 2818 -280L2903 -482C2912 -503 2924 -514 2937 -513C2950 -514 2962 -503 2971 -482L3056 -280C3065 -255 3049 -236 3024 -236Z"/></svg><svg class="ol" style="left:941.12px;top:612.44px;width:733.98px;height:94.25px;color:rgb(249, 225, 77)" aria-hidden="true" viewBox="70 -712 5646 725" preserveAspectRatio="xMinYMid meet" fill="currentColor"><path d="M511 -700H121C92 -700 70 -678 70 -649V-51C70 -22 92 0 121 0H144C173 0 195 -22 195 -51V-238C195 -261 219 -288 245 -288H431C460 -288 482 -310 482 -339V-352C482 -381 460 -403 431 -403H245C222 -403 195 -427 195 -453V-535C195 -558 219 -585 245 -585H511C540 -585 562 -607 562 -636V-649C562 -678 540 -700 511 -700ZM723 0H746C775 0 797 -22 797 -51V-649C797 -678 775 -700 746 -700H723C694 -700 672 -678 672 -649V-51C672 -22 694 0 723 0ZM1112 -585H1383C1412 -585 1434 -607 1434 -636V-649C1434 -678 1412 -700 1383 -700H988C959 -700 937 -678 937 -649V-51C937 -22 959 0 988 0H1378C1407 0 1429 -22 1429 -51V-64C1429 -93 1407 -115 1378 -115H1112C1089 -115 1062 -139 1062 -165V-238C1062 -261 1086 -288 1112 -288H1298C1327 -288 1349 -310 1349 -339V-352C1349 -381 1327 -403 1298 -403H1112C1089 -403 1062 -427 1062 -453V-535C1062 -558 1086 -585 1112 -585ZM1967 -115H1719C1696 -115 1669 -139 1669 -165V-649C1669 -678 1647 -700 1618 -700H1595C1566 -700 1544 -678 1544 -649V-51C1544 -22 1566 0 1595 0H1967C1996 0 2018 -22 2018 -51V-64C2018 -93 1996 -115 1967 -115ZM2450 -700H2159C2130 -700 2108 -678 2108 -649V-51C2108 -22 2130 0 2159 0H2182C2186 0 2189 0 2193 -1H2450C2611 -1 2762 -136 2762 -356C2762 -572 2611 -700 2450 -700ZM2439 -116H2283C2260 -116 2233 -140 2233 -166V-535C2233 -558 2257 -585 2283 -585H2439C2536 -585 2624 -500 2624 -356C2624 -212 2536 -116 2439 -116ZM3678 -367C3713 -403 3735 -450 3735 -503C3735 -620 3640 -700 3528 -700H3213C3184 -700 3162 -678 3162 -649V-51C3162 -22 3184 0 3213 0H3555C3667 0 3762 -86 3762 -203C3762 -269 3728 -328 3678 -367ZM3517 -585C3565 -585 3605 -552 3605 -503C3605 -455 3565 -415 3517 -415H3337C3311 -415 3287 -442 3287 -465V-535C3287 -558 3311 -585 3337 -585ZM3544 -115H3337C3311 -115 3287 -142 3287 -165V-250C3287 -273 3311 -300 3337 -300H3544C3592 -300 3632 -260 3632 -203C3632 -155 3592 -115 3544 -115ZM4502 -58 4251 -646C4236 -682 4210 -700 4170 -700H4160C4120 -700 4094 -682 4079 -646L3828 -58C3813 -24 3829 0 3866 0H3887C3915 0 3934 -12 3945 -39L3959 -71C3969 -95 4002 -121 4028 -121H4301C4327 -121 4361 -95 4371 -71L4385 -39C4396 -12 4415 0 4443 0H4464C4501 0 4517 -24 4502 -58ZM4077 -236C4052 -236 4037 -255 4046 -280L4131 -482C4140 -503 4152 -514 4165 -513C4178 -514 4190 -503 4199 -482L4284 -280C4293 -255 4277 -236 4252 -236ZM4844 13C4964 13 5119 -40 5119 -187C5119 -313 5040 -377 4843 -412C4719 -434 4681 -451 4681 -508C4681 -570 4754 -596 4837 -596C4888 -596 4948 -580 4993 -554C5021 -538 5051 -541 5067 -566L5076 -580C5094 -609 5080 -635 5051 -653C4993 -689 4916 -712 4838 -712C4663 -712 4558 -620 4558 -497C4558 -372 4637 -317 4838 -290C4959 -274 4993 -236 4993 -183C4993 -124 4917 -102 4845 -102C4797 -102 4729 -114 4658 -154C4633 -168 4606 -174 4587 -148L4578 -136C4557 -108 4571 -80 4600 -60C4663 -16 4752 13 4844 13ZM5394 -585H5665C5694 -585 5716 -607 5716 -636V-649C5716 -678 5694 -700 5665 -700H5270C5241 -700 5219 -678 5219 -649V-51C5219 -22 5241 0 5270 0H5660C5689 0 5711 -22 5711 -51V-64C5711 -93 5689 -115 5660 -115H5394C5371 -115 5344 -139 5344 -165V-238C5344 -261 5368 -288 5394 -288H5580C5609 -288 5631 -310 5631 -339V-352C5631 -381 5609 -403 5580 -403H5394C5371 -403 5344 -427 5344 -453V-535C5344 -558 5368 -585 5394 -585Z"/></svg><svg class="ol" style="left:2212.10px;top:612.44px;width:711.36px;height:94.25px;color:rgb(255, 255, 255)" aria-hidden="true" viewBox="70 -712 5472 725" preserveAspectRatio="xMinYMid meet" fill="currentColor"><path d="M626 -700H603C574 -700 552 -678 552 -649V-450C552 -427 528 -400 502 -400H245C219 -400 195 -427 195 -450V-649C195 -678 173 -700 144 -700H121C92 -700 70 -678 70 -649V-51C70 -22 92 0 121 0H144C173 0 195 -22 195 -51V-235C195 -261 222 -285 245 -285H502C525 -285 552 -261 552 -235V-51C552 -22 574 0 603 0H626C655 0 677 -22 677 -51V-649C677 -678 655 -700 626 -700ZM1447 -58 1196 -646C1181 -682 1155 -700 1115 -700H1105C1065 -700 1039 -682 1024 -646L773 -58C758 -24 774 0 811 0H832C860 0 879 -12 890 -39L904 -71C914 -95 947 -121 973 -121H1246C1272 -121 1306 -95 1316 -71L1330 -39C1341 -12 1360 0 1388 0H1409C1446 0 1462 -24 1447 -58ZM1022 -236C997 -236 982 -255 991 -280L1076 -482C1085 -503 1097 -514 1110 -513C1123 -514 1135 -503 1144 -482L1229 -280C1238 -255 1222 -236 1197 -236ZM2013 -269C2001 -297 2010 -317 2035 -335C2084 -372 2116 -429 2116 -497C2116 -614 2021 -700 1909 -700H1594C1565 -700 1543 -678 1543 -649V-51C1543 -22 1565 0 1594 0H1617C1646 0 1668 -22 1668 -51V-244C1668 -267 1692 -294 1718 -294H1825C1853 -294 1872 -283 1883 -256L1974 -39C1985 -12 2004 0 2032 0H2065C2102 0 2118 -24 2103 -58ZM1901 -409H1718C1695 -409 1668 -433 1668 -459V-535C1668 -558 1692 -585 1718 -585H1901C1943 -585 1983 -546 1983 -497C1983 -449 1943 -409 1901 -409ZM2504 0H2514C2554 0 2580 -18 2595 -54L2846 -642C2861 -676 2845 -700 2808 -700H2782C2754 -700 2735 -688 2724 -661L2538 -218C2529 -197 2522 -189 2509 -190C2496 -189 2489 -197 2480 -218L2294 -661C2283 -688 2264 -700 2236 -700H2210C2173 -700 2157 -676 2172 -642L2423 -54C2438 -18 2464 0 2504 0ZM3117 -585H3388C3417 -585 3439 -607 3439 -636V-649C3439 -678 3417 -700 3388 -700H2993C2964 -700 2942 -678 2942 -649V-51C2942 -22 2964 0 2993 0H3383C3412 0 3434 -22 3434 -51V-64C3434 -93 3412 -115 3383 -115H3117C3094 -115 3067 -139 3067 -165V-238C3067 -261 3091 -288 3117 -288H3303C3332 -288 3354 -310 3354 -339V-352C3354 -381 3332 -403 3303 -403H3117C3094 -403 3067 -427 3067 -453V-535C3067 -558 3091 -585 3117 -585ZM3795 13C3915 13 4070 -40 4070 -187C4070 -313 3991 -377 3794 -412C3670 -434 3632 -451 3632 -508C3632 -570 3705 -596 3788 -596C3839 -596 3899 -580 3944 -554C3972 -538 4002 -541 4018 -566L4027 -580C4045 -609 4031 -635 4002 -653C3944 -689 3867 -712 3789 -712C3614 -712 3509 -620 3509 -497C3509 -372 3588 -317 3789 -290C3910 -274 3944 -236 3944 -183C3944 -124 3868 -102 3796 -102C3748 -102 3680 -114 3609 -154C3584 -168 3557 -174 3538 -148L3529 -136C3508 -108 3522 -80 3551 -60C3614 -16 3703 13 3795 13ZM4633 -700H4171C4142 -700 4120 -678 4120 -649V-636C4120 -607 4142 -585 4171 -585H4294C4317 -585 4344 -561 4344 -535V-51C4344 -22 4366 0 4395 0H4418C4447 0 4469 -22 4469 -51V-535C4469 -558 4493 -585 4519 -585H4633C4662 -585 4684 -607 4684 -636V-649C4684 -678 4662 -700 4633 -700ZM5288 10C5428 10 5542 -102 5542 -243C5542 -366 5451 -471 5332 -492C5312 -496 5303 -513 5313 -530L5382 -639C5405 -675 5393 -700 5351 -700H5301C5275 -700 5252 -692 5240 -670L5074 -378C5049 -339 5034 -292 5034 -243C5034 -102 5148 10 5288 10ZM5288 -104C5216 -104 5159 -163 5159 -243C5159 -270 5166 -295 5177 -316L5185 -327C5208 -360 5245 -381 5288 -381C5359 -381 5418 -322 5418 -243C5418 -163 5359 -104 5288 -104Z"/></svg><svg class="ol" style="left:2968.97px;top:612.44px;width:657.41px;height:94.25px;color:rgb(249, 225, 77)" aria-hidden="true" viewBox="20 -712 5057 725" preserveAspectRatio="xMinYMid meet" fill="currentColor"><path d="M533 -700H71C42 -700 20 -678 20 -649V-636C20 -607 42 -585 71 -585H194C217 -585 244 -561 244 -535V-51C244 -22 266 0 295 0H318C347 0 369 -22 369 -51V-535C369 -558 393 -585 419 -585H533C562 -585 584 -607 584 -636V-649C584 -678 562 -700 533 -700ZM967 13C1167 13 1330 -149 1330 -350C1330 -550 1167 -712 967 -712C767 -712 604 -550 604 -350C604 -149 767 13 967 13ZM966 -102C837 -103 729 -220 729 -350C729 -480 837 -597 966 -597C1096 -597 1205 -480 1205 -350C1205 -220 1096 -101 966 -102ZM1796 -700H1481C1452 -700 1430 -678 1430 -649V-51C1430 -22 1452 0 1481 0H1504C1533 0 1555 -22 1555 -51V-244C1555 -267 1579 -294 1605 -294H1796C1908 -294 2003 -381 2003 -497C2003 -614 1908 -700 1796 -700ZM1796 -409H1605C1579 -409 1555 -436 1555 -459V-535C1555 -558 1579 -585 1605 -585H1796C1831 -585 1875 -546 1875 -497C1875 -449 1831 -409 1796 -409ZM2479 -700H2164C2135 -700 2113 -678 2113 -649V-51C2113 -22 2135 0 2164 0H2187C2216 0 2238 -22 2238 -51V-244C2238 -267 2262 -294 2288 -294H2479C2591 -294 2686 -381 2686 -497C2686 -614 2591 -700 2479 -700ZM2479 -409H2288C2262 -409 2238 -436 2238 -459V-535C2238 -558 2262 -585 2288 -585H2479C2514 -585 2558 -546 2558 -497C2558 -449 2514 -409 2479 -409ZM2847 0H2870C2899 0 2921 -22 2921 -51V-649C2921 -678 2899 -700 2870 -700H2847C2818 -700 2796 -678 2796 -649V-51C2796 -22 2818 0 2847 0ZM3112 0H3135C3164 0 3186 -22 3186 -51V-364C3186 -410 3218 -422 3248 -387L3565 -20C3574 -8 3589 0 3606 0H3629C3658 0 3680 -22 3680 -51V-649C3680 -678 3658 -700 3629 -700H3606C3577 -700 3555 -678 3555 -649V-332C3555 -286 3523 -273 3493 -309L3176 -680C3167 -692 3152 -700 3135 -700H3112C3083 -700 3061 -678 3061 -649V-51C3061 -22 3083 0 3112 0ZM4143 13C4243 13 4348 -19 4416 -111C4431 -131 4435 -148 4435 -172C4436 -199 4436 -237 4436 -316C4436 -345 4414 -367 4385 -367H4289C4260 -367 4238 -345 4238 -316C4238 -286 4260 -266 4280 -266C4305 -266 4321 -255 4321 -216C4321 -141 4215 -105 4142 -106C4017 -108 3909 -224 3909 -350C3909 -475 4017 -593 4142 -593C4209 -593 4270 -566 4314 -518C4335 -494 4357 -489 4383 -505L4404 -518C4432 -536 4439 -562 4417 -588C4350 -664 4252 -712 4143 -712C3943 -712 3780 -550 3780 -350C3780 -149 3943 13 4143 13ZM4802 13C4922 13 5077 -40 5077 -187C5077 -313 4998 -377 4801 -412C4677 -434 4639 -451 4639 -508C4639 -570 4712 -596 4795 -596C4846 -596 4906 -580 4951 -554C4979 -538 5009 -541 5025 -566L5034 -580C5052 -609 5038 -635 5009 -653C4951 -689 4874 -712 4796 -712C4621 -712 4516 -620 4516 -497C4516 -372 4595 -317 4796 -290C4917 -274 4951 -236 4951 -183C4951 -124 4875 -102 4803 -102C4755 -102 4687 -114 4616 -154C4591 -168 4564 -174 4545 -148L4536 -136C4515 -108 4529 -80 4558 -60C4621 -16 4710 13 4802 13Z"/></svg><svg class="ol" style="left:182.25px;top:1966.60px;width:870.90px;height:54.38px;color:rgb(249, 225, 77)" aria-hidden="true" viewBox="30 -712 11612 725" preserveAspectRatio="xMinYMid meet" fill="currentColor"><path d="M393 13C593 13 756 -149 756 -350C756 -550 593 -712 393 -712C193 -712 30 -550 30 -350C30 -149 193 13 393 13ZM392 -102C263 -103 155 -220 155 -350C155 -480 263 -597 392 -597C522 -597 631 -480 631 -350C631 -220 522 -101 392 -102ZM1222 -700H907C878 -700 856 -678 856 -649V-51C856 -22 878 0 907 0H930C959 0 981 -22 981 -51V-244C981 -267 1005 -294 1031 -294H1222C1334 -294 1429 -381 1429 -497C1429 -614 1334 -700 1222 -700ZM1222 -409H1031C1005 -409 981 -436 981 -459V-535C981 -558 1005 -585 1031 -585H1222C1257 -585 1301 -546 1301 -497C1301 -449 1257 -409 1222 -409ZM1714 -585H1985C2014 -585 2036 -607 2036 -636V-649C2036 -678 2014 -700 1985 -700H1590C1561 -700 1539 -678 1539 -649V-51C1539 -22 1561 0 1590 0H1980C2009 0 2031 -22 2031 -51V-64C2031 -93 2009 -115 1980 -115H1714C1691 -115 1664 -139 1664 -165V-238C1664 -261 1688 -288 1714 -288H1900C1929 -288 1951 -310 1951 -339V-352C1951 -381 1929 -403 1900 -403H1714C1691 -403 1664 -427 1664 -453V-535C1664 -558 1688 -585 1714 -585ZM2197 0H2220C2249 0 2271 -22 2271 -51V-364C2271 -410 2303 -422 2333 -387L2650 -20C2659 -8 2674 0 2691 0H2714C2743 0 2765 -22 2765 -51V-649C2765 -678 2743 -700 2714 -700H2691C2662 -700 2640 -678 2640 -649V-332C2640 -286 2608 -273 2578 -309L2261 -680C2252 -692 2237 -700 2220 -700H2197C2168 -700 2146 -678 2146 -649V-51C2146 -22 2168 0 2197 0ZM3256 0H3279C3308 0 3330 -22 3330 -51V-649C3330 -678 3308 -700 3279 -700H3256C3227 -700 3205 -678 3205 -649V-51C3205 -22 3227 0 3256 0ZM3521 0H3544C3573 0 3595 -22 3595 -51V-649C3595 -678 3573 -700 3544 -700H3521C3492 -700 3470 -678 3470 -649V-51C3470 -22 3492 0 3521 0ZM4665 -58 4414 -646C4399 -682 4373 -700 4333 -700H4323C4283 -700 4257 -682 4242 -646L3991 -58C3976 -24 3992 0 4029 0H4050C4078 0 4097 -12 4108 -39L4122 -71C4132 -95 4165 -121 4191 -121H4464C4490 -121 4524 -95 4534 -71L4548 -39C4559 -12 4578 0 4606 0H4627C4664 0 4680 -24 4665 -58ZM4240 -236C4215 -236 4200 -255 4209 -280L4294 -482C4303 -503 4315 -514 4328 -513C4341 -514 4353 -503 4362 -482L4447 -280C4456 -255 4440 -236 4415 -236ZM4812 0H4835C4864 0 4886 -22 4886 -51V-364C4886 -410 4918 -422 4948 -387L5078 -237C5109 -201 5145 -201 5176 -237L5306 -387C5336 -422 5368 -410 5368 -364V-51C5368 -22 5390 0 5419 0H5442C5471 0 5493 -22 5493 -51V-649C5493 -678 5471 -700 5442 -700H5419C5396 -700 5363 -665 5354 -653L5162 -427C5140 -401 5114 -401 5092 -427L4899 -653C4886 -670 4856 -700 4835 -700H4812C4783 -700 4761 -678 4761 -649V-51C4761 -22 4783 0 4812 0ZM5944 -272H6310C6339 -272 6361 -294 6361 -323V-336C6361 -365 6339 -387 6310 -387H5944C5915 -387 5893 -365 5893 -336V-323C5893 -294 5915 -272 5944 -272ZM7111 -383C7142 -414 7163 -455 7162 -507C7160 -619 7070 -711 6959 -711C6861 -711 6777 -645 6759 -554C6754 -529 6774 -507 6802 -507H6845C6861 -507 6871 -518 6876 -533C6887 -569 6917 -595 6956 -595C7002 -595 7038 -553 7038 -506C7038 -463 7009 -421 6956 -421H6947C6918 -421 6896 -406 6896 -378V-371C6896 -342 6918 -320 6947 -320H6956C7020 -320 7073 -277 7073 -223C7073 -146 7027 -106 6961 -106C6907 -106 6860 -146 6845 -196C6838 -219 6823 -235 6799 -235H6774C6741 -235 6714 -209 6722 -177C6748 -71 6845 9 6961 9C7094 9 7195 -81 7195 -222C7195 -283 7171 -345 7111 -383ZM7961 -700H7646C7617 -700 7595 -678 7595 -649V-51C7595 -22 7617 0 7646 0H7669C7698 0 7720 -22 7720 -51V-244C7720 -267 7744 -294 7770 -294H7961C8073 -294 8168 -381 8168 -497C8168 -614 8073 -700 7961 -700ZM7961 -409H7770C7744 -409 7720 -436 7720 -459V-535C7720 -558 7744 -585 7770 -585H7961C7996 -585 8040 -546 8040 -497C8040 -449 7996 -409 7961 -409ZM8329 0H8352C8381 0 8403 -22 8403 -51V-364C8403 -410 8435 -422 8465 -387L8595 -237C8626 -201 8662 -201 8693 -237L8823 -387C8853 -422 8885 -410 8885 -364V-51C8885 -22 8907 0 8936 0H8959C8988 0 9010 -22 9010 -51V-649C9010 -678 8988 -700 8959 -700H8936C8913 -700 8880 -665 8871 -653L8679 -427C8657 -401 8631 -401 8609 -427L8416 -653C8403 -670 8373 -700 8352 -700H8329C8300 -700 8278 -678 8278 -649V-51C8278 -22 8300 0 8329 0ZM9801 0H9824C9853 0 9875 -22 9875 -51V-364C9875 -410 9907 -422 9937 -387L10067 -237C10098 -201 10134 -201 10165 -237L10295 -387C10325 -422 10357 -410 10357 -364V-51C10357 -22 10379 0 10408 0H10431C10460 0 10482 -22 10482 -51V-649C10482 -678 10460 -700 10431 -700H10408C10385 -700 10352 -665 10343 -653L10151 -427C10129 -401 10103 -401 10081 -427L9888 -653C9875 -670 9845 -700 9824 -700H9801C9772 -700 9750 -678 9750 -649V-51C9750 -22 9772 0 9801 0ZM10633 -272H10999C11028 -272 11050 -294 11050 -323V-336C11050 -365 11028 -387 10999 -387H10633C10604 -387 10582 -365 10582 -336V-323C10582 -294 10604 -272 10633 -272ZM11591 -700H11201C11172 -700 11150 -678 11150 -649V-51C11150 -22 11172 0 11201 0H11224C11253 0 11275 -22 11275 -51V-238C11275 -261 11299 -288 11325 -288H11511C11540 -288 11562 -310 11562 -339V-352C11562 -381 11540 -403 11511 -403H11325C11302 -403 11275 -427 11275 -453V-535C11275 -558 11299 -585 11325 -585H11591C11620 -585 11642 -607 11642 -636V-649C11642 -678 11620 -700 11591 -700Z"/></svg></div>
+</div>
+<div id="dot" aria-hidden="true"></div>
+</div>
+<script>
+// Runs inside every menu board page (inlined by tools/build-screens.py).
+// Scales the 3840x2160 board to the screen, plays the grass loop, keeps itself up to date,
+// and keeps working from its offline cache when the store's internet drops.
+//
+// URL options, for testing on a TV:
+//   ?video=4k     the 3840x2160 loop instead of the 1920x1080 default
+//   ?video=off    the still only
+//   ?check        title-safe margin, the build id and the screen's real resolution
+(() => {
+  const stage = document.getElementById('stage');
+  const video = document.getElementById('bg');
+  const dot = document.getElementById('dot');
+  const q = new URLSearchParams(location.search);
+  const BUILD = stage.dataset.build;
+  const POLL = 2 * 60 * 1000;
+
+  // ---- fit the stage to the screen (any resolution, letterboxed if not 16:9)
+  const fit = () => {
+    const k = Math.min(innerWidth / 3840, innerHeight / 2160);
+    stage.style.transform = `scale(${k})`;
+  };
+  addEventListener('resize', fit);
+  fit();
+  // Show the board once Fredoka has loaded, so a fallback face never flashes up.
+  // Five seconds at most, then show it anyway.
+  Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 5000))])
+    .then(() => stage.classList.add('ready'));
+
+  // ---- the grass loop. The poster still is the stage background, so a video that
+  // fails, stalls or is switched off leaves the board on its still, never black.
+  const want = q.get('video');
+  const src = want === 'off' ? '' : (want === '4k' && stage.dataset.loopUhd) || stage.dataset.loopHd;
+  if (src) {
+    video.src = src;
+    const play = () => video.play().catch(() => {});
+    video.addEventListener('canplay', play, { once: true });
+    play();
+    // A stall in a web view sometimes never recovers on its own: nudge it.
+    let last = -1;
+    setInterval(() => {
+      if (!video.paused && video.currentTime === last) { video.load(); play(); }
+      last = video.currentTime;
+    }, 10000);
+  } else {
+    video.remove();
+  }
+
+  // ---- updates. XOGO may keep the page open for days, so the page checks for a new
+  // build itself and reloads at the loop's seam, where the swap can't be seen.
+  let pending = false;
+  const reload = () => location.reload();
+  const reloadAtSeam = () => {
+    if (!src || video.paused) return reload();
+    let prev = video.currentTime;
+    const onTime = () => {
+      if (video.currentTime < prev) reload(); // wrapped back to the start
+      prev = video.currentTime;
+    };
+    video.addEventListener('timeupdate', onTime);
+    setTimeout(reload, 30000); // the loop is 18.5 s; don't wait forever
+  };
+  const poll = async () => {
+    try {
+      const r = await fetch(`../version.json?t=${Date.now()}`, { cache: 'no-store' });
+      if (!r.ok) throw new Error(r.status);
+      const { build } = await r.json();
+      dot.classList.remove('offline');
+      if (build !== BUILD && !pending) {
+        pending = true;
+        // Fetch the new page first, so a half-finished deploy never replaces a good board.
+        const p = await fetch(location.pathname, { cache: 'no-store' });
+        if (p.ok && (await p.text()).includes(`data-build="${build}"`)) reloadAtSeam();
+        else pending = false;
+      }
+    } catch {
+      dot.classList.add('offline');
+    }
+  };
+  setInterval(poll, POLL);
+  setTimeout(poll, 15000);
+
+  // A fresh page once a night (4 AM on the player's clock) clears anything a web view
+  // leaks over days of video.
+  const now = new Date();
+  const four = new Date(now);
+  four.setHours(4, 0, 0, 0);
+  if (four <= now) four.setDate(four.getDate() + 1);
+  setTimeout(reload, four - now);
+
+  // ---- offline: the service worker keeps the page, fonts, still and loop cached.
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('../sw.js', { scope: '../' }).catch(() => {});
+  }
+
+  // ---- ?check
+  if (q.has('check')) {
+    document.body.classList.add('check');
+    const safe = document.createElement('div');
+    safe.id = 'safe';
+    const info = document.createElement('div');
+    info.id = 'info';
+    const show = () => {
+      info.textContent = `build ${BUILD} · screen ${screen.width}×${screen.height} @${devicePixelRatio}x · ` +
+        `viewport ${innerWidth}×${innerHeight} · video ${src ? (want === '4k' ? '4K' : '1080p') : 'off'}` +
+        (video.isConnected && video.videoWidth ? ` (${video.videoWidth}×${video.videoHeight})` : '') +
+        ` · ${navigator.serviceWorker?.controller ? 'offline cache on' : 'no offline cache yet'}`;
+    };
+    stage.append(safe, info);
+    show();
+    setInterval(show, 2000);
+  }
+})();
+
+</script>
+</body>
+</html>
