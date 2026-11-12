@@ -8,8 +8,8 @@ so a menu change is a JSON edit and a push, not a re-bake and a hand-off.
 | Board | TV | URL |
 |---|---|---|
 | House Bowls | left | `https://fieldsbowls.com/screens/7upeczte/house-bowls/` |
-| Grow Your Own | centre | not built yet |
-| Proteins + Upgrades | right | not built yet |
+| Grow Your Own | centre | `https://fieldsbowls.com/screens/7upeczte/grow-your-own/` |
+| Proteins + Upgrades | right | `https://fieldsbowls.com/screens/7upeczte/proteins-upgrades/` |
 
 `7upeczte` is just an unlisted path segment. It isn't a secret (this repo is
 public): `X-Robots-Tag: noindex` in `site/_headers` and the robots meta tag keep the
@@ -24,7 +24,20 @@ from crawlers. To change the code: `CODE` in `tools/build-screens.py`, the
    - `boardLines` are each description's lines on the board (we break lines by
      hand, as Figma does). They must spell out `ingredients` exactly: the build
      stops if they don't.
-   - `boardKicker` is the top-right line, `note` the footer.
+   - `boardKicker` is House Bowls' top-right line, `note` its footer.
+   - Steps: `boardTitle` / `boardDetail` are the board's wording; `*stars*` mark the words
+     set in Sunshine. They must match `title` / `detail` apart from the stars and case.
+     `boardAside` is the "+$0.85 each / for extras" note, `boardHours` the hours line.
+   - Greens + Grains, Field Ingredients, Proteins and Upgrades come straight from their
+     lists (up to 6, 18, 7 and 7 entries fit). Prices are formatted for you.
+   - Dressings: `boardColumns` is the board's 5 + 6 layout with its own wording
+     ("Honey Vinaigrette", "Lime or Lemon Wedge"); `|` breaks a name over two lines.
+     It must have as many names as `items`.
+   - `footnotes` close the Proteins + Upgrades board.
+   - Some lettering is Figma's, exported as vectors in `source/screens/vectors/`:
+     "Grow your Own", "Starts at" and the **$9.95** price, the step numbers, and
+     "Order online @ fieldsbowls.com". Changing `startsAt` stops the build until a
+     new price is exported from Figma.
 2. `python3 tools/build-screens.py` (and `python3 tools/build-menu.py` for the website).
    The build stops if a line runs out of its column.
 3. Commit and push to `main`. Cloudflare deploys in about a minute. Each TV checks

@@ -31,6 +31,7 @@ with Playwright.
 import hashlib
 import html
 import json
+import re
 import pathlib
 import shutil
 import subprocess
@@ -104,9 +105,152 @@ def house_bowls(m, img):
     return b
 
 
+# ------------------------------------------------------------------ boards 2 and 3: the steps
+# fields-digital-menu build-grass-latest.py build() and beverages(), frames "FINAL - 2" and "FINAL - 3".
+
+def emph(t):
+    """'Pick a *field base*' -> the starred words in medium-weight Sunshine."""
+    parts = t.split("*")
+    if len(parts) % 2 == 0:
+        raise SystemExit(f"unbalanced * in {t!r}")
+    return "".join(esc(x) if i % 2 == 0 else f'<span style="font-weight: 500; color: {SUN}">{esc(x)}</span>'
+                   for i, x in enumerate(parts))
+
+
+def emph_heading(t):
+    """Same, for a Heart of the Land heading: the starred words in Sunshine (the face has one weight)."""
+    parts = t.upper().split("*")
+    return "".join(esc(x) if i % 2 == 0 else f'<span style="color: {SUN}">{esc(x)}</span>' for i, x in enumerate(parts))
+
+
+def plain(t):
+    return t.replace("*", "")
+
+
+def vec(img, key, x, y, w, h, alt=""):
+    return (f'<img src="{img[key]}" alt="{esc(alt)}" style="position: absolute; left: {x:g}px; top: {y:g}px; '
+            f'width: {w:g}px; height: {h:g}px; display: block">\n')
+
+
+def hotl(x, y, size, inner, extra=""):
+    return (f'<p data-outline="Heart of the Land" style="position: absolute; left: {x}px; top: {y}px; margin: 0; {HOTL}; '
+            f'font-size: {size}px; line-height: 123.6px;{extra} white-space: nowrap">{inner}</p>\n')
+
+
+def step(img, n, st, px, py, ph, x, hy, ty=None):
+    """A number pill, a 130px Heart of the Land heading and (optionally) an 80px Fredoka line."""
+    if plain(st["boardTitle"]).lower() != st["title"].lower():
+        raise SystemExit(f"step {n}: boardTitle {st['boardTitle']!r} doesn't match title {st['title']!r}")
+    b = vec(img, f"step{n}", px, py, 231, ph, alt=str(n)) + hotl(x, hy + 1, 130, emph_heading(st["boardTitle"]))  # Figma's glyphs sit 1px lower
+    if ty is not None:
+        if "boardDetail" not in st:
+            raise SystemExit(f"step {n} needs a boardDetail")
+        b += (f'<p data-fit style="position: absolute; left: {x}px; top: {ty}px; margin: 0; font-size: 80px; font-weight: 400; line-height: normal; '
+              f'letter-spacing: -1px; white-space: nowrap; font-feature-settings: \'dlig\' 1">{emph(st["boardDetail"])}</p>\n')
+    return b
+
+
+def column_grid(x, y, width, cols, row_gap, cells):
+    """Figma's 74px ingredient grids, filled column by column."""
+    rows = -(-len(cells) // cols)
+    cells_html = "".join(f'<div style="grid-column: {i // rows + 1}; grid-row: {i % rows + 1}">{esc(c)}</div>' for i, c in enumerate(cells))
+    return (f'<div style="position: absolute; left: {x}px; top: {y}px; width: {width}px; display: grid; '
+            f'grid-template-columns: repeat({cols}, minmax(0, 1fr)); column-gap: 76px; row-gap: {row_gap}px; align-items: start; '
+            f'font-size: 74px; font-weight: 400; line-height: 90px; white-space: nowrap">{cells_html}</div>\n')
+
+
+def lst(m, title):
+    for l in m["lists"]:
+        if l["title"] == title:
+            return l
+    raise SystemExit(f"menu.json has no list titled {title!r}")
+
+
+def grow_your_own(m, img):
+    """Board 2, centre TV: steps 1 and 2."""
+    byo = m["buildYourOwn"]
+    s1, s2 = byo["steps"][0], byo["steps"][1]
+    # "Grow your Own", "Starts at" and the price are Figma's lettering, exported as vectors.
+    if byo["startsAt"] != 9.95:
+        raise SystemExit("buildYourOwn.startsAt changed: the board's price is Figma lettering "
+                         "(source/screens/vectors/price-6.svg). Export the new price from Figma first.")
+    b = vec(img, "grow-2", 147, 167.05, 615.076, 249.191, alt="Grow")
+    b += vec(img, "your", 801.47, 298, 281.533, 74.069, alt="your")
+    b += vec(img, "own", 1129, 159.43, 489.883, 248.033, alt="Own")
+    b += vec(img, "starts-at-6", 2969, 244.55, 258.121, 92.342, alt="Starts at")
+    b += vec(img, "price-6", 3270.76, 219.61, 359.237, 136.31, alt=money(byo["startsAt"]))
+    b += step(img, 1, s1, 180, 593, 128.452, 464, 591, 778)
+    greens = lst(m, "Greens + Grains")["items"]
+    if len(greens) > 6:
+        raise SystemExit("Greens + Grains: the board has room for 6")
+    b += column_grid(464, 974, 565, 1, 53, greens)
+    b += step(img, 2, s2, 1920, 592, 129.712, 2203, 591, 782)
+    b += ('<p style="position: absolute; right: 210px; top: 805px; margin: 0; font-size: 55px; font-weight: 400; line-height: normal; '
+          'letter-spacing: -1px; text-align: right; white-space: nowrap">' + "<br>".join(esc(l) for l in s2["boardAside"]) + "</p>\n")
+    toppings = lst(m, "Field Ingredients")["items"]
+    if len(toppings) > 18:
+        raise SystemExit("Field Ingredients: the board has room for 18")
+    b += column_grid(2203, 974, 1571, 2, 32, toppings)
+    b += hotl(180, 1928 + 1, 75, f'<span style="color: {SUN}; white-space: pre">{esc(byo["boardHours"].upper())}</span>')
+    return b
+
+
+STEP4_TOP, TITLE_TOP, DRESS_ROW = 1486, 358, 75
+
+
+def proteins_upgrades(m, img):
+    """Board 3, right TV: steps 3 and 4."""
+    s3, s4 = m["buildYourOwn"]["steps"][2], m["buildYourOwn"]["steps"][3]
+    curly = lambda t: t.replace("'", "’")
+
+    def title(x, t):
+        return (f'<h2 data-outline="Midstar" style="position: absolute; left: {x}px; top: {TITLE_TOP}px; margin: 0; {MID}; font-size: 110px; '
+                f'line-height: normal; letter-spacing: -1px; color: {SUN}; white-space: nowrap">{esc(t)}</h2>\n')
+
+    def prices(x, items):
+        if len(items) > 7:
+            raise SystemExit("Proteins and Upgrades: the board has room for 7 rows each")
+        return (f'<div style="position: absolute; left: {x}px; top: 544px; width: 1483px; display: flex; flex-direction: column; gap: 28px">'
+                + "".join(f'<div data-row style="display: flex; align-items: center; justify-content: space-between; white-space: nowrap">'
+                          f'<span style="font-size: 74px; font-weight: 400; line-height: 90px">{esc(curly(it["name"]))}</span>'
+                          f'<span style="font-size: 68px; font-weight: 600; line-height: 73.6px; color: {SUN}">+{money(it["price"])}</span></div>'
+                          for it in items) + "</div>\n")
+
+    b = step(img, 3, s3, 193, 192, 130.972, 476, 192)
+    b += vec(img, "order-online", 3102.49, 179, 537.43, 49.926, alt="Order online @")
+    b += vec(img, "fieldsbowls", 2904, 249.66, 734.183, 56.345, alt="fieldsbowls.com")
+    for x, t in ((458, "Proteins"), (2140, "Upgrades")):
+        b += title(x, t)
+        b += prices(x + 18, lst(m, t)["items"])
+    # Step 4 is centred on y 1608 in Figma: its heading's top is 1608 minus half the block (147 + one 80px line).
+    b += step(img, 4, s4, 193, STEP4_TOP + 6, 128.485, 476, STEP4_TOP, STEP4_TOP + 147)
+    # Dressings: Figma's 2-column grid, 62px. "|" breaks a name over two lines. The last two of the
+    # second column are one 93px-leading block that Figma places 9px above its row, so its first
+    # line lines up with the two-line name beside it.
+    dress = lst(m, "Dressings")
+    c1, c2 = dress["boardColumns"]
+    if len(c1) + len(c2) != len(dress["items"]):
+        raise SystemExit(f"Dressings: boardColumns has {len(c1) + len(c2)} names, items has {len(dress['items'])}")
+    if len(c1) != 5 or len(c2) != 6:
+        raise SystemExit("Dressings: the board layout is 5 names on the left, 6 on the right")
+    cell = lambda t: (lambda n: f'<div style="height: {DRESS_ROW * n + 32 * (n - 1)}px">{"<br>".join(esc(x) for x in t.split("|"))}</div>')(t.count("|") + 1)
+    b += ('<div style="position: absolute; left: 2157px; top: 1481px; width: 1683px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); '
+          f'column-gap: 76px; align-items: start; font-size: 62px; font-weight: 400; line-height: {DRESS_ROW}px; white-space: nowrap">'
+          '<div data-col style="display: flex; flex-direction: column; gap: 32px">' + "".join(cell(t) for t in c1)
+          + '</div><div data-col style="display: flex; flex-direction: column; gap: 32px">' + "".join(cell(t) for t in c2[:4])
+          + f'<div style="margin-top: -9px; line-height: 93px">{esc(c2[4])}<br>{esc(c2[5])}</div></div></div>\n')
+    notes = list(m["footnotes"])
+    notes[-1] = notes[-1].rstrip(".")  # as on the board
+    b += ('<p style="position: absolute; left: 193px; top: 1997px; transform: translateY(-50%); margin: 0; font-size: 38px; font-weight: 400; '
+          'line-height: normal; white-space: nowrap">' + "<br>".join(esc(n) for n in notes) + "</p>\n")
+    return b
+
+
 BOARDS = [
     # slug, title, builder, poster
     ("house-bowls", "House Bowls", house_bowls, "grass-house-bowls.jpg"),
+    ("grow-your-own", "Grow Your Own", grow_your_own, "grass-grow-your-own.jpg"),
+    ("proteins-upgrades", "Proteins + Upgrades", proteins_upgrades, "grass-proteins-upgrades.jpg"),
 ]
 
 
@@ -131,10 +275,11 @@ def fredoka_woff2() -> bytes:
         return pathlib.Path(t.name).read_bytes()
 
 
-def outline_svg(text, family, size):
-    """The words as one <svg> of paths, positioned from its baseline origin."""
+def outline_svg(text, family, size, tracking=0.0):
+    """The words as one <svg> of paths, positioned from its baseline origin.
+    `tracking` is CSS letter-spacing in em, which outlines have to bake in."""
     font = FONTFILES[family]
-    s = scripttype.render(text, font_path=font, css_class="ol", aria_hidden=True)
+    s = scripttype.render(text, font_path=font, css_class="ol", aria_hidden=True, tracking=tracking)
     upm = scripttype._load(str(font))[2]
     vb = s.split('viewBox="')[1].split('"')[0]
     x0, y0, w, h = map(float, vb.split())
@@ -184,38 +329,36 @@ def measure(draft_html):
 
 
 def final_body(body, m):
-    """Swap each outlined element's text for outlines placed where it measured."""
+    """Hide each outlined element's live text and draw its runs as outlines on top.
+
+    The element stays in place (hidden, but sized to what it measured with the real
+    font) so the rows around it lay out exactly as they did when measured.
+    """
     parts = body.split('data-outline="')
-    out, svgs, n = parts[0], [], 0
-    for part in parts[1:]:
+    out, svgs = parts[0], []
+    assert len(parts) - 1 == len(m["outlines"])
+    for part, el in zip(parts[1:], m["outlines"]):
         fam, rest = part.split('"', 1)
-        el = m["outlines"][n]
-        assert el["font"] == fam, (el, fam)
-        n += 1
-        # Keep the element's box (it holds its row's layout), hide its words for
-        # screen readers only, and draw the lines as outlines on the overlay.
-        tag_end = rest.index(">")
-        attrs, inner = rest[:tag_end], rest[tag_end + 1:]
-        close = inner.index("</")
-        words = inner[:close].replace("<br>", " ")
-        style_fix = f'; width: {el["w"]:.2f}px; height: {el["h"]:.2f}px'
-        attrs = attrs.replace('white-space: nowrap"', f'white-space: nowrap{style_fix}"', 1)
-        out += f'data-o="{fam}"{attrs}><span class="vh">{words}</span>{inner[close:]}'
-        for line in el["lines"]:
-            s, x0, y0, w, h = outline_svg(html.unescape(line["text"]), fam, el["size"])
-            left, top = line["x"] + x0, line["baseline"] + y0
-            s = s.replace('<svg class="ol"', f'<svg class="ol" style="left:{left:.2f}px;top:{top:.2f}px;width:{w:.2f}px;height:{h:.2f}px;color:{el["color"]}"', 1)
+        assert el["font"] == fam, (el["font"], fam)
+        assert rest.startswith(' style="'), rest[:40]
+        rest = rest.replace(' style="', f' style="visibility: hidden; width: {el["w"]:.2f}px; height: {el["h"]:.2f}px; ', 1)
+        out += f'data-o="{fam}"' + rest
+        for run in el["lines"]:
+            text = html.unescape(run["text"])
+            if not run["pre"]:
+                text = re.sub(r"\s+", " ", text)
+            s, x0, y0, w, h = outline_svg(text, fam, run["size"], run["tracking"])
+            left, top = run["x"] + x0, run["baseline"] + y0
+            s = s.replace('<svg class="ol"', f'<svg class="ol" style="left:{left:.2f}px;top:{top:.2f}px;width:{w:.2f}px;height:{h:.2f}px;color:{run["color"]}"', 1)
             # scripttype sizes in em via --sw/--sh; drop that, the overlay is absolutely placed.
             s = s.replace(s[s.index(' style="--sw'):s.index('" preserveAspectRatio') + 1], "", 1)
             svgs.append(s)
-    assert n == len(m["outlines"])
     return out + '<div class="outlines" aria-hidden="true">' + "".join(svgs) + "</div>\n"
 
 
 def place_marks(body, m):
     """Put each data-mark image beside the outlined name it belongs to."""
-    import re
-    names = {html.unescape(" ".join(l["text"] for l in o["lines"])): o for o in m["outlines"]}
+    names = {html.unescape("".join(l["text"] for l in o["lines"])): o for o in m["outlines"]}
 
     def put(mt):
         o = names[html.unescape(mt.group(1))]
@@ -290,7 +433,7 @@ def main():
     PAGES.mkdir(parents=True)
 
     fredoka_url = hashed(FREDOKA, "fredoka.woff2", fredoka_woff2())
-    img = {"vegetarian": hashed(SRC / "vegetarian.svg", "vegetarian.svg")}
+    img = {f.stem: hashed(f, f.name) for f in sorted((SRC / "vectors").glob("*.svg"))}
     runtime = (SRC / "screen.js").read_text()
     precache, built = [fredoka_url, *img.values()], []
 
