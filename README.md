@@ -37,6 +37,7 @@ website/
     ├── palette.md     ← brand colours + how the page uses them
     ├── motion.md      ← the intro choreography, and why there's no library
     ├── signage.md     ← the looping video for screens in the space
+    ├── screens.md     ← the live in-store menu board pages (XOGO URLs)
     └── hosting.md     ← Porkbun + Cloudflare runbook, and the launch checklist
 ```
 

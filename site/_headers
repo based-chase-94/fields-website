@@ -26,3 +26,15 @@
   Cache-Control: public, max-age=86400
 /assets/img/*
   Cache-Control: public, max-age=86400
+
+# In-store menu board pages (tools/build-screens.py, docs/screens.md). Played by
+# the XOGO players as URL assets; never meant for search. noindex is the real
+# protection: the path is unlisted, but this repo is public.
+# The two blocks below must not overlap: Cloudflare joins a header set by two
+# matching rules with a comma, which would garble Cache-Control.
+/screens/7upeczte/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-cache
+/screens/assets/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: public, max-age=31536000, immutable
