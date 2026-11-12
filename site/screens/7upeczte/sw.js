@@ -7,9 +7,9 @@
 // - Everything under /screens/assets/ has a content hash in its name and never changes:
 //   cache first. Video range requests are answered from the cached file, so the loop
 //   keeps playing with no connection.
-const BUILD = '07510275758d';
+const BUILD = '38f2bd870393';
 const CACHE = `fields-screens-${BUILD}`;
-const PRECACHE = ["/screens/7upeczte/house-bowls/", "/screens/assets/fredoka.8d14f8dd64.woff2", "/screens/assets/grass-house-bowls-1080.9c5a5dd76c.mp4", "/screens/assets/grass-house-bowls-2160.c8ae81d9e5.mp4", "/screens/assets/grass-house-bowls.3a3f16f615.jpg", "/screens/assets/vegetarian.764b341977.svg"];
+const PRECACHE = ["/screens/7upeczte/house-bowls/", "/screens/assets/fredoka.8d14f8dd64.woff2", "/screens/assets/grass-house-bowls-1080.67ddd6d8cb.mp4", "/screens/assets/grass-house-bowls-2160.77f784e11d.mp4", "/screens/assets/grass-house-bowls.3a3f16f615.jpg", "/screens/assets/vegetarian.764b341977.svg"];
 
 self.addEventListener('install', (e) => {
   e.waitUntil((async () => {

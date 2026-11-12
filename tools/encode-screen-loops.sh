@@ -22,6 +22,10 @@
 #
 # No text is burned in, so the bitrate goes on grass alone: blurred grass
 # compresses well. Cloudflare Workers static assets cap a file at 25 MiB.
+#
+# Colour: the masters' grade is only brightness 0.85 and blur. There is no
+# contrast or saturation step; the "duller" look of the first web loops was a
+# BT.601/BT.709 matrix mismatch, fixed below.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -53,13 +57,18 @@ encode() {  # board width height crf preset level [maxrate]
   # Rotate the loop so it starts at the board's moment: frames [start, end) then [0, start).
   graph+="[l1]trim=start_frame=$start,setpts=PTS-STARTPTS[tail];"
   graph+="[l2]trim=end_frame=$start,setpts=PTS-STARTPTS[lead];"
+  # Back to YUV with the BT.709 matrix, and say so in the file. The look runs in RGB
+  # (colorchannelmixer), and ffmpeg's default RGB->YUV matrix is BT.601 with no tag:
+  # browsers then decode it as BT.709 and the grass comes out duller and shifted
+  # towards yellow. The TV masters end tagged BT.709, so this matches them.
+  local yuv="scale=out_color_matrix=bt709:out_range=tv,format=yuv420p,setparams=colorspace=bt709:color_primaries=bt709:color_trc=bt709:range=tv"
   if [ "$start" -eq 0 ]; then
-    graph+="[tail]format=yuv420p[v];[lead]nullsink"
+    graph+="[tail]$yuv[v];[lead]nullsink"
   else
-    graph+="[tail][lead]concat=n=2:v=1,format=yuv420p[v]"
+    graph+="[tail][lead]concat=n=2:v=1,$yuv[v]"
   fi
   ffmpeg -y -loglevel error -i "$SRC" -filter_complex "$graph" -map '[v]' -an -r 30 -frames:v "$FRAMES" \
-    -c:v libx264 -profile:v high -level:v "$level" -preset "$preset" -crf "$crf" ${cap:+-maxrate $cap -bufsize $((${cap%M} * 2))M} -movflags +faststart "$out"
+    -c:v libx264 -profile:v high -level:v "$level" -preset "$preset" -crf "$crf" ${cap:+-maxrate $cap -bufsize $((${cap%M} * 2))M} -colorspace bt709 -color_primaries bt709 -color_trc bt709 -movflags +faststart "$out"
   printf '  %s  %s MB\n' "$out" "$(python3 -c "import os; print(round(os.path.getsize('$out') / 1e6, 1))")"
 }
 
