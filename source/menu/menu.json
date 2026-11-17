@@ -40,16 +40,40 @@
     ]
   },
 
+  "grainBowls": {
+    "title": "Grain Bowls",
+    "items": [
+      { "name": "Forager", "price": 13.50,
+        "ingredients": "Citrus-herb chicken, warm wild rice, kale, roasted sweet potato, green apple, dried cherries, walnuts, blue cheese, Fields honey vinaigrette, almond brittle",
+        "boardLines": ["Citrus-herb chicken, warm wild rice, kale, roasted sweet",
+          "potato, green apple, dried cherries, walnuts, blue cheese,",
+          "Fields honey vinaigrette, almond brittle"] },
+      { "name": "Penang", "price": 12.95, "vegetarian": true,
+        "ingredients": "Sweet chili tofu, warm wild rice, roasted broccoli, carrot ribbons, edamame, cilantro, peanuts, Thai maple peanut dressing, chili oil drizzle, rice paper crackle",
+        "boardLines": ["Sweet chili tofu, warm wild rice, roasted broccoli, carrot",
+          "ribbons, edamame, cilantro, peanuts, Thai maple peanut",
+          "dressing, chili oil drizzle, rice paper crackle"] },
+      { "name": "Taos", "price": 13.50,
+        "ingredients": "Blackened chicken, warm quinoa, roasted sweet potato, black beans, grilled poblano, grilled corn, shredded cheddar, Fiery Fields, Colorado ranch drizzle, Tajin tortilla",
+        "boardLines": ["Blackened chicken, warm quinoa, roasted sweet potato, black",
+          "beans, grilled poblano, grilled corn, shredded cheddar, Fiery",
+          "Fields, Colorado ranch drizzle, Tajin tortilla"] },
+      { "name": "Umbria", "price": 13.25, "vegetarian": true,
+        "ingredients": "Warm shiitake mix, roasted chickpeas, warm quinoa, arugula, cherry tomatoes, red onion, parmesan, olive oil + balsamic, focaccia crouton",
+        "boardLines": ["Warm shiitake mix, roasted chickpeas, warm quinoa, arugula, cherry",
+          "tomatoes, red onion, parmesan, olive oil + balsamic, focaccia crouton"] }
+    ]
+  },
+
   "buildYourOwn": {
     "title": "Grow Your Own",
     "startsAt": 9.95,
     "boardHours": "Open 11 AM - 3 pm  M-F",
     "steps": [
       { "title": "Pick a field base",  "detail": "Select 2 greens and/or grains",
-        "boardTitle": "Pick a *field base*", "boardDetail": "*Select 2* greens and/or grains" },
+        "boardTitle": "Pick 2 *field bases*" },
       { "title": "Harvest 6 toppings", "detail": "Pick up to 6 field ingredients", "aside": "+$0.85 each for extras",
-        "boardTitle": "Harvest 6 *toppings*", "boardDetail": "Pick up to *6 field ingredients*",
-        "boardAside": ["+$0.85 each", "for extras"] },
+        "boardTitle": "Harvest 6 *toppings*" },
       { "title": "Upgrade your crop",  "detail": "Add proteins + upgrades",
         "boardTitle": "*Upgrade* your crop" },
       { "title": "Dress your field",   "detail": "Choose a house-made dressing",
@@ -60,14 +84,19 @@
   "lists": [
     { "title": "Greens + Grains", "note": "Select 2", "layout": "columns",
       "items": ["Romaine Hearts", "Arugula", "Kale",
-                "Spinach", "Wild Rice", "Quinoa"] },
+                "Spinach", "Wild Rice", "Quinoa"],
+      "boardRows": [["Spinach", "Arugula", "Kale"], ["Romaine", "Wild Rice", "Quinoa"]] },
 
     { "title": "Field Ingredients", "note": "Pick 6", "layout": "columns",
       "items": ["Cucumber", "Red Onion", "Grilled Corn", "Cherry Tomatoes",
                 "Roasted Chickpeas", "Roasted Sweet Potato", "Pico de Gallo",
                 "Strawberries", "Chives", "Carrot Ribbons", "Edamame",
                 "Black Beans", "Grilled Poblano", "Roasted Broccoli",
-                "Watermelon Radish", "Green Apples", "Cilantro"] },
+                "Watermelon Radish", "Green Apples", "Cilantro"],
+      "boardColumns": [["Cucumber", "Red Onion", "Grilled Corn", "Cherry Tomatoes", "Roasted Chickpeas",
+                        "Roasted Sweet Potato", "Pico de Gallo", "Strawberries"],
+                       ["Carrot Ribbons", "Edamame", "Black Beans", "Grilled Poblano", "Roasted Broccoli",
+                        "Watermelon Radish", "Green Apples", ["Cilantro", "Chives"]]] },
 
     { "title": "Proteins", "layout": "priced",
       "items": [

@@ -9,10 +9,11 @@ XOGO Mini behind each TV as a URL asset. They replace the baked 4K videos: the
 grass loop plays as the page background and the browser draws the board on top,
 so a menu change is an edit to source/menu/menu.json and a push, not a re-bake.
 
-The layout is fields-digital-menu's tools/build-grass-latest.py, unchanged:
-a fixed 3840x2160 stage using Figma's numbers (frame "FINAL - 1" for House
-Bowls), scaled to the screen in the page. Only the words now come from
-menu.json, the same file the website menu is built from.
+The layout is a fixed 3840x2160 stage using Figma's numbers, scaled to the
+screen in the page. Figma file "Menus - Other Print", page "Lunch Boards -
+Latest": frames "LEFT - House", "CENTER - Grain + GYO 1+2" and "RIGHT - GYO 3"
+(16 Nov 2026; the first version was fields-digital-menu's build-grass-latest.py).
+Only the words come from menu.json, the same file the website menu is built from.
 
 Lettering. Midstar and Heart of the Land are licensed, and this repo is public,
 so neither font file can ship (see tools/scripttype.py). They are drawn as SVG
@@ -67,46 +68,54 @@ money = lambda p: f"${p:.2f}"
 # Each board returns its stage HTML. An element with data-outline="<font>" has
 # its text drawn as outlines; one text node per line (lines split with <br>).
 
+def bowl(it, price_weight, desc_size, desc_weight, row_width=None, desc_style="line-height: normal"):
+    """A bowl: Heart of the Land name, Sunshine price on the right, the description below in Fredoka."""
+    lines = it["boardLines"]
+    if " ".join(lines) != it["ingredients"]:
+        raise SystemExit(
+            f"{it['name']}: boardLines don't spell out ingredients.\n"
+            f"  ingredients: {it['ingredients']}\n  boardLines:  {' '.join(lines)}")
+    return (
+        '<div style="display: flex; flex-direction: column; gap: 36px">'
+        f'<div style="display: flex; align-items: flex-start; gap: 36px{f"; width: {row_width}px" if row_width else ""}">'
+        f'<span data-outline="Heart of the Land" style="{HOTL}; font-size: 106px; line-height: 73.6px; white-space: nowrap">{esc(it["name"])}</span>'
+        '<span style="flex: 1 0 0; min-width: 1px; height: 76px"></span>'
+        f'<span style="position: relative; top: 1px; font-size: 106px; font-weight: {price_weight}; line-height: 73.6px; color: {SUN}; white-space: nowrap">{money(it["price"])}</span></div>'
+        f'<p data-fit style="margin: 0; font-size: {desc_size}px; font-weight: {desc_weight}; {desc_style}; letter-spacing: -1px; white-space: nowrap; font-feature-settings: \'dlig\' 1, \'liga\' 1">'
+        + "<br>".join(esc(l) for l in lines) + "</p></div>")
+
+
+def marks(img, items, dx, dy):
+    """The vegetarian mark after each vegetarian bowl's name. place_marks() sets left/top."""
+    return "".join(
+        f'<img data-mark="{esc(it["name"])}" data-dx="{dx}" data-dy="{dy}" src="{img["vegetarian"]}" alt="Vegetarian" '
+        'style="position: absolute; left: 0px; top: 0px; width: 95px; height: 95px; display: block">\n'
+        for it in items if it.get("vegetarian"))
+
+
 def house_bowls(m, img):
-    """Board 1, left TV. fields-digital-menu build-grass-latest.py signature()."""
+    """Board 1, left TV: frame "LEFT - House"."""
     hb = m["houseBowls"]
-
-    def item(it):
-        lines = it["boardLines"]
-        if " ".join(lines) != it["ingredients"]:
-            raise SystemExit(
-                f"{it['name']}: boardLines don't spell out ingredients.\n"
-                f"  ingredients: {it['ingredients']}\n  boardLines:  {' '.join(lines)}")
-        return (
-            '<div style="display: flex; flex-direction: column; gap: 36px">'
-            '<div style="display: flex; align-items: flex-start; gap: 36px">'
-            f'<span data-outline="Heart of the Land" style="{HOTL}; font-size: 106px; line-height: 73.6px; white-space: nowrap">{esc(it["name"])}</span>'
-            '<span style="flex: 1 0 0; min-width: 1px; height: 76px"></span>'
-            f'<span style="position: relative; top: 1px; font-size: 106px; font-weight: 600; line-height: 73.6px; color: {SUN}; white-space: nowrap">{money(it["price"])}</span></div>'
-            '<p data-fit style="margin: 0; font-size: 68px; font-weight: 400; line-height: normal; letter-spacing: -1px; white-space: nowrap; font-feature-settings: \'dlig\' 1">'
-            + "<br>".join(esc(l) for l in lines) + "</p></div>")
-
+    if len(hb["items"]) > 6:
+        raise SystemExit("House Bowls: the board has room for 6")
     b = (f'<h2 data-outline="Midstar" style="position: absolute; left: 137px; top: 231.1px; margin: 0; {MID}; font-size: 273px; '
          f'line-height: 121.8px; color: {SUN}; white-space: nowrap">{esc(hb["title"])}</h2>\n')
     b += (f'<p data-outline="Heart of the Land" style="position: absolute; right: 131px; top: 185px; margin: 0; {HOTL}; font-size: 106px; '
           f'line-height: 120px; text-align: right; white-space: nowrap">'
           + "<br>".join(esc(l.upper()) for l in hb["boardKicker"]) + "</p>\n")
-    b += ('<div data-column style="position: absolute; left: 130px; top: 589px; width: 3579px; display: grid; '
+    b += ('<div style="position: absolute; left: 130px; top: 589px; width: 3579px; display: grid; '
           'grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 130px; row-gap: 107px">')
-    b += "".join(item(it) for it in hb["items"])
+    b += "".join(bowl(it, 600, 68, 400) for it in hb["items"])
     b += "</div>\n"
-    # The vegetarian mark follows the name of each vegetarian bowl: Figma puts it 31 px after
-    # FIELDS NOTES and 7 px above the name's box (2764, 1512). place_marks() sets left/top.
-    for i, it in enumerate(hb["items"]):
-        if it.get("vegetarian"):
-            b += f'<img data-mark="{esc(it["name"])}" data-dx="31.1" data-dy="-7" src="{img["vegetarian"]}" alt="Vegetarian" style="position: absolute; left: 0px; top: 0px; width: 95px; height: 95px; display: block">\n'
-    b += (f'<p style="position: absolute; left: 62px; top: {H - 122}px; margin: 0; font-size: 58px; font-weight: 500; line-height: normal; '
-          f'letter-spacing: -1px; color: {SUN}; white-space: nowrap; font-feature-settings: \'dlig\' 1">{esc(hb["note"])}</p>\n')
+    # Figma puts the mark 31 px after FIELDS NOTES and 7 px above the name's box (2764, 1512).
+    b += marks(img, hb["items"], 31.1, -7)
+    b += hotl(130, 1968 + 1, 75, f'<span style="color: {SUN}; white-space: pre">{esc(m["buildYourOwn"]["boardHours"].upper())}</span>')
+    b += (f'<p style="position: absolute; right: 131px; top: 1990px; margin: 0; font-size: 58px; font-weight: 500; line-height: normal; '
+          f'letter-spacing: -1px; text-align: right; color: {SUN}; white-space: nowrap; font-feature-settings: \'dlig\' 1, \'liga\' 1">{esc(hb["note"])}</p>\n')
     return b
 
 
-# ------------------------------------------------------------------ boards 2 and 3: the steps
-# fields-digital-menu build-grass-latest.py build() and beverages(), frames "FINAL - 2" and "FINAL - 3".
+# ------------------------------------------------------------------ boards 2 and 3: grain bowls and the steps
 
 def emph(t):
     """'Pick a *field base*' -> the starred words in medium-weight Sunshine."""
@@ -138,25 +147,33 @@ def hotl(x, y, size, inner, extra=""):
 
 
 def step(img, n, st, px, py, ph, x, hy, ty=None):
-    """A number pill, a 130px Heart of the Land heading and (optionally) an 80px Fredoka line."""
-    if plain(st["boardTitle"]).lower() != st["title"].lower():
-        raise SystemExit(f"step {n}: boardTitle {st['boardTitle']!r} doesn't match title {st['title']!r}")
+    """A number pill, a 130px Heart of the Land heading and (optionally) an 80px Fredoka line.
+    The board's wording (boardTitle) can differ from the website's (title): "Pick 2 field bases"."""
     b = vec(img, f"step{n}", px, py, 231, ph, alt=str(n)) + hotl(x, hy + 1, 130, emph_heading(st["boardTitle"]))  # Figma's glyphs sit 1px lower
     if ty is not None:
         if "boardDetail" not in st:
             raise SystemExit(f"step {n} needs a boardDetail")
         b += (f'<p data-fit style="position: absolute; left: {x}px; top: {ty}px; margin: 0; font-size: 80px; font-weight: 400; line-height: normal; '
-              f'letter-spacing: -1px; white-space: nowrap; font-feature-settings: \'dlig\' 1">{emph(st["boardDetail"])}</p>\n')
+              f'letter-spacing: -1px; white-space: nowrap; font-feature-settings: \'dlig\' 1, \'liga\' 1">{emph(st["boardDetail"])}</p>\n')
     return b
 
 
-def column_grid(x, y, width, cols, row_gap, cells):
-    """Figma's 74px ingredient grids, filled column by column."""
-    rows = -(-len(cells) // cols)
-    cells_html = "".join(f'<div style="grid-column: {i // rows + 1}; grid-row: {i % rows + 1}">{esc(c)}</div>' for i, c in enumerate(cells))
-    return (f'<div style="position: absolute; left: {x}px; top: {y}px; width: {width}px; display: grid; '
-            f'grid-template-columns: repeat({cols}, minmax(0, 1fr)); column-gap: 76px; row-gap: {row_gap}px; align-items: start; '
-            f'font-size: 74px; font-weight: 400; line-height: 90px; white-space: nowrap">{cells_html}</div>\n')
+def grid(x, y, col_pitch, row_pitch, columns, max_rows):
+    """Figma's 60px ingredient lists: each name placed at its column and row. A cell can be a
+    list of names that share the row, set apart as Figma does (five spaces: "Cilantro     Chives")."""
+    if any(len(c) > max_rows for c in columns):
+        raise SystemExit(f"the board has room for {max_rows} names per column")
+    out = ""
+    for ci, col in enumerate(columns):
+        for ri, cell in enumerate(col):
+            text = "     ".join(cell) if isinstance(cell, list) else cell
+            out += (f'<div style="position: absolute; left: {x + ci * col_pitch:g}px; top: {y + ri * row_pitch + 1:g}px; '
+                    f'font-size: 60px; font-weight: 500; line-height: normal; white-space: pre">{esc(text)}</div>\n')
+    return out
+
+
+def names(columns):
+    return [n for col in columns for c in col for n in (c if isinstance(c, list) else [c])]
 
 
 def lst(m, title):
@@ -166,32 +183,52 @@ def lst(m, title):
     raise SystemExit(f"menu.json has no list titled {title!r}")
 
 
+# Each grain bowl's top in Figma (the gaps between them aren't even), and how far its description
+# may run: clear of the step pills (x 1915) beside the first three, of the toppings (x 2203) beside the last.
+GRAIN_SLOTS = [(530, 1720), (957, 1720), (1377, 1720), (1790, 1995)]
+# Figma sets 60px Fredoka Medium on a 73px line, its glyphs 2px lower than Chromium (1px for one line).
+GRAIN_DESC = "line-height: 73px; position: relative; top: 2px"
+
+
 def grow_your_own(m, img):
-    """Board 2, centre TV: steps 1 and 2."""
-    byo = m["buildYourOwn"]
+    """Board 2, centre TV: frame "CENTER - Grain + GYO 1+2". Grain bowls on the left, steps 1 and 2 on the right."""
+    gb, byo = m["grainBowls"], m["buildYourOwn"]
     s1, s2 = byo["steps"][0], byo["steps"][1]
-    # "Grow your Own", "Starts at" and the price are Figma's lettering, exported as vectors.
+    b = (f'<h2 data-outline="Midstar" style="position: absolute; left: 103px; top: 209px; margin: 0; {MID}; font-size: 273px; '
+         f'line-height: 121.8px; color: {SUN}; white-space: nowrap">{esc(gb["title"])}</h2>\n')
+    if len(gb["items"]) > len(GRAIN_SLOTS):
+        raise SystemExit(f"Grain Bowls: the board has room for {len(GRAIN_SLOTS)}")
+    for it, (top, fit) in zip(gb["items"], GRAIN_SLOTS):
+        # The price column ends at x 1778; the description's wrapper sets how far it may run.
+        b += f'<div style="position: absolute; left: 155px; top: {top}px; width: {fit}px">{bowl(it, 700, 60, 500, 1623, GRAIN_DESC)}</div>\n'
+    b += marks(img, gb["items"], 30.5, -8.5)  # Figma: 27-34 px after PENANG and UMBRIA, 7-10 px above
+
+    # "Grow your Own" and "Starts at $9.95" are Figma's lettering, exported as vectors.
     if byo["startsAt"] != 9.95:
         raise SystemExit("buildYourOwn.startsAt changed: the board's price is Figma lettering "
-                         "(source/screens/vectors/price-6.svg). Export the new price from Figma first.")
-    b = vec(img, "grow-2", 147, 167.05, 615.076, 249.191, alt="Grow")
-    b += vec(img, "your", 801.47, 298, 281.533, 74.069, alt="your")
-    b += vec(img, "own", 1129, 159.43, 489.883, 248.033, alt="Own")
-    b += vec(img, "starts-at-6", 2969, 244.55, 258.121, 92.342, alt="Starts at")
-    b += vec(img, "price-6", 3270.76, 219.61, 359.237, 136.31, alt=money(byo["startsAt"]))
-    b += step(img, 1, s1, 180, 593, 128.452, 464, 591, 778)
-    greens = lst(m, "Greens + Grains")["items"]
-    if len(greens) > 6:
-        raise SystemExit("Greens + Grains: the board has room for 6")
-    b += column_grid(464, 974, 565, 1, 53, greens)
-    b += step(img, 2, s2, 1920, 592, 129.712, 2203, 591, 782)
-    b += ('<p style="position: absolute; right: 210px; top: 805px; margin: 0; font-size: 55px; font-weight: 400; line-height: normal; '
-          'letter-spacing: -1px; text-align: right; white-space: nowrap">' + "<br>".join(esc(l) for l in s2["boardAside"]) + "</p>\n")
-    toppings = lst(m, "Field Ingredients")["items"]
-    if len(toppings) > 18:
-        raise SystemExit("Field Ingredients: the board has room for 18")
-    b += column_grid(2203, 974, 1571, 2, 32, toppings)
-    b += hotl(180, 1928 + 1, 75, f'<span style="color: {SUN}; white-space: pre">{esc(byo["boardHours"].upper())}</span>')
+                         "(source/screens/vectors/starts-at-price.svg). Export the new price from Figma first.")
+    b += vec(img, "grow-your-own", 1905, 159, 1451, 254, alt="Grow your Own")
+    b += vec(img, "starts-at-price", 3438, 262, 277, 146, alt=f"Starts at {money(byo['startsAt'])}")
+
+    b += step(img, 1, s1, 1920, 532, 128.452, 2202, 530)
+    greens = lst(m, "Greens + Grains")
+    rows = greens["boardRows"]
+    if len(names(rows)) != len(greens["items"]):
+        raise SystemExit(f"Greens + Grains: boardRows has {len(names(rows))} names, items has {len(greens['items'])}")
+    if len(rows) > 2 or any(len(r) > 3 for r in rows):
+        raise SystemExit("Greens + Grains: the board has room for 2 rows of 3")
+    b += grid(2203, 703, 507, 104, [[r[i] for r in rows if i < len(r)] for i in range(3)], 2)
+
+    b += step(img, 2, s2, 1915, 1015, 129.712, 2198, 1014)
+    toppings = lst(m, "Field Ingredients")
+    cols = toppings["boardColumns"]
+    if len(names(cols)) != len(toppings["items"]):
+        raise SystemExit(f"Field Ingredients: boardColumns has {len(names(cols))} names, items has {len(toppings['items'])}")
+    if len(cols) != 2:
+        raise SystemExit("Field Ingredients: the board layout is 2 columns")
+    b += grid(2203, 1190, 823.5, 105, cols, 8)
+    b += ('<p style="position: absolute; right: 91px; top: 2028px; margin: 0; font-size: 55px; font-weight: 400; line-height: normal; '
+          f'letter-spacing: -1px; text-align: right; white-space: nowrap">{esc(s2["aside"])}</p>\n')
     return b
 
 
@@ -199,7 +236,7 @@ STEP4_TOP, TITLE_TOP, DRESS_ROW = 1486, 358, 75
 
 
 def proteins_upgrades(m, img):
-    """Board 3, right TV: steps 3 and 4."""
+    """Board 3, right TV: frame "RIGHT - GYO 3", steps 3 and 4."""
     s3, s4 = m["buildYourOwn"]["steps"][2], m["buildYourOwn"]["steps"][3]
     curly = lambda t: t.replace("'", "’")
 
@@ -249,7 +286,7 @@ def proteins_upgrades(m, img):
 BOARDS = [
     # slug, title, builder, poster
     ("house-bowls", "House Bowls", house_bowls, "grass-house-bowls.jpg"),
-    ("grow-your-own", "Grow Your Own", grow_your_own, "grass-grow-your-own.jpg"),
+    ("grow-your-own", "Grain Bowls + Grow Your Own", grow_your_own, "grass-grow-your-own.jpg"),
     ("proteins-upgrades", "Proteins + Upgrades", proteins_upgrades, "grass-proteins-upgrades.jpg"),
 ]
 
