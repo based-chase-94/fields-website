@@ -8,8 +8,8 @@ so a menu change is a JSON edit and a push, not a re-bake and a hand-off.
 | Board | TV | URL |
 |---|---|---|
 | House Bowls | left | `https://fieldsbowls.com/screens/7upeczte/house-bowls/` |
-| Grow Your Own | centre | `https://fieldsbowls.com/screens/7upeczte/grow-your-own/` |
-| Proteins + Upgrades | right | `https://fieldsbowls.com/screens/7upeczte/proteins-upgrades/` |
+| Grain Bowls + Grow Your Own (steps 1–2) | centre | `https://fieldsbowls.com/screens/7upeczte/grow-your-own/` |
+| Proteins + Upgrades (steps 3–4) | right | `https://fieldsbowls.com/screens/7upeczte/proteins-upgrades/` |
 
 `7upeczte` is just an unlisted path segment. It isn't a secret (this repo is
 public): `X-Robots-Tag: noindex` in `site/_headers` and the robots meta tag keep the
@@ -24,18 +24,24 @@ from crawlers. To change the code: `CODE` in `tools/build-screens.py`, the
    - `boardLines` are each description's lines on the board (we break lines by
      hand, as Figma does). They must spell out `ingredients` exactly: the build
      stops if they don't.
-   - `boardKicker` is House Bowls' top-right line, `note` its footer.
-   - Steps: `boardTitle` / `boardDetail` are the board's wording; `*stars*` mark the words
-     set in Sunshine. They must match `title` / `detail` apart from the stars and case.
-     `boardAside` is the "+$0.85 each / for extras" note, `boardHours` the hours line.
-   - Greens + Grains, Field Ingredients, Proteins and Upgrades come straight from their
-     lists (up to 6, 18, 7 and 7 entries fit). Prices are formatted for you.
+   - `boardKicker` is House Bowls' top-right line, `note` its footer. `buildYourOwn.boardHours`
+     is the hours line under the House Bowls.
+   - `grainBowls` (4 fit, centre TV) work like the House Bowls (6 fit). The website menu
+     doesn't show Grain Bowls yet.
+   - Steps: `boardTitle` / `boardDetail` are the board's wording ("Pick 2 field bases"), which
+     can differ from the website's `title` / `detail`; `*stars*` mark the words set in Sunshine.
+     Step 2's `aside` is the "+$0.85 each for extras" line.
+   - Greens + Grains: `boardRows` is the board's 2 rows of 3, with its own wording ("Romaine").
+     Field Ingredients: `boardColumns` is its 2 columns of up to 8; a cell can hold two names
+     that share a row (`["Cilantro", "Chives"]`). Both must have as many names as `items`.
+   - Proteins and Upgrades come straight from their lists (7 rows each fit). Prices are
+     formatted for you.
    - Dressings: `boardColumns` is the board's 5 + 6 layout with its own wording
      ("Honey Vinaigrette", "Lime or Lemon Wedge"); `|` breaks a name over two lines.
      It must have as many names as `items`.
    - `footnotes` close the Proteins + Upgrades board.
    - Some lettering is Figma's, exported as vectors in `source/screens/vectors/`:
-     "Grow your Own", "Starts at" and the **$9.95** price, the step numbers, and
+     "Grow your Own", "Starts at **$9.95**", the step numbers, and
      "Order online @ fieldsbowls.com". Changing `startsAt` stops the build until a
      new price is exported from Figma.
 2. `python3 tools/build-screens.py` (and `python3 tools/build-menu.py` for the website).
@@ -46,9 +52,9 @@ from crawlers. To change the code: `CODE` in `tools/build-screens.py`, the
 
 ## What the page does
 
-- **Layout:** a fixed 3840×2160 stage with Figma's numbers (fields-digital-menu's
-  `tools/build-grass-latest.py`, frame "FINAL - 1"), scaled to whatever the
-  player's browser reports.
+- **Layout:** a fixed 3840×2160 stage with Figma's numbers (file "Menus - Other Print",
+  page "Lunch Boards - Latest", frames "LEFT - House", "CENTER - Grain + GYO 1+2" and
+  "RIGHT - GYO 3"), scaled to whatever the player's browser reports.
 - **Lettering:** Midstar and Heart of the Land are licensed and can't be served,
   so they ship as SVG outlines (`tools/scripttype.py`). The build lays the board out
   with the real fonts in headless Chromium (`tools/screens-measure.mjs`) and puts
