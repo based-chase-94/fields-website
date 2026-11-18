@@ -14,6 +14,20 @@
   const dot = document.getElementById('dot');
   const q = new URLSearchParams(location.search);
   const BUILD = stage.dataset.build;
+  const BOARD = stage.dataset.board;
+  const store = {  // localStorage, which a web view may refuse
+    get(k) { try { return JSON.parse(localStorage.getItem(`fields-${BOARD}-${k}`)); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(`fields-${BOARD}-${k}`, JSON.stringify(v)); } catch {} },
+  };
+
+  // ---- reloads. Every load is logged with its cause, for ?check: one we asked for
+  // (an update, the nightly refresh) or one the player did on its own.
+  const asked = store.get('asked');
+  store.set('asked', null);
+  const nav = performance.getEntriesByType?.('navigation')[0]?.type || '?';
+  const loads = [{ at: Date.now(), why: asked && Date.now() - asked.at < 60000 ? asked.why : `player (${nav})` },
+                 ...(store.get('loads') || [])].slice(0, 12);
+  store.set('loads', loads);
   const POLL = 2 * 60 * 1000;
 
   // ---- fit the stage to the screen (any resolution, letterboxed if not 16:9)
@@ -32,8 +46,17 @@
   addEventListener('resize', fit);
   window.visualViewport?.addEventListener('resize', fit);
   fit();
-  // Show the board once Fredoka has loaded, so a fallback face never flashes up.
-  // Five seconds at most, then show it anyway.
+  // ---- a reload should barely show. The page keeps the grass's last frame and position
+  // when it unloads; the next load shows that frame at once and carries on the loop from
+  // where it was, so a reload looks like a blink of the words, not a dark flash and a restart.
+  const last = store.get('frame');
+  const resume = last && Date.now() - last.at < 30000 ? last : null;
+  if (resume?.img) {
+    stage.style.backgroundImage = `url(${resume.img})`;
+    stage.classList.add('resumed');
+  }
+  // Show the words once Fredoka has loaded, so a fallback face never flashes up.
+  // Five seconds at most, then show them anyway.
   Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 5000))])
     .then(() => stage.classList.add('ready'));
 
@@ -43,6 +66,25 @@
   const src = want === 'off' ? '' : (want === '4k' && stage.dataset.loopUhd) || stage.dataset.loopHd;
   if (src) {
     video.src = src;
+    if (resume && resume.src === src) {
+      video.addEventListener('loadedmetadata', () => {
+        const d = video.duration;
+        if (d > 0) video.currentTime = (resume.t + (Date.now() - resume.at) / 1000) % d;
+      }, { once: true });
+    }
+    const keep = () => {
+      if (!video.videoWidth) return;
+      let img = '';
+      try {
+        const c = document.createElement('canvas');
+        c.width = 960; c.height = 540;
+        c.getContext('2d').drawImage(video, 0, 0, 960, 540);
+        img = c.toDataURL('image/jpeg', 0.7);
+      } catch {}
+      store.set('frame', { at: Date.now(), t: video.currentTime, src, img });
+    };
+    addEventListener('pagehide', keep);
+    addEventListener('beforeunload', keep);
     const play = () => video.play().catch(() => {});
     video.addEventListener('canplay', play, { once: true });
     play();
@@ -59,16 +101,16 @@
   // ---- updates. XOGO may keep the page open for days, so the page checks for a new
   // build itself and reloads at the loop's seam, where the swap can't be seen.
   let pending = false;
-  const reload = () => location.reload();
+  const reload = (why) => { store.set('asked', { at: Date.now(), why }); location.reload(); };
   const reloadAtSeam = () => {
-    if (!src || video.paused) return reload();
+    if (!src || video.paused) return reload('update');
     let prev = video.currentTime;
     const onTime = () => {
-      if (video.currentTime < prev) reload(); // wrapped back to the start
+      if (video.currentTime < prev) reload('update'); // wrapped back to the start
       prev = video.currentTime;
     };
     video.addEventListener('timeupdate', onTime);
-    setTimeout(reload, 30000); // the loop is 18.5 s; don't wait forever
+    setTimeout(() => reload('update'), 30000); // the loop is 18.5 s; don't wait forever
   };
   const poll = async () => {
     try {
@@ -96,7 +138,7 @@
   const four = new Date(now);
   four.setHours(4, 0, 0, 0);
   if (four <= now) four.setDate(four.getDate() + 1);
-  setTimeout(reload, four - now);
+  setTimeout(() => reload('nightly'), four - now);
 
   // ---- offline: the service worker keeps the page, fonts, still and loop cached.
   if ('serviceWorker' in navigator) {
@@ -117,7 +159,12 @@
         (vv ? ` · visual ${Math.round(vv.width)}×${Math.round(vv.height)} @${vv.scale}` : '') +
         ` · video ${src ? (want === '4k' ? '4K' : '1080p') : 'off'}` +
         (video.isConnected && video.videoWidth ? ` (${video.videoWidth}×${video.videoHeight})` : '') +
-        ` · ${navigator.serviceWorker?.controller ? 'offline cache on' : 'no offline cache yet'}`;
+        ` · ${navigator.serviceWorker?.controller ? 'offline cache on' : 'no offline cache yet'}` +
+        '\nloads: ' + loads.map((l, i) => {
+          const t = new Date(l.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          const gap = loads[i + 1] ? ` +${Math.round((l.at - loads[i + 1].at) / 1000)}s` : '';
+          return `${t} ${l.why}${gap}`;
+        }).join(' · ');
     };
     // The info sits in the middle of the window, outside the board, so it stays readable
     // however much of the board the player crops.
