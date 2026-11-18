@@ -6,6 +6,8 @@
 //   ?video=4k     the 3840x2160 loop instead of the 1920x1080 default
 //   ?video=off    the still only
 //   ?check        title-safe margin, the build id and the screen's real resolution
+//   ?zoom=0.5     shrink the board by this factor, for a player that shows the page zoomed
+//                 in (the XOGO Minis in the store showed the middle quarter, i.e. 2x)
 (() => {
   const stage = document.getElementById('stage');
   const video = document.getElementById('bg');
@@ -15,11 +17,20 @@
   const POLL = 2 * 60 * 1000;
 
   // ---- fit the stage to the screen (any resolution, letterboxed if not 16:9)
+  // Players disagree on how big the window is, so take the smallest size any of them reports.
+  const zoom = Math.min(Math.max(parseFloat(q.get('zoom')) || 1, 0.1), 4);
+  const view = () => {
+    const vv = window.visualViewport;
+    const de = document.documentElement;
+    return [Math.min(innerWidth, de.clientWidth || innerWidth, vv ? vv.width : innerWidth),
+            Math.min(innerHeight, de.clientHeight || innerHeight, vv ? vv.height : innerHeight)];
+  };
   const fit = () => {
-    const k = Math.min(innerWidth / 3840, innerHeight / 2160);
-    stage.style.transform = `scale(${k})`;
+    const [w, h] = view();
+    stage.style.transform = `scale(${Math.min(w / 3840, h / 2160) * zoom})`;
   };
   addEventListener('resize', fit);
+  window.visualViewport?.addEventListener('resize', fit);
   fit();
   // Show the board once Fredoka has loaded, so a fallback face never flashes up.
   // Five seconds at most, then show it anyway.
@@ -100,12 +111,18 @@
     const info = document.createElement('div');
     info.id = 'info';
     const show = () => {
-      info.textContent = `build ${BUILD} · screen ${screen.width}×${screen.height} @${devicePixelRatio}x · ` +
-        `viewport ${innerWidth}×${innerHeight} · video ${src ? (want === '4k' ? '4K' : '1080p') : 'off'}` +
+      const vv = window.visualViewport;
+      info.textContent = `build ${BUILD} · zoom ${zoom} · screen ${screen.width}×${screen.height} @${devicePixelRatio}x · ` +
+        `window ${innerWidth}×${innerHeight} · page ${document.documentElement.clientWidth}×${document.documentElement.clientHeight}` +
+        (vv ? ` · visual ${Math.round(vv.width)}×${Math.round(vv.height)} @${vv.scale}` : '') +
+        ` · video ${src ? (want === '4k' ? '4K' : '1080p') : 'off'}` +
         (video.isConnected && video.videoWidth ? ` (${video.videoWidth}×${video.videoHeight})` : '') +
         ` · ${navigator.serviceWorker?.controller ? 'offline cache on' : 'no offline cache yet'}`;
     };
-    stage.append(safe, info);
+    // The info sits in the middle of the window, outside the board, so it stays readable
+    // however much of the board the player crops.
+    stage.append(safe);
+    document.body.append(info);
     show();
     setInterval(show, 2000);
   }
