@@ -87,7 +87,7 @@ the build prints a `FONT:` warning. Check for that line before shipping.
 ## All-caps lines are Heart of the Land
 
 Everything in the menu that was uppercase Fredoka — bowl names, step names,
-group titles, refresher names — is set in Heart of the Land outlines. 21
+group titles — is set in Heart of the Land outlines. 21
 drawings in all. Both display faces are rendered rather than served; see the
 licence note above and in `tools/scripttype.py`.
 

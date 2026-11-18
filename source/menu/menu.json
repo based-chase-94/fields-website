@@ -138,15 +138,7 @@
                 "Citrus Poppyseed Vinaigrette", "Hot Honey Drizzle", "Lime/Lemon Wedge"],
       "boardColumns": [
         ["Baja Lime Vinaigrette", "Honey Vinaigrette", "Vegan Caesar", "Colorado Ranch", "Citrus Poppyseed|Vinaigrette"],
-        ["Thai Maple Peanut", "Sesame Miso", "Green Goddess", "Olive Oil + Balsamic", "Hot Honey Drizzle", "Lime or Lemon Wedge"]] },
-
-    { "title": "Refreshers", "layout": "named", "price": 4.50,
-      "items": [
-        { "name": "Palm Springs", "detail": "iced tea + lemonade" },
-        { "name": "Valencia",     "detail": "orange" },
-        { "name": "Flamingo",     "detail": "hibiscus lemonade" },
-        { "name": "Bluebird",     "detail": "blueberry iced tea" }
-      ] }
+        ["Thai Maple Peanut", "Sesame Miso", "Green Goddess", "Olive Oil + Balsamic", "Hot Honey Drizzle", "Lime or Lemon Wedge"]] }
   ],
 
   "footnotes": [
@@ -154,6 +146,6 @@
     "All proteins ethically sourced and sustainable."
   ],
 
-  "_note": "Dressings, Refreshers and Crunch are all confirmed current (client, 21 Oct) -- the three October boards simply do not cover them. The bowls say 'mixed mushrooms' where the protein list says 'Roasted Shiitake Mushroom Mix'; confirmed as intended. Plain-name lists are in board order, not alphabetical.",
+  "_note": "Dressings and Crunch are both confirmed current (client, 21 Oct) -- the three October boards simply do not cover them. Refreshers were removed from the website menu (Chase, 18 Nov). The bowls say 'mixed mushrooms' where the protein list says 'Roasted Shiitake Mushroom Mix'; confirmed as intended. Plain-name lists are in board order, not alphabetical.",
   "_unresolved": []
 }

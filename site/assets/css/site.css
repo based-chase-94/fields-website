@@ -341,6 +341,11 @@ html, body {
 
 /* --- house bowls ---------------------------------------------------------- */
 
+/* Grain Bowls follows a rule, like Grow Your Own: same space above it. */
+.menu__rule + .menu__title {
+  margin-top: clamp(3rem, 8vw, 5.5rem);
+}
+
 .bowls {
   list-style: none;
   margin: clamp(2rem, 5vw, 3rem) 0 0;

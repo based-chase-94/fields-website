@@ -71,10 +71,11 @@ def esc(s):
     return html.escape(str(s), quote=False)
 
 
-def bowls(d):
-    o = [script_title(d["title"], "menu__title", "menu-bowls"),
-         f'<p class="menu__kicker">{esc(d["kicker"])}</p>',
-         '<ul class="bowls">']
+def bowls(d, hid):
+    o = [script_title(d["title"], "menu__title", hid)]
+    if d.get("kicker"):
+        o.append(f'<p class="menu__kicker">{esc(d["kicker"])}</p>')
+    o.append('<ul class="bowls">')
     for b in d["items"]:
         veg = ' <abbr class="bowls__veg" title="Vegetarian">V</abbr>' if b.get("vegetarian") else ""
         o += ['  <li class="bowls__item">',
@@ -85,7 +86,9 @@ def bowls(d):
               '    </div>',
               f'    <p class="bowls__ingredients">{esc(b["ingredients"])}</p>',
               '  </li>']
-    o += ['</ul>', f'<p class="menu__note">{esc(d["note"])}</p>']
+    o.append('</ul>')
+    if d.get("note"):
+        o.append(f'<p class="menu__note">{esc(d["note"])}</p>')
     return o
 
 
@@ -149,8 +152,11 @@ def lists(ls):
 def build(d):
     o = ['<section class="menu" id="menu" aria-labelledby="menu-bowls">',
          '  <div class="menu__inner">']
-    o += ["    " + x for x in bowls(d["houseBowls"])]
+    o += ["    " + x for x in bowls(d["houseBowls"], "menu-bowls")]
     o.append('    <hr class="menu__rule">')
+    if d.get("grainBowls"):
+        o += ["    " + x for x in bowls(d["grainBowls"], "menu-grain")]
+        o.append('    <hr class="menu__rule">')
     o += ["    " + x for x in byo(d["buildYourOwn"])]
     o += ["    " + x for x in lists(d["lists"])]
     if d.get("footnotes"):
@@ -177,7 +183,7 @@ def main():
 
     INDEX.write_text(out, encoding="utf-8")
 
-    bowls_n = len(d["houseBowls"]["items"])
+    bowls_n = len(d["houseBowls"]["items"]) + len(d.get("grainBowls", {}).get("items", []))
     items_n = sum(len(l["items"]) for l in d["lists"])
     print(f"menu rendered: {bowls_n} bowls, {len(d['buildYourOwn']['steps'])} steps, "
           f"{items_n} list items across {len(d['lists'])} lists")
