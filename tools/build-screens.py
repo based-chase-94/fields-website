@@ -425,8 +425,10 @@ def page(title, body, board, poster, loops, fredoka_url, runtime, build):
 html,body{{margin:0;height:100%;background:#1d2716;overflow:hidden;cursor:none}}
 #stage{{position:absolute;left:50%;top:50%;width:{W}px;height:{H}px;margin:-{H // 2}px 0 0 -{W // 2}px;overflow:hidden;
   background:#1d2716 url({poster}) center/cover no-repeat;color:{WHITE};font-family:'Fredoka',sans-serif;
-  transform-origin:50% 50%;opacity:0;transition:opacity .4s}}
-#stage.ready{{opacity:1}}
+  transform-origin:50% 50%}}
+#board{{opacity:0;transition:opacity .4s}}
+#stage.ready #board{{opacity:1}}
+#stage.resumed #board{{transition:none}}
 #bg{{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}}
 #board{{position:absolute;inset:0}}
 .outlines{{position:absolute;inset:0;pointer-events:none}}
@@ -435,7 +437,7 @@ html,body{{margin:0;height:100%;background:#1d2716;overflow:hidden;cursor:none}}
 #dot{{position:absolute;right:40px;bottom:40px;width:14px;height:14px;border-radius:50%;background:#7bc96f;opacity:.35}}
 #dot.offline{{background:#f0a43a;opacity:.7}}
 .check #safe{{position:absolute;inset:{H * 0.05:.0f}px {W * 0.05:.0f}px;outline:4px dashed #f0f;pointer-events:none}}
-.check #info{{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:60vw;font:500 2vw/1.3 Fredoka,sans-serif;color:#f0f;background:#000c;padding:1vw 1.5vw;text-align:center;z-index:9}}
+.check #info{{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:60vw;font:500 2vw/1.3 Fredoka,sans-serif;color:#f0f;background:#000c;padding:1vw 1.5vw;text-align:center;z-index:9;white-space:pre-line}}
 </style>
 </head>
 <body>

@@ -11,8 +11,10 @@
 html,body{margin:0;height:100%;background:#1d2716;overflow:hidden;cursor:none}
 #stage{position:absolute;left:50%;top:50%;width:3840px;height:2160px;margin:-1080px 0 0 -1920px;overflow:hidden;
   background:#1d2716 url(/screens/assets/grass-grow-your-own.9f31a18ad8.jpg) center/cover no-repeat;color:#ffffff;font-family:'Fredoka',sans-serif;
-  transform-origin:50% 50%;opacity:0;transition:opacity .4s}
-#stage.ready{opacity:1}
+  transform-origin:50% 50%}
+#board{opacity:0;transition:opacity .4s}
+#stage.ready #board{opacity:1}
+#stage.resumed #board{transition:none}
 #bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 #board{position:absolute;inset:0}
 .outlines{position:absolute;inset:0;pointer-events:none}
@@ -21,11 +23,11 @@ html,body{margin:0;height:100%;background:#1d2716;overflow:hidden;cursor:none}
 #dot{position:absolute;right:40px;bottom:40px;width:14px;height:14px;border-radius:50%;background:#7bc96f;opacity:.35}
 #dot.offline{background:#f0a43a;opacity:.7}
 .check #safe{position:absolute;inset:108px 192px;outline:4px dashed #f0f;pointer-events:none}
-.check #info{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:60vw;font:500 2vw/1.3 Fredoka,sans-serif;color:#f0f;background:#000c;padding:1vw 1.5vw;text-align:center;z-index:9}
+.check #info{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:60vw;font:500 2vw/1.3 Fredoka,sans-serif;color:#f0f;background:#000c;padding:1vw 1.5vw;text-align:center;z-index:9;white-space:pre-line}
 </style>
 </head>
 <body>
-<div id="stage" data-board="grow-your-own" data-build="0e9818eb908b" data-loop-hd="/screens/assets/grass-grow-your-own-1080.e3510ba23d.mp4" data-loop-uhd="/screens/assets/grass-grow-your-own-2160.942870e650.mp4">
+<div id="stage" data-board="grow-your-own" data-build="09a36ee340f8" data-loop-hd="/screens/assets/grass-grow-your-own-1080.e3510ba23d.mp4" data-loop-uhd="/screens/assets/grass-grow-your-own-2160.942870e650.mp4">
 <video id="bg" muted loop playsinline autoplay preload="auto" disablepictureinpicture aria-hidden="true"></video>
 <div id="board">
 <h2 data-o="Midstar" style="visibility: hidden; width: 1498.31px; height: 121.80px; position: absolute; left: 103px; top: 209px; margin: 0; font-family: 'Midstar'; font-weight: 400; font-size: 273px; line-height: 121.8px; color: #f9e14d; white-space: nowrap">Grain Bowls</h2>
@@ -85,6 +87,20 @@ html,body{margin:0;height:100%;background:#1d2716;overflow:hidden;cursor:none}
   const dot = document.getElementById('dot');
   const q = new URLSearchParams(location.search);
   const BUILD = stage.dataset.build;
+  const BOARD = stage.dataset.board;
+  const store = {  // localStorage, which a web view may refuse
+    get(k) { try { return JSON.parse(localStorage.getItem(`fields-${BOARD}-${k}`)); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(`fields-${BOARD}-${k}`, JSON.stringify(v)); } catch {} },
+  };
+
+  // ---- reloads. Every load is logged with its cause, for ?check: one we asked for
+  // (an update, the nightly refresh) or one the player did on its own.
+  const asked = store.get('asked');
+  store.set('asked', null);
+  const nav = performance.getEntriesByType?.('navigation')[0]?.type || '?';
+  const loads = [{ at: Date.now(), why: asked && Date.now() - asked.at < 60000 ? asked.why : `player (${nav})` },
+                 ...(store.get('loads') || [])].slice(0, 12);
+  store.set('loads', loads);
   const POLL = 2 * 60 * 1000;
 
   // ---- fit the stage to the screen (any resolution, letterboxed if not 16:9)
@@ -103,8 +119,17 @@ html,body{margin:0;height:100%;background:#1d2716;overflow:hidden;cursor:none}
   addEventListener('resize', fit);
   window.visualViewport?.addEventListener('resize', fit);
   fit();
-  // Show the board once Fredoka has loaded, so a fallback face never flashes up.
-  // Five seconds at most, then show it anyway.
+  // ---- a reload should barely show. The page keeps the grass's last frame and position
+  // when it unloads; the next load shows that frame at once and carries on the loop from
+  // where it was, so a reload looks like a blink of the words, not a dark flash and a restart.
+  const last = store.get('frame');
+  const resume = last && Date.now() - last.at < 30000 ? last : null;
+  if (resume?.img) {
+    stage.style.backgroundImage = `url(${resume.img})`;
+    stage.classList.add('resumed');
+  }
+  // Show the words once Fredoka has loaded, so a fallback face never flashes up.
+  // Five seconds at most, then show them anyway.
   Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 5000))])
     .then(() => stage.classList.add('ready'));
 
@@ -114,6 +139,25 @@ html,body{margin:0;height:100%;background:#1d2716;overflow:hidden;cursor:none}
   const src = want === 'off' ? '' : (want === '4k' && stage.dataset.loopUhd) || stage.dataset.loopHd;
   if (src) {
     video.src = src;
+    if (resume && resume.src === src) {
+      video.addEventListener('loadedmetadata', () => {
+        const d = video.duration;
+        if (d > 0) video.currentTime = (resume.t + (Date.now() - resume.at) / 1000) % d;
+      }, { once: true });
+    }
+    const keep = () => {
+      if (!video.videoWidth) return;
+      let img = '';
+      try {
+        const c = document.createElement('canvas');
+        c.width = 960; c.height = 540;
+        c.getContext('2d').drawImage(video, 0, 0, 960, 540);
+        img = c.toDataURL('image/jpeg', 0.7);
+      } catch {}
+      store.set('frame', { at: Date.now(), t: video.currentTime, src, img });
+    };
+    addEventListener('pagehide', keep);
+    addEventListener('beforeunload', keep);
     const play = () => video.play().catch(() => {});
     video.addEventListener('canplay', play, { once: true });
     play();
@@ -130,16 +174,16 @@ html,body{margin:0;height:100%;background:#1d2716;overflow:hidden;cursor:none}
   // ---- updates. XOGO may keep the page open for days, so the page checks for a new
   // build itself and reloads at the loop's seam, where the swap can't be seen.
   let pending = false;
-  const reload = () => location.reload();
+  const reload = (why) => { store.set('asked', { at: Date.now(), why }); location.reload(); };
   const reloadAtSeam = () => {
-    if (!src || video.paused) return reload();
+    if (!src || video.paused) return reload('update');
     let prev = video.currentTime;
     const onTime = () => {
-      if (video.currentTime < prev) reload(); // wrapped back to the start
+      if (video.currentTime < prev) reload('update'); // wrapped back to the start
       prev = video.currentTime;
     };
     video.addEventListener('timeupdate', onTime);
-    setTimeout(reload, 30000); // the loop is 18.5 s; don't wait forever
+    setTimeout(() => reload('update'), 30000); // the loop is 18.5 s; don't wait forever
   };
   const poll = async () => {
     try {
@@ -167,7 +211,7 @@ html,body{margin:0;height:100%;background:#1d2716;overflow:hidden;cursor:none}
   const four = new Date(now);
   four.setHours(4, 0, 0, 0);
   if (four <= now) four.setDate(four.getDate() + 1);
-  setTimeout(reload, four - now);
+  setTimeout(() => reload('nightly'), four - now);
 
   // ---- offline: the service worker keeps the page, fonts, still and loop cached.
   if ('serviceWorker' in navigator) {
@@ -188,7 +232,12 @@ html,body{margin:0;height:100%;background:#1d2716;overflow:hidden;cursor:none}
         (vv ? ` · visual ${Math.round(vv.width)}×${Math.round(vv.height)} @${vv.scale}` : '') +
         ` · video ${src ? (want === '4k' ? '4K' : '1080p') : 'off'}` +
         (video.isConnected && video.videoWidth ? ` (${video.videoWidth}×${video.videoHeight})` : '') +
-        ` · ${navigator.serviceWorker?.controller ? 'offline cache on' : 'no offline cache yet'}`;
+        ` · ${navigator.serviceWorker?.controller ? 'offline cache on' : 'no offline cache yet'}` +
+        '\nloads: ' + loads.map((l, i) => {
+          const t = new Date(l.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          const gap = loads[i + 1] ? ` +${Math.round((l.at - loads[i + 1].at) / 1000)}s` : '';
+          return `${t} ${l.why}${gap}`;
+        }).join(' · ');
     };
     // The info sits in the middle of the window, outside the board, so it stays readable
     // however much of the board the player crops.
