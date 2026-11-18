@@ -435,7 +435,7 @@ html,body{{margin:0;height:100%;background:#1d2716;overflow:hidden;cursor:none}}
 #dot{{position:absolute;right:40px;bottom:40px;width:14px;height:14px;border-radius:50%;background:#7bc96f;opacity:.35}}
 #dot.offline{{background:#f0a43a;opacity:.7}}
 .check #safe{{position:absolute;inset:{H * 0.05:.0f}px {W * 0.05:.0f}px;outline:4px dashed #f0f;pointer-events:none}}
-.check #info{{position:absolute;left:{W * 0.05 + 20:.0f}px;top:{H * 0.05 + 20:.0f}px;font:500 48px/1.3 Fredoka,sans-serif;color:#f0f;background:#000a;padding:12px 20px}}
+.check #info{{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:60vw;font:500 2vw/1.3 Fredoka,sans-serif;color:#f0f;background:#000c;padding:1vw 1.5vw;text-align:center;z-index:9}}
 </style>
 </head>
 <body>
