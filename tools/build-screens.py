@@ -110,8 +110,11 @@ def house_bowls(m, img):
     # Figma put the mark 31 px after the name (FIELDS NOTES, now discontinued) and 7 px above its box.
     b += marks(img, hb["items"], 31.1, -7)
     b += hotl(130, 1968 + 1, 75, f'<span style="color: {SUN}; white-space: pre">{esc(m["buildYourOwn"]["boardHours"].upper())}</span>')
-    b += (f'<p style="position: absolute; right: 131px; top: 1990px; margin: 0; font-size: 58px; font-weight: 500; line-height: normal; '
-          f'letter-spacing: -1px; text-align: right; color: {SUN}; white-space: nowrap; font-feature-settings: \'dlig\' 1, \'liga\' 1">{esc(hb["note"])}</p>\n')
+    if " ".join(hb["boardNote"]) != hb["note"]:
+        raise SystemExit("House Bowls: boardNote doesn't spell out note")
+    b += (f'<p style="position: absolute; right: 131px; top: 1864px; margin: 0; font-size: 78px; font-weight: 500; line-height: normal; '
+          f'letter-spacing: -1px; text-align: right; color: {SUN}; white-space: nowrap; font-feature-settings: \'dlig\' 1, \'liga\' 1">'
+          + "<br>".join(esc(l) for l in hb["boardNote"]) + '</p>\n')
     return b
 
 

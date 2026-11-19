@@ -4,7 +4,8 @@
   "houseBowls": {
     "title": "House Bowls",
     "kicker": "Our favorite places, in a bowl",
-    "note": "All bowls can be made vegetarian upon request",
+    "note": "All bowls can be made vegetarian with tofu upon request",
+    "boardNote": ["All bowls can be made", "vegetarian with tofu upon request"],
     "boardKicker": ["Our favorite", "places, in a bowl"],
     "items": [
       { "name": "Strawberry Fields", "price": 13.25,
