@@ -31,12 +31,7 @@
         "ingredients": "Spinach + romaine hearts, miso-glazed salmon, sweet potato, watermelon radish, carrot, toasted nori puffs, avocado, edamame, sesame-miso dressing",
         "boardLines": ["Spinach + romaine hearts, miso-glazed salmon, sweet",
           "potato, watermelon radish, carrot, toasted nori puffs,",
-          "avocado, edamame, sesame-miso dressing"] },
-      { "name": "Fields Notes", "price": 13.50, "vegetarian": true,
-        "ingredients": "Kale + spinach, sweet potato, broccoli, mixed mushrooms, apple, blue cheese, almonds, fields honey vinaigrette, hot honey drizzle",
-        "boardLines": ["Kale + spinach, sweet potato, broccoli, mixed mushrooms,",
-          "apple, blue cheese, almonds, fields honey vinaigrette, hot",
-          "honey drizzle"] }
+          "avocado, edamame, sesame-miso dressing"] }
     ]
   },
 
@@ -54,14 +49,15 @@
           "ribbons, edamame, cilantro, peanuts, Thai maple peanut",
           "dressing, chili oil drizzle, rice paper crackle"] },
       { "name": "Taos", "price": 13.50,
-        "ingredients": "Blackened chicken, warm quinoa, roasted sweet potato, black beans, grilled poblano, grilled corn, shredded cheddar, Fiery Fields, Colorado ranch drizzle, Tajin tortilla",
+        "ingredients": "Blackened chicken, warm quinoa, roasted sweet potato, black beans, grilled poblano, grilled corn, pepperoncini, shredded cheddar, Fiery Fields, Colorado ranch drizzle, Tajin tortilla",
         "boardLines": ["Blackened chicken, warm quinoa, roasted sweet potato, black",
-          "beans, grilled poblano, grilled corn, shredded cheddar, Fiery",
-          "Fields, Colorado ranch drizzle, Tajin tortilla"] },
+          "beans, grilled poblano, grilled corn, pepperoncini, shredded",
+          "cheddar, Fiery Fields, Colorado ranch drizzle, Tajin tortilla"] },
       { "name": "Umbria", "price": 13.25, "vegetarian": true,
-        "ingredients": "Warm shiitake mix, roasted chickpeas, warm quinoa, arugula, cherry tomatoes, red onion, parmesan, olive oil + balsamic, focaccia crouton",
-        "boardLines": ["Warm shiitake mix, roasted chickpeas, warm quinoa, arugula, cherry",
-          "tomatoes, red onion, parmesan, olive oil + balsamic, focaccia crouton"] }
+        "ingredients": "Warm quinoa, roasted chickpeas, hardboiled egg, arugula, cherry tomatoes, pepperoncini, red onion, parmesan, olive oil + balsamic, focaccia crouton",
+        "boardLines": ["Warm quinoa, roasted chickpeas, hardboiled egg, arugula, cherry",
+          "tomatoes, pepperoncini, red onion, parmesan, olive oil + balsamic,",
+          "focaccia crouton"] }
     ]
   },
 
@@ -89,14 +85,14 @@
 
     { "title": "Field Ingredients", "note": "Pick 6", "layout": "columns",
       "items": ["Cucumber", "Red Onion", "Grilled Corn", "Cherry Tomatoes",
-                "Roasted Chickpeas", "Roasted Sweet Potato", "Pico de Gallo",
-                "Strawberries", "Chives", "Carrot Ribbons", "Edamame",
-                "Black Beans", "Grilled Poblano", "Roasted Broccoli",
-                "Watermelon Radish", "Green Apples", "Cilantro"],
-      "boardColumns": [["Cucumber", "Red Onion", "Grilled Corn", "Cherry Tomatoes", "Roasted Chickpeas",
-                        "Roasted Sweet Potato", "Pico de Gallo", "Strawberries"],
-                       ["Carrot Ribbons", "Edamame", "Black Beans", "Grilled Poblano", "Roasted Broccoli",
-                        "Watermelon Radish", "Green Apples", ["Cilantro", "Chives"]]] },
+                "Grilled Poblano", "Roasted Broccoli", "Watermelon Radish",
+                "Green Apples", "Cilantro", "Chives", "Carrot Ribbons", "Edamame",
+                "Black Beans", "Pepperoncini", "Roasted Chickpeas",
+                "Roasted Sweet Potato", "Pico de Gallo", "Strawberries"],
+      "boardColumns": [["Cucumber", "Red Onion", "Grilled Corn", "Cherry Tomatoes", "Grilled Poblano",
+                        "Roasted Broccoli", "Watermelon Radish", "Green Apples", ["Cilantro", "Chives"]],
+                       ["Carrot Ribbons", "Edamame", "Black Beans", "Pepperoncini", "Roasted Chickpeas",
+                        "Roasted Sweet Potato", "Pico de Gallo", "Strawberries"]] },
 
     { "title": "Proteins", "layout": "priced",
       "items": [
@@ -105,7 +101,6 @@
         { "name": "Sesame Miso Alaskan Salmon", "price": 6.50 },
         { "name": "Smoked Applewood Bacon", "price": 2.85 },
         { "name": "Sweet Chili Tofu", "price": 3.50 },
-        { "name": "Roasted Shiitake Mushroom Mix", "price": 3.50 },
         { "name": "Hardboiled Egg", "price": 1.25 }
       ] },
 
@@ -146,6 +141,6 @@
     "All proteins ethically sourced and sustainable."
   ],
 
-  "_note": "Dressings and Crunch are both confirmed current (client, 21 Oct) -- the three October boards simply do not cover them. Refreshers were removed from the website menu (Chase, 18 Nov). The bowls say 'mixed mushrooms' where the protein list says 'Roasted Shiitake Mushroom Mix'; confirmed as intended. Plain-name lists are in board order, not alphabetical.",
+  "_note": "Dressings and Crunch are both confirmed current (client, 21 Oct) -- the three October boards simply do not cover them. Refreshers were removed from the website menu (Chase, 18 Nov). Mushrooms, Fields Notes and the shiitake protein were dropped (Chase, 19 Nov 2026); pepperoncini added. Plain-name lists are in board order, not alphabetical.",
   "_unresolved": []
 }
