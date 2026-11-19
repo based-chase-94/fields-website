@@ -107,7 +107,7 @@ def house_bowls(m, img):
           'grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 130px; row-gap: 107px">')
     b += "".join(bowl(it, 600, 68, 400) for it in hb["items"])
     b += "</div>\n"
-    # Figma puts the mark 31 px after FIELDS NOTES and 7 px above the name's box (2764, 1512).
+    # Figma put the mark 31 px after the name (FIELDS NOTES, now discontinued) and 7 px above its box.
     b += marks(img, hb["items"], 31.1, -7)
     b += hotl(130, 1968 + 1, 75, f'<span style="color: {SUN}; white-space: pre">{esc(m["buildYourOwn"]["boardHours"].upper())}</span>')
     b += (f'<p style="position: absolute; right: 131px; top: 1990px; margin: 0; font-size: 58px; font-weight: 500; line-height: normal; '
@@ -219,14 +219,14 @@ def grow_your_own(m, img):
         raise SystemExit("Greens + Grains: the board has room for 2 rows of 3")
     b += grid(2203, 703, 507, 104, [[r[i] for r in rows if i < len(r)] for i in range(3)], 2)
 
-    b += step(img, 2, s2, 1915, 1015, 129.712, 2198, 1014)
+    b += step(img, 2, s2, 1915, 935, 129.712, 2198, 934)
     toppings = lst(m, "Field Ingredients")
     cols = toppings["boardColumns"]
     if len(names(cols)) != len(toppings["items"]):
         raise SystemExit(f"Field Ingredients: boardColumns has {len(names(cols))} names, items has {len(toppings['items'])}")
     if len(cols) != 2:
         raise SystemExit("Field Ingredients: the board layout is 2 columns")
-    b += grid(2203, 1190, 823.5, 105, cols, 8)
+    b += grid(2203, 1110, 823.5, 105, cols, 9)
     b += ('<p style="position: absolute; right: 91px; top: 2028px; margin: 0; font-size: 55px; font-weight: 400; line-height: normal; '
           f'letter-spacing: -1px; text-align: right; white-space: nowrap">{esc(s2["aside"])}</p>\n')
     return b
