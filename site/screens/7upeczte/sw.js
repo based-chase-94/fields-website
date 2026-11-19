@@ -7,7 +7,7 @@
 // - Everything under /screens/assets/ has a content hash in its name and never changes:
 //   cache first. Video range requests are answered from the cached file, so the loop
 //   keeps playing with no connection.
-const BUILD = 'd886817bef9b';
+const BUILD = '788b935fc134';
 const CACHE = `fields-screens-${BUILD}`;
 const PRECACHE = ["/screens/7upeczte/grow-your-own/", "/screens/7upeczte/house-bowls/", "/screens/7upeczte/proteins-upgrades/", "/screens/assets/fieldsbowls.609a3543c9.svg", "/screens/assets/fredoka.8d14f8dd64.woff2", "/screens/assets/grass-grow-your-own-1080.e3510ba23d.mp4", "/screens/assets/grass-grow-your-own-2160.942870e650.mp4", "/screens/assets/grass-grow-your-own.9f31a18ad8.jpg", "/screens/assets/grass-house-bowls-1080.67ddd6d8cb.mp4", "/screens/assets/grass-house-bowls-2160.77f784e11d.mp4", "/screens/assets/grass-house-bowls.3a3f16f615.jpg", "/screens/assets/grass-proteins-upgrades-1080.3b5058ad25.mp4", "/screens/assets/grass-proteins-upgrades-2160.cbefc97e7c.mp4", "/screens/assets/grass-proteins-upgrades.5c2fe53aab.jpg", "/screens/assets/grow-your-own.440fb5e116.svg", "/screens/assets/order-online.5954ba76d0.svg", "/screens/assets/starts-at-price.91ff7cb66b.svg", "/screens/assets/step1.0c21096521.svg", "/screens/assets/step2.5cd3ba4231.svg", "/screens/assets/step3.5006ac8ae5.svg", "/screens/assets/step4.4b438dbd44.svg", "/screens/assets/vegetarian.764b341977.svg"];
 
